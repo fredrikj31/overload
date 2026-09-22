@@ -1,0 +1,26 @@
+{
+  "name": "overload",
+  "description": "An open source workout tracker application.",
+  "author": "fredrikj31",
+  "version": "1.0.0",
+  "scripts": {
+    "prepare": "husky",
+    "pre-commit": "lint-staged -c lint-staged.config.js",
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fredrikj31/overload.git"
+  },
+  "engines": {
+    "node": ">=24",
+    "pnpm": ">=12"
+  },
+  "packageManager": "pnpm@12.0.0",
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^17.5.1",
+    "prettier": "^3.9.8"
+  }
+}
