@@ -4,6 +4,8 @@
   "author": "fredrikj31",
   "version": "1.0.0",
   "scripts": {
+    "prepare": "husky",
+    "pre-commit": "echo Hello World",
     "format:check": "prettier --check .",
     "format:write": "prettier --write ."
   },
@@ -17,6 +19,7 @@
   },
   "packageManager": "pnpm@12.0.0",
   "devDependencies": {
+    "husky": "^9.1.7",
     "prettier": "^3.9.8"
   }
 }
