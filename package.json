@@ -3,9 +3,15 @@
   "description": "An open source workout tracker application.",
   "author": "fredrikj31",
   "version": "1.0.0",
-  "scripts": {},
+  "scripts": {
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write ."
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/fredrikj31/overload.git"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.8"
   }
 }
