@@ -1,0 +1,11 @@
+{
+  "name": "overload",
+  "description": "An open source workout tracker application.",
+  "author": "fredrikj31",
+  "version": "1.0.0",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fredrikj31/overload.git"
+  }
+}
