@@ -1,0 +1,33 @@
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  backend:
+    container_name: overload-backend
+    image: ghcr.io/fredrikj31/overload-backend:latest
+    restart: always
+    profiles:
+      - prod
+    networks:
+      - cloudflared
+    ports:
+      - ${BACKEND_PORT:-5001}:3000
+    logging: *default-logging
+
+  frontend:
+    container_name: overload-frontend
+    image: ghcr.io/fredrikj31/overload-frontend:latest
+    restart: always
+    profiles:
+      - prod
+    networks:
+      - cloudflared
+    ports:
+      - ${BACKEND_PORT:-5002}:80
+
+networks:
+  cloudflared:
+    external: true
