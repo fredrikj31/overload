@@ -4,7 +4,7 @@
   "main": "src/app.ts",
   "scripts": {
     "dev": "tsx watch --include src src/app.ts | pino-pretty",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.build.json",
     "build:check": "tsc --noEmit"
   },
   "dependencies": {

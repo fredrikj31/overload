@@ -1,15 +1,22 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    "lib": ["ES2022"],
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "strict": true,
     "esModuleInterop": true,
+    "incremental": false,
+    "isolatedModules": true,
+    "lib": ["es2022"],
+    "module": "NodeNext",
+    "moduleDetection": "force",
+    "moduleResolution": "NodeNext",
+    "noUncheckedIndexedAccess": true,
+    "resolveJsonModule": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "strict": true,
+    "target": "ES2022",
+    "rootDir": "./src",
+    "outDir": "./build",
+    "declaration": false,
+    "declarationMap": false
   },
-  "include": ["src/**/*"]
+  "include": ["./src", "tsconfig.build.json"],
+  "exclude": ["./build"]
 }

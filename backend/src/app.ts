@@ -1,5 +1,5 @@
 import fastify, { FastifyInstance } from "fastify";
-import { routes } from "./routes";
+import { routes } from "./routes/index";
 import { config } from "./config";
 
 const app: FastifyInstance = fastify({
