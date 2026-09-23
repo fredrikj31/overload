@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDir": "./src",
+    "noEmit": false // Override the base to allow output
+  },
+  "exclude": ["build", "drizzle.config.ts", "eslint.config.mts"]
+}

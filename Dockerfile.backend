@@ -1,0 +1,17 @@
+FROM node:24-alpine AS base
+ENV PNPM_HOME="/pnpm"
+ENV PATH="$PNPM_HOME:$PATH"
+RUN npm install -g pnpm@latest-12
+
+FROM base AS build
+COPY . /usr/src/app
+WORKDIR /usr/src/app
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --filter=backend
+RUN pnpm --filter=backend run build
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm deploy --filter=backend --prod /app
+
+FROM base AS app
+COPY --from=build /app /app
+WORKDIR /app
+EXPOSE 3000
+CMD [ "node", "build/app.js" ]

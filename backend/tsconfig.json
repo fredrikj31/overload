@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "incremental": false,
+    "isolatedModules": true,
+    "lib": ["es2022"],
+    "module": "NodeNext",
+    "moduleDetection": "force",
+    "moduleResolution": "NodeNext",
+    "noUncheckedIndexedAccess": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2022",
+    "rootDir": "./src",
+    "outDir": "./build",
+    "declaration": false,
+    "declarationMap": false
+  },
+  "include": ["./src", "tsconfig.build.json"],
+  "exclude": ["./build"]
+}
