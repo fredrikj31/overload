@@ -11,7 +11,10 @@
     "format:write": "prettier --write .",
     "dev:backend": "pnpm --filter @overload/backend dev",
     "build:backend": "pnpm --filter @overload/backend build",
-    "build:check:backend": "pnpm --filter @overload/backend build:check"
+    "build:check:backend": "pnpm --filter @overload/backend build:check",
+    "dev:frontend": "pnpm --filter @overload/frontend dev",
+    "build:frontend": "pnpm --filter @overload/frontend build",
+    "build:check:frontend": "pnpm --filter @overload/frontend build:check"
   },
   "repository": {
     "type": "git",
