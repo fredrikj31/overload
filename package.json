@@ -3,6 +3,7 @@
   "description": "An open source workout tracker application.",
   "author": "fredrikj31",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "prepare": "husky",
     "pre-commit": "lint-staged -c lint-staged.config.js",

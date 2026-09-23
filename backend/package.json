@@ -1,7 +1,6 @@
 {
   "name": "@overload/backend",
   "version": "1.0.0",
-  "type": "module",
   "main": "src/app.ts",
   "scripts": {
     "dev": "tsx watch --include src src/app.ts | pino-pretty",
