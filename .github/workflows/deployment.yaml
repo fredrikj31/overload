@@ -136,3 +136,31 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  prune-frontend-old-docker-images:
+    needs: push-frontend-docker-image
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    env:
+      IMAGE_NAME: overload-frontend
+    steps:
+      - uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ env.IMAGE_NAME }}
+          package-type: container
+          min-versions-to-keep: 10
+
+  prune-backend-old-docker-images:
+    needs: push-backend-docker-image
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+    env:
+      IMAGE_NAME: overload-backend
+    steps:
+      - uses: actions/delete-package-versions@v5
+        with:
+          package-name: ${{ env.IMAGE_NAME }}
+          package-type: container
+          min-versions-to-keep: 10
