@@ -156,7 +156,7 @@ jobs:
         with:
           package-name: ${{ env.FRONTEND_DOCKER_IMAGE_NAME }}
           package-type: container
-          min-versions-to-keep: 10
+          min-versions-to-keep: 50 # The count is 50, because we are releasing 5 images in total, 1 main & 4 manifest images for other platforms. This needs to be changed, if we change the number of generated images/manifests.
 
   prune-backend-old-docker-images:
     needs: push-backend-docker-image
@@ -168,4 +168,4 @@ jobs:
         with:
           package-name: ${{ env.BACKEND_DOCKER_IMAGE_NAME }}
           package-type: container
-          min-versions-to-keep: 10
+          min-versions-to-keep: 50 # The count is 50, because we are releasing 5 images in total, 1 main & 4 manifest images for other platforms. This needs to be changed, if we change the number of generated images/manifests.
