@@ -136,7 +136,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 
   trigger-deployment:
-    needs: [push-frontend-docker-image, push-backend-docker-image]
+    needs: [release, push-frontend-docker-image, push-backend-docker-image]
     if: needs.release.outputs.new-release-published == 'true'
     runs-on: ubuntu-latest
     steps:
