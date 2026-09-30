@@ -57,7 +57,14 @@ services:
     restart: always
     profiles:
       - prod
+    environment:
+      DATABASE_HOST: overload-database
+      DATABASE_PORT: 5432
+      DATABASE_NAME: overload
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
     networks:
+      - overload-network
       - cloudflared
     ports:
       - ${BACKEND_PORT:-5001}:3000
