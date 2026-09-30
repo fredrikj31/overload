@@ -8,7 +8,7 @@ const envVarsSchema = z.object({
   API_HOST: z.string().default("0.0.0.0"),
   API_PORT: z.coerce.number().default(3000),
   DATABASE_HOST: z.string(),
-  DATABASE_PORT: z.string(),
+  DATABASE_PORT: z.coerce.number(),
   DATABASE_USER: z.string(),
   DATABASE_PASSWORD: z.string(),
   DATABASE_NAME: z.string(),

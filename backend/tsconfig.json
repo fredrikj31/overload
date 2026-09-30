@@ -12,11 +12,10 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "ES2022",
-    "rootDir": "./src",
     "outDir": "./build",
     "declaration": false,
     "declarationMap": false
   },
-  "include": ["./src", "tsconfig.build.json"],
+  "include": ["./src", "drizzle.config.ts", "tsconfig.build.json"],
   "exclude": ["./build"]
 }
