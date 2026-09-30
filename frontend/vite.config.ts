@@ -1,11 +1,22 @@
 import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import { VitePWA } from "vite-plugin-pwa";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
   envDir: "../",
-  plugins: [react(), tailwindcss()],
+  plugins: [
+    react(),
+    VitePWA({
+      registerType: "prompt",
+      manifest: false,
+      workbox: {
+        cleanupOutdatedCaches: true, // auto-removes old caches
+      },
+    }),
+    tailwindcss(),
+  ],
   build: {
     outDir: "build",
   },
