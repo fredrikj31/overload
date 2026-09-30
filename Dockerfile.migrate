@@ -6,9 +6,11 @@ RUN --mount=type=bind,source=backend/package.json,target=/tmp/package.json \
       "drizzle-kit@$(node -p "require('/tmp/package.json').devDependencies['drizzle-kit']")" \
       "drizzle-orm@$(node -p "require('/tmp/package.json').dependencies['drizzle-orm']")" \
       "pg@$(node -p "require('/tmp/package.json').dependencies.pg")" \
-      "zod@$(node -p "require('/tmp/package.json').dependencies.zod")"
+      "zod@$(node -p "require('/tmp/package.json').dependencies.zod")" \
+      "dotenv@$(node -p "require('/tmp/package.json').dependencies.dotenv")"
 
 COPY backend/drizzle.config.ts ./
-COPY backend/src/database ./backend/src/database
+COPY backend/src/config.ts ./src/config.ts
+COPY backend/src/database ./src/database
 
 CMD ["npx", "drizzle-kit", "migrate"]
