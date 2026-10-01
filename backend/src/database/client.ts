@@ -4,7 +4,7 @@ import fastifyPlugin from "fastify-plugin";
 import { logger } from "../logger";
 import { FastifyInstance } from "fastify";
 
-interface DatabasePluginOptions {
+export interface DatabasePluginOptions {
   dbHost: string;
   dbPort: number;
   dbUser: string;
@@ -12,7 +12,7 @@ interface DatabasePluginOptions {
   dbName: string;
 }
 
-const createDatabaseClient = (opts: DatabasePluginOptions) =>
+export const createDatabaseClient = (opts: DatabasePluginOptions) =>
   drizzle({
     connection: {
       connectionString: `postgresql://${opts.dbUser}:${opts.dbPassword}@${opts.dbHost}:${opts.dbPort}/${opts.dbName}`,
@@ -30,7 +30,7 @@ const database = async (
 ) => {
   try {
     const databaseClient = createDatabaseClient(opts);
-    fastify.decorate("drizzleDatabase", databaseClient);
+    fastify.decorate("database", databaseClient);
   } catch (error: unknown) {
     logger.fatal(error, "Unable to connect to database");
     throw new Error("Unable to connect to database!", {
