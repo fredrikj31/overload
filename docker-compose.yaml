@@ -77,11 +77,14 @@ services:
     profiles:
       - prod
     environment:
+      AUTH_BASE_URL: ${AUTH_BASE_URL}
+      AUTH_SECRET: ${AUTH_SECRET}
       DATABASE_HOST: overload-database
       DATABASE_PORT: 5432
       DATABASE_NAME: overload
       DATABASE_USER: ${DATABASE_USER}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      WEBSITE_BASE_URL: ${WEBSITE_BASE_URL}
     networks:
       - overload-network
       - cloudflared
@@ -95,6 +98,8 @@ services:
     restart: always
     profiles:
       - prod
+    environment:
+      MY_APP_API_BASE_URL: ${MY_APP_API_BASE_URL}
     networks:
       - cloudflared
     ports:

@@ -14,7 +14,10 @@
     "build:check:backend": "pnpm --filter @overload/backend build:check",
     "dev:frontend": "pnpm --filter @overload/frontend dev",
     "build:frontend": "pnpm --filter @overload/frontend build",
-    "build:check:frontend": "pnpm --filter @overload/frontend build:check"
+    "build:check:frontend": "pnpm --filter @overload/frontend build:check",
+    "backend:auth:generate": "pnpm --filter @overload/backend auth:generate",
+    "backend:database:generate": "pnpm --filter @overload/backend database:generate",
+    "backend:database:migrate": "pnpm --filter @overload/backend database:migrate"
   },
   "repository": {
     "type": "git",
