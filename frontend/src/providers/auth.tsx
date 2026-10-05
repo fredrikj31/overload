@@ -7,6 +7,8 @@ import { authClient } from "../auth/client";
 import { useSignup } from "../api/actions/signup/useSignup";
 import { login } from "../api/actions/login/login";
 import { useLogin } from "../api/actions/login/useLogin";
+import { useLogout } from "../api/actions/logout/useLogout";
+import { useQueryClient } from "@tanstack/react-query";
 
 type AuthProviderProps = {
   children: ReactNode;
@@ -23,6 +25,7 @@ type AuthProviderValue = {
     | null;
   signup: (data: Parameters<typeof signup>[0]) => void;
   login: (data: Parameters<typeof login>[0]) => void;
+  logout: () => void;
 };
 
 const AuthContext = createContext<AuthProviderValue | null>(null);
@@ -30,8 +33,10 @@ const AuthContext = createContext<AuthProviderValue | null>(null);
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const { data: session, isPending } = authClient.useSession();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { mutate: signupUser } = useSignup();
   const { mutate: loginUser } = useLogin();
+  const { mutate: logoutUser } = useLogout();
 
   // Derive directly from session on every render — no separate state,
   // no effect, no stale-render window between isPending flipping and
@@ -67,6 +72,19 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     });
   };
 
+  const logoutAction = () => {
+    logoutUser(undefined, {
+      onError: (error) => {
+        console.error(error);
+        toast.error("Error logging out!", { position: "bottom-right" });
+      },
+      onSuccess: () => {
+        queryClient.clear();
+        navigate("/login");
+      },
+    });
+  };
+
   const value = useMemo(
     () => ({
       isAuthenticated,
@@ -74,6 +92,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       user,
       signup: signupAction,
       login: loginAction,
+      logout: logoutAction,
     }),
     [isAuthenticated, isPending, user],
   );
