@@ -1,6 +1,7 @@
 import { createContext, ReactNode, useContext, useMemo } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
+import { User } from "better-auth";
 import { signup } from "../api/actions/signup/signup";
 import { authClient } from "../auth/client";
 import { useSignup } from "../api/actions/signup/useSignup";
@@ -12,6 +13,14 @@ type AuthProviderProps = {
 };
 
 type AuthProviderValue = {
+  isAuthenticated: boolean;
+  isPending: boolean;
+  user:
+    | (User & {
+        username?: string | null | undefined;
+        displayUsername?: string | null | undefined;
+      })
+    | null;
   signup: (data: Parameters<typeof signup>[0]) => void;
   login: (data: Parameters<typeof login>[0]) => void;
 };
@@ -60,6 +69,9 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const value = useMemo(
     () => ({
+      isAuthenticated,
+      isPending,
+      user,
       signup: signupAction,
       login: loginAction,
     }),
