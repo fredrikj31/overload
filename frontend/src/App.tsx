@@ -1,10 +1,12 @@
-import { Button } from "@shadcn-ui/components/ui/button";
+import { BrowserRouter, Routes, Route } from "react-router";
+import { SignupRoute } from "./routes/signup/route";
 
 export const App = () => {
   return (
-    <>
-      <h1 className="text-xl">Hello World</h1>
-      <Button>Click Me</Button>
-    </>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/signup" element={<SignupRoute />} />
+      </Routes>
+    </BrowserRouter>
   );
 };
