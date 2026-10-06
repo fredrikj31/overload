@@ -1,4 +1,4 @@
-import { Send } from "lucide-react";
+import { Dumbbell } from "lucide-react";
 import { SignupForm } from "./components/SignupForm";
 import { useAuth } from "../../providers/auth";
 import { Navigate } from "react-router";
@@ -19,9 +19,9 @@ export const SignupRoute = () => {
       <div className="flex w-full max-w-sm flex-col gap-6">
         <a href="#" className="flex items-center gap-2 self-center font-medium">
           <div className="flex size-8 items-center justify-center rounded-md bg-primary text-primary-foreground">
-            <Send className="size-4" />
+            <Dumbbell className="size-4" />
           </div>
-          Relay
+          Overload
         </a>
         <SignupForm />
       </div>
