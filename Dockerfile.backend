@@ -6,9 +6,9 @@ RUN npm install -g pnpm@latest-12
 FROM base AS build
 COPY . /usr/src/app
 WORKDIR /usr/src/app
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --filter=backend
-RUN pnpm --filter=backend run build
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm deploy --filter=backend --prod /app
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --filter=@overload/backend...
+RUN pnpm --filter=@overload/backend... run build
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm deploy --filter=@overload/backend --prod /app
 
 FROM base AS app
 COPY --from=build /app /app
