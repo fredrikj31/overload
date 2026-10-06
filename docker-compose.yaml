@@ -27,6 +27,20 @@ services:
       retries: 10
     logging: *default-logging
 
+  dev-assets:
+    container_name: overload-assets
+    image: nginx:1.31.6-alpine
+    restart: always
+    profiles:
+      - dev
+    ports:
+      - ${ASSETS_PORT:-5003}:80
+    volumes:
+      # Populated by running the seeder locally (pnpm seeder:run)
+      - ./.data/assets:/usr/share/nginx/data:ro
+      - ./nginx/assets.conf:/etc/nginx/conf.d/default.conf:ro
+    logging: *default-logging
+
   # ----- PRODUCTION -----
   database:
     container_name: overload-database
@@ -73,6 +87,21 @@ services:
       - overload-network
     logging: *default-logging
 
+  assets:
+    container_name: overload-assets
+    image: nginx:1.31.6-alpine
+    restart: always
+    profiles:
+      - prod
+    networks:
+      - cloudflared
+    ports:
+      - ${ASSETS_PORT:-5003}:80
+    volumes:
+      - assets-data:/usr/share/nginx/data:ro
+      - ./nginx/assets.conf:/etc/nginx/conf.d/default.conf:ro
+    logging: *default-logging
+
   backend:
     container_name: overload-backend
     image: ghcr.io/fredrikj31/overload-backend:latest
@@ -117,4 +146,7 @@ networks:
 volumes:
   database-data:
     name: overload-database-data
+    driver: local
+  assets-data:
+    name: overload-assets-data
     driver: local
