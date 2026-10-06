@@ -16,8 +16,8 @@
     "build:frontend": "pnpm --filter @overload/frontend build",
     "build:check:frontend": "pnpm --filter @overload/frontend build:check",
     "backend:auth:generate": "pnpm --filter @overload/backend auth:generate",
-    "backend:database:generate": "pnpm --filter @overload/backend database:generate",
-    "backend:database:migrate": "pnpm --filter @overload/backend database:migrate"
+    "database:generate": "pnpm --filter @overload/database database:generate",
+    "database:migrate": "pnpm --filter @overload/database database:migrate"
   },
   "repository": {
     "type": "git",

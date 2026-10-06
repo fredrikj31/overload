@@ -4,8 +4,8 @@ import { config } from "./src/config";
 export default defineConfig({
   dialect: "postgresql",
   // Globbed explicitly: a bare directory path is not searched recursively.
-  schema: "./src/database/schemas/*",
-  out: "./src/database/migrations",
+  schema: "./src/schemas/*",
+  out: "./src/migrations",
   dbCredentials: {
     host: config.database.host,
     port: config.database.port,

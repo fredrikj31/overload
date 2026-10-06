@@ -1,9 +1,8 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import * as schema from "../database/schemas/auth";
+import { authSchema, Database } from "@overload/database";
 import { username, openAPI } from "better-auth/plugins";
 import { config } from "../config";
-import { Database } from "../database/client";
 import { FastifyInstance } from "fastify";
 import fastifyPlugin from "fastify-plugin";
 
@@ -15,7 +14,7 @@ export const createAuth = (database: Database) =>
     database: drizzleAdapter(database, {
       provider: "pg",
       schema: {
-        ...schema,
+        ...authSchema,
       },
     }),
     emailAndPassword: {
