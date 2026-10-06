@@ -13,6 +13,7 @@ export default defineConfig({
       manifest: false,
       workbox: {
         cleanupOutdatedCaches: true, // auto-removes old caches
+        navigateFallbackDenylist: [/^\/media\//], // exercise media is served by the assets nginx, not the SPA
       },
     }),
     tailwindcss(),
