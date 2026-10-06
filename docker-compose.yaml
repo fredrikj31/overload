@@ -84,6 +84,29 @@ services:
       - overload-network
     logging: *default-logging
 
+  # Downloads the exercises dataset into the assets volume and seeds the database. Skips if already imported.
+  seeder:
+    container_name: overload-seeder
+    image: ghcr.io/fredrikj31/overload-seeder:latest
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    restart: "no"
+    profiles:
+      - prod
+    environment:
+      DATABASE_HOST: overload-database
+      DATABASE_PORT: 5432
+      DATABASE_NAME: overload
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      ASSETS_DIR: /data
+    networks:
+      - overload-network
+    volumes:
+      - assets-data:/data
+    logging: *default-logging
+
   assets:
     container_name: overload-assets
     image: nginx:1.31.6-alpine

@@ -2,6 +2,7 @@ packages:
   - "backend"
   - "database"
   - "frontend"
+  - "seeder"
 allowBuilds:
   esbuild: true
 injectWorkspacePackages: true
