@@ -1,6 +1,10 @@
 packages:
   - "backend"
+  - "database"
   - "frontend"
 allowBuilds:
   esbuild: true
 injectWorkspacePackages: true
+# Workspace packages are injected (copied) into their dependants, so re-sync them after @overload/database is rebuilt
+syncInjectedDepsAfterScripts:
+  - build

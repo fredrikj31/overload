@@ -1,7 +1,7 @@
 FROM node:24-alpine
 WORKDIR /app
 
-RUN --mount=type=bind,source=backend/package.json,target=/tmp/package.json \
+RUN --mount=type=bind,source=database/package.json,target=/tmp/package.json \
     npm install --no-save --no-package-lock --legacy-peer-deps \
       "drizzle-kit@$(node -p "require('/tmp/package.json').devDependencies['drizzle-kit']")" \
       "drizzle-orm@$(node -p "require('/tmp/package.json').dependencies['drizzle-orm']")" \
@@ -9,8 +9,9 @@ RUN --mount=type=bind,source=backend/package.json,target=/tmp/package.json \
       "zod@$(node -p "require('/tmp/package.json').dependencies.zod")" \
       "dotenv@$(node -p "require('/tmp/package.json').dependencies.dotenv")"
 
-COPY backend/drizzle.config.ts ./
-COPY backend/src/config.ts ./src/config.ts
-COPY backend/src/database ./src/database
+COPY database/drizzle.config.ts ./
+COPY database/src/config.ts ./src/config.ts
+COPY database/src/schemas ./src/schemas
+COPY database/src/migrations ./src/migrations
 
 CMD ["npx", "drizzle-kit", "migrate"]
