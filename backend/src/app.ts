@@ -1,4 +1,5 @@
 import fastify, { FastifyInstance } from "fastify";
+import fastifyCors from "@fastify/cors";
 import { routes } from "./routes/index";
 import { config } from "./config";
 import { databasePlugin } from "./database/client";
@@ -15,6 +16,12 @@ app
     dbUser: config.database.user,
     dbPassword: config.database.password,
     dbName: config.database.name,
+  })
+  .register(fastifyCors, {
+    origin: config.website.baseUrl,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    maxAge: 86400,
+    credentials: true,
   })
   .register(authPlugin, {
     database: app.database,
