@@ -16,7 +16,7 @@ export default defineConfig({
         cleanupOutdatedCaches: true,
         clientsClaim: true,
         skipWaiting: true,
-        navigateFallbackDenylist: [/^\/media\//], // exercise media is served by the assets nginx, not the SPA
+        navigateFallbackDenylist: [/^\/media\//], // exercise media is served by the media nginx, not the SPA
       },
     }),
     tailwindcss(),
