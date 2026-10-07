@@ -16,7 +16,7 @@ export const exercise = pgTable(
       .notNull()
       .default(sql`'{}'::text[]`),
     instructions: text("instructions").array().notNull(),
-    // Paths relative to the assets root (e.g. "exercises/images/0025-EIeI8Vf.jpg")
+    // Paths relative to the media root (e.g. "exercises/images/0025-EIeI8Vf.jpg")
     imagePath: text("image_path"),
     gifPath: text("gif_path"),
     attribution: text("attribution"),

@@ -27,7 +27,7 @@ const EXTRACTED_PATHS = [
   "LICENSE",
   "NOTICE.md",
 ];
-// Directory inside ASSETS_DIR holding the exercise media, served by the assets nginx service
+// Directory inside MEDIA_DIR holding the exercise media, served by the media nginx service
 const EXERCISES_DIR = "exercises";
 const REF_MARKER_FILE = ".dataset-ref";
 const UPSERT_CHUNK_SIZE = 200;
@@ -155,7 +155,7 @@ const upsertExercises = async (exercises: DatasetExercise[]) => {
 
 // Swaps the freshly downloaded media into place, replacing the previous import
 const publishMedia = async (datasetDir: string, exercisesDir: string) => {
-  const previousDir = path.join(config.assetsDir, `.old-${EXERCISES_DIR}`);
+  const previousDir = path.join(config.mediaDir, `.old-${EXERCISES_DIR}`);
 
   await rm(path.join(datasetDir, "data"), { recursive: true, force: true });
   await writeFile(path.join(datasetDir, REF_MARKER_FILE), config.dataset.ref);
@@ -167,7 +167,7 @@ const publishMedia = async (datasetDir: string, exercisesDir: string) => {
 };
 
 const seed = async () => {
-  const exercisesDir = path.join(config.assetsDir, EXERCISES_DIR);
+  const exercisesDir = path.join(config.mediaDir, EXERCISES_DIR);
 
   if (!config.dataset.force && (await isAlreadyImported(exercisesDir))) {
     logger.info(
@@ -177,8 +177,8 @@ const seed = async () => {
     return;
   }
 
-  // Downloaded inside ASSETS_DIR so the final move is a rename on the same volume
-  const datasetDir = path.join(config.assetsDir, `.tmp-${config.dataset.ref}`);
+  // Downloaded inside MEDIA_DIR so the final move is a rename on the same volume
+  const datasetDir = path.join(config.mediaDir, `.tmp-${config.dataset.ref}`);
   await rm(datasetDir, { recursive: true, force: true });
 
   try {

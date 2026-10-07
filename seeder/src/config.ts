@@ -11,8 +11,8 @@ const envVarsSchema = z.object({
   DATABASE_USER: z.string(),
   DATABASE_PASSWORD: z.string(),
   DATABASE_NAME: z.string(),
-  // Directory the exercise media is written to (the assets volume in Docker)
-  ASSETS_DIR: z.string().default("/data"),
+  // Directory the exercise media is written to (the media volume in Docker)
+  MEDIA_DIR: z.string().default("/data"),
   // Commit of https://github.com/hasaneyldrm/exercises-dataset to import. Bump this to import a newer version.
   DATASET_REF: z.string().default("7455efae41b330c265e7cd4b78dfa848e7ce5ebd"),
   // Re-import even if the current dataset ref has already been imported
@@ -33,7 +33,7 @@ export const config = {
     password: envVars.data.DATABASE_PASSWORD,
     name: envVars.data.DATABASE_NAME,
   },
-  assetsDir: path.resolve(envVars.data.ASSETS_DIR),
+  mediaDir: path.resolve(envVars.data.MEDIA_DIR),
   dataset: {
     ref: envVars.data.DATASET_REF,
     force: envVars.data.FORCE,
