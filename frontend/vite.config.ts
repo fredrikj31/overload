@@ -9,10 +9,13 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
-      registerType: "prompt",
+      registerType: "autoUpdate",
+      injectRegister: false,
       manifest: false,
       workbox: {
-        cleanupOutdatedCaches: true, // auto-removes old caches
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+        skipWaiting: true,
         navigateFallbackDenylist: [/^\/media\//], // exercise media is served by the assets nginx, not the SPA
       },
     }),
