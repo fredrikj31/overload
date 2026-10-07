@@ -1,5 +1,6 @@
 import fastify, { FastifyInstance } from "fastify";
 import fastifyCors from "@fastify/cors";
+import fastifyCookie from "@fastify/cookie";
 import { routes } from "./routes/index";
 import { config } from "./config";
 import { databasePlugin } from "./database/client";
@@ -22,6 +23,12 @@ app
     methods: ["GET", "POST", "PUT", "DELETE"],
     maxAge: 86400,
     credentials: true,
+  })
+  .register(fastifyCookie, {
+    parseOptions: {
+      path: "/",
+      sameSite: true,
+    },
   })
   .register(authPlugin, {
     database: app.database,
