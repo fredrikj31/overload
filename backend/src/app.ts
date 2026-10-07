@@ -4,10 +4,10 @@ import fastifyCookie from "@fastify/cookie";
 import fastifySwagger from "@fastify/swagger";
 import { routes } from "./routes/index";
 import { config } from "./config";
-import { authPlugin } from "./auth/client";
 import { swaggerConfig } from "./plugins/swagger";
 import { scalarConfig } from "./plugins/scalar";
 import { databasePlugin } from "./plugins/database";
+import { authPlugin } from "./plugins/auth";
 
 const app: FastifyInstance = fastify({
   logger: true,
