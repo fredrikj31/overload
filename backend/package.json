@@ -6,12 +6,14 @@
     "dev": "tsx watch --include src src/app.ts | pino-pretty",
     "build": "tsc -p tsconfig.build.json",
     "build:check": "tsc --noEmit",
-    "auth:generate": "pnpm dlx auth@latest generate --config src/auth/cli.ts --output ../database/src/schemas/auth.ts"
+    "auth:generate": "pnpm dlx auth@latest generate --config src/tools/auth/cli.ts --output ../database/src/schemas/auth.ts"
   },
   "dependencies": {
     "@fastify/cookie": "^11.1.2",
     "@fastify/cors": "^11.3.0",
+    "@fastify/swagger": "^9.9.1",
     "@overload/database": "workspace:*",
+    "@scalar/fastify-api-reference": "^1.73.0",
     "better-auth": "^1.7.6",
     "dotenv": "^18.0.1",
     "drizzle-orm": "^1.0.0-rc.4",

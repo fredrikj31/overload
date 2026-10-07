@@ -31,4 +31,21 @@ export const routes: FastifyPluginAsync = async (instance) => {
       return res.send({ ok: true });
     },
   );
+
+  app.get(
+    "/docs/json", // Make it available for API docs website to fetch JSON file
+    {
+      schema: {
+        hide: true, // Hide from API & Swagger docs (UI & JSON)
+        response: {
+          "200": z.any(),
+        },
+        summary: "Receive Swagger docs in JSON format",
+        tags: ["Documentation"],
+      },
+    },
+    async (_, res) => {
+      return res.send(app.swagger());
+    },
+  );
 };

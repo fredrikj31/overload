@@ -1,23 +1,19 @@
 import fastify, { FastifyInstance } from "fastify";
 import fastifyCors from "@fastify/cors";
 import fastifyCookie from "@fastify/cookie";
+import fastifySwagger from "@fastify/swagger";
 import { routes } from "./routes/index";
 import { config } from "./config";
-import { databasePlugin } from "./database/client";
-import { authPlugin } from "./auth/client";
+import { swaggerConfig } from "./plugins/swagger";
+import { scalarConfig } from "./plugins/scalar";
+import { databasePlugin } from "./plugins/database";
+import { authPlugin } from "./plugins/auth";
 
 const app: FastifyInstance = fastify({
   logger: true,
 });
 
 app
-  .register(databasePlugin, {
-    dbHost: config.database.host,
-    dbPort: config.database.port,
-    dbUser: config.database.user,
-    dbPassword: config.database.password,
-    dbName: config.database.name,
-  })
   .register(fastifyCors, {
     origin: config.website.baseUrl,
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -29,6 +25,15 @@ app
       path: "/",
       sameSite: true,
     },
+  })
+  .register(fastifySwagger, swaggerConfig)
+  .register(import("@scalar/fastify-api-reference"), scalarConfig)
+  .register(databasePlugin, {
+    dbHost: config.database.host,
+    dbPort: config.database.port,
+    dbUser: config.database.user,
+    dbPassword: config.database.password,
+    dbName: config.database.name,
   })
   .register(authPlugin, {
     database: app.database,
