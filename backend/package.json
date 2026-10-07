@@ -6,7 +6,7 @@
     "dev": "tsx watch --include src src/app.ts | pino-pretty",
     "build": "tsc -p tsconfig.build.json",
     "build:check": "tsc --noEmit",
-    "auth:generate": "pnpm dlx auth@latest generate --config src/auth/cli.ts --output ../database/src/schemas/auth.ts"
+    "auth:generate": "pnpm dlx auth@latest generate --config src/tools/auth/cli.ts --output ../database/src/schemas/auth.ts"
   },
   "dependencies": {
     "@fastify/cookie": "^11.1.2",
