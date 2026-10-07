@@ -7,6 +7,7 @@ import { config } from "./config";
 import { databasePlugin } from "./database/client";
 import { authPlugin } from "./auth/client";
 import { swaggerConfig } from "./plugins/swagger";
+import { scalarConfig } from "./plugins/scalar";
 
 const app: FastifyInstance = fastify({
   logger: true,
@@ -14,6 +15,7 @@ const app: FastifyInstance = fastify({
 
 app
   .register(fastifySwagger, swaggerConfig)
+  .register(import("@scalar/fastify-api-reference"), scalarConfig)
   .register(databasePlugin, {
     dbHost: config.database.host,
     dbPort: config.database.port,
