@@ -14,15 +14,6 @@ const app: FastifyInstance = fastify({
 });
 
 app
-  .register(fastifySwagger, swaggerConfig)
-  .register(import("@scalar/fastify-api-reference"), scalarConfig)
-  .register(databasePlugin, {
-    dbHost: config.database.host,
-    dbPort: config.database.port,
-    dbUser: config.database.user,
-    dbPassword: config.database.password,
-    dbName: config.database.name,
-  })
   .register(fastifyCors, {
     origin: config.website.baseUrl,
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -34,6 +25,15 @@ app
       path: "/",
       sameSite: true,
     },
+  })
+  .register(fastifySwagger, swaggerConfig)
+  .register(import("@scalar/fastify-api-reference"), scalarConfig)
+  .register(databasePlugin, {
+    dbHost: config.database.host,
+    dbPort: config.database.port,
+    dbUser: config.database.user,
+    dbPassword: config.database.password,
+    dbName: config.database.name,
   })
   .register(authPlugin, {
     database: app.database,
