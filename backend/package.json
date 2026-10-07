@@ -13,6 +13,7 @@
     "@fastify/cors": "^11.3.0",
     "@fastify/swagger": "^9.9.1",
     "@overload/database": "workspace:*",
+    "@scalar/fastify-api-reference": "^1.73.0",
     "better-auth": "^1.7.6",
     "dotenv": "^18.0.1",
     "drizzle-orm": "^1.0.0-rc.4",
