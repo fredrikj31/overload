@@ -1,14 +1,21 @@
 import { StrictMode } from "react";
-import ReactDOM from "react-dom/client";
+import { createRoot } from "react-dom/client";
+import { registerSW } from "virtual:pwa-register";
 import "./index.css";
 import { App } from "./App";
 
-const rootElement = document.getElementById("root")!;
-if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement);
-  root.render(
-    <StrictMode>
-      <App />
-    </StrictMode>,
-  );
-}
+const UPDATE_CHECK_INTERVAL_MS = 60 * 1000;
+
+registerSW({
+  immediate: true,
+  onRegisteredSW(_swUrl, registration) {
+    if (!registration) return;
+    setInterval(() => registration.update(), UPDATE_CHECK_INTERVAL_MS);
+  },
+});
+
+createRoot(document.getElementById("root")!).render(
+  <StrictMode>
+    <App />
+  </StrictMode>,
+);

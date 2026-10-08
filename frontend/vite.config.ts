@@ -9,9 +9,12 @@ export default defineConfig({
   plugins: [
     react(),
     VitePWA({
+      // A new service worker takes over immediately and the page reloads, see src/main.tsx
       registerType: "autoUpdate",
+      // The service worker is registered from src/main.tsx so we can also check for updates
+      // periodically, instead of relying on the injected registerSW.js script
       injectRegister: false,
-      manifest: false,
+      manifest: false, // served from public/manifest.webmanifest
       workbox: {
         cleanupOutdatedCaches: true,
         clientsClaim: true,
