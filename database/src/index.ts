@@ -5,3 +5,4 @@ export * as bodyPartSchema from "./schemas/bodyPart";
 export * as muscleSchema from "./schemas/muscle";
 export * as equipmentSchema from "./schemas/equipment";
 export * as exerciseSchema from "./schemas/exercise";
+export * as muscleExerciseSchema from "./schemas/muscle_exercise";
