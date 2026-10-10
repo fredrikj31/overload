@@ -1,10 +1,11 @@
 import { defineRelations } from "drizzle-orm";
 import * as authSchema from "./schemas/auth";
 import { bodyPart } from "./schemas/bodyPart";
+import { equipment } from "./schemas/equipment";
 import { muscle } from "./schemas/muscle";
 
 export const relations = defineRelations(
-  { ...authSchema, bodyPart, muscle },
+  { ...authSchema, bodyPart, muscle, equipment },
   (r) => ({
     user: {
       sessions: r.many.session(),
