@@ -19,7 +19,8 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - database-data:/var/lib/postgresql
+      # Database files are stored on the local file system (gitignored)
+      - ./.docker/database:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER} -d overload"]
       interval: 5s
