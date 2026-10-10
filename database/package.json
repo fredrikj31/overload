@@ -13,7 +13,7 @@
     "database:migrate": "pnpm exec drizzle-kit migrate"
   },
   "dependencies": {
-    "dotenv": "^18.0.1",
+    "dotenv": "^18.0.6",
     "drizzle-orm": "^1.0.0-rc.4",
     "drizzle-zod": "^0.8.3",
     "pg": "^8.23.0",
