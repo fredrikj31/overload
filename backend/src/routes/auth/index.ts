@@ -26,7 +26,9 @@ export const authRoutes: FastifyPluginAsync = async (instance) => {
         const response = await instance.auth.handler(req);
         // Forward response to client
         reply.status(response.status);
-        response.headers.forEach((value, key) => reply.header(key, value));
+        response.headers.forEach((value, key) => {
+          reply.header(key, value);
+        });
         return reply.send(response.body ? await response.text() : null);
       } catch (error) {
         logger.error(error, "Authentication Error");

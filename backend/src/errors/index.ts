@@ -4,15 +4,15 @@ export interface BaseErrorOptions {
   message: string;
 }
 
-export class BaseError {
+export class BaseError extends Error {
   public statusCode: number;
   public code: string;
-  public message: string;
 
   constructor({ statusCode, code, message }: BaseErrorOptions) {
+    super(message);
+    this.name = new.target.name;
     this.statusCode = statusCode;
     this.code = code;
-    this.message = message;
   }
 
   toJSON = () => {

@@ -1,4 +1,10 @@
-import { createContext, ReactNode, useContext, useMemo } from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useMemo,
+} from "react";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { User } from "better-auth";
@@ -44,35 +50,43 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const user = session?.user ?? null;
   const isAuthenticated = !!session;
 
-  const signupAction = (data: Parameters<typeof signup>[0]) => {
-    signupUser(data, {
-      onError: (error) => {
-        console.error(error);
-        toast.error("Error signing up!", { position: "bottom-right" });
-      },
-      onSuccess: () => {
-        toast.success("Successfully signed up!", { position: "bottom-right" });
-        navigate("/login");
-      },
-    });
-  };
+  const signupAction = useCallback(
+    (data: Parameters<typeof signup>[0]) => {
+      signupUser(data, {
+        onError: (error) => {
+          console.error(error);
+          toast.error("Error signing up!", { position: "bottom-right" });
+        },
+        onSuccess: () => {
+          toast.success("Successfully signed up!", {
+            position: "bottom-right",
+          });
+          void navigate("/login");
+        },
+      });
+    },
+    [signupUser, navigate],
+  );
 
-  const loginAction = (data: Parameters<typeof login>[0]) => {
-    loginUser(data, {
-      onError: (error) => {
-        console.error(error);
-        toast.error("Error logging in!", { position: "bottom-right" });
-      },
-      onSuccess: () => {
-        // Don't manually setUserSession here — authClient.useSession()
-        // will re-fetch/update on its own and the derived `user` above
-        // will pick it up automatically. Just navigate.
-        navigate("/");
-      },
-    });
-  };
+  const loginAction = useCallback(
+    (data: Parameters<typeof login>[0]) => {
+      loginUser(data, {
+        onError: (error) => {
+          console.error(error);
+          toast.error("Error logging in!", { position: "bottom-right" });
+        },
+        onSuccess: () => {
+          // Don't manually setUserSession here — authClient.useSession()
+          // will re-fetch/update on its own and the derived `user` above
+          // will pick it up automatically. Just navigate.
+          void navigate("/");
+        },
+      });
+    },
+    [loginUser, navigate],
+  );
 
-  const logoutAction = () => {
+  const logoutAction = useCallback(() => {
     logoutUser(undefined, {
       onError: (error) => {
         console.error(error);
@@ -80,10 +94,10 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       },
       onSuccess: () => {
         queryClient.clear();
-        navigate("/login");
+        void navigate("/login");
       },
     });
-  };
+  }, [logoutUser, queryClient, navigate]);
 
   const value = useMemo(
     () => ({
@@ -94,12 +108,13 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
       login: loginAction,
       logout: logoutAction,
     }),
-    [isAuthenticated, isPending, user],
+    [isAuthenticated, isPending, user, signupAction, loginAction, logoutAction],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
+// eslint-disable-next-line react-refresh/only-export-components -- hook lives next to its provider; editing this file triggers a full reload instead of HMR
 export const useAuth = (): AuthProviderValue => {
   const authContext = useContext(AuthContext);
 
