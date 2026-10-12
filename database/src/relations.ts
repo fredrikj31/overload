@@ -27,6 +27,7 @@ export const relations = defineRelations(
       bodyPart: r.one.bodyPart({
         from: r.muscle.bodyPartId,
         to: r.bodyPart.id,
+        optional: false,
       }),
       muscleExercises: r.many.muscleExercise(),
     },
@@ -41,6 +42,7 @@ export const relations = defineRelations(
       equipment: r.one.equipment({
         from: r.exercise.equipmentId,
         to: r.equipment.id,
+        optional: false,
       }),
       muscleExercises: r.many.muscleExercise(),
     },
@@ -48,10 +50,12 @@ export const relations = defineRelations(
       exercise: r.one.exercise({
         from: r.muscleExercise.exerciseId,
         to: r.exercise.id,
+        optional: false,
       }),
       muscle: r.one.muscle({
         from: r.muscleExercise.muscleId,
         to: r.muscle.id,
+        optional: false,
       }),
     },
   }),
