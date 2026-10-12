@@ -10,7 +10,7 @@ registerSW({
   immediate: true,
   onRegisteredSW(_swUrl, registration) {
     if (!registration) return;
-    setInterval(() => registration.update(), UPDATE_CHECK_INTERVAL_MS);
+    setInterval(() => void registration.update(), UPDATE_CHECK_INTERVAL_MS);
   },
 });
 

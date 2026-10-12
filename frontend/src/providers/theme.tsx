@@ -63,6 +63,7 @@ export function ThemeProvider({
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components -- hook lives next to its provider; editing this file triggers a full reload instead of HMR
 export const useTheme = () => {
   const context = useContext(ThemeProviderContext);
 

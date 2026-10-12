@@ -19,7 +19,6 @@ import {
 import path from "node:path";
 import { Readable } from "node:stream";
 import { pipeline } from "node:stream/promises";
-import { ReadableStream } from "node:stream/web";
 import * as tar from "tar";
 import { config } from "./config";
 import { DatasetExercise, datasetSchema } from "./dataset";
@@ -118,7 +117,7 @@ const downloadDataset = async (targetDir: string) => {
 
   await mkdir(targetDir, { recursive: true });
   await pipeline(
-    Readable.fromWeb(response.body as ReadableStream),
+    Readable.fromWeb(response.body),
     tar.x({
       cwd: targetDir,
       // Archive entries are prefixed with "<repo>-<ref>/"

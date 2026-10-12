@@ -54,12 +54,12 @@ app.listen(
 
 process.on("SIGINT", () => {
   app.log.warn(`SIGINT signal detected, terminating service`);
-  app.close();
+  void app.close();
 });
 
 process.on("SIGTERM", () => {
   app.log.warn(`SIGTERM signal detected, terminating service`);
-  app.close();
+  void app.close();
 });
 
 declare module "fastify" {
