@@ -1,20 +1,30 @@
-import { Button } from "@shadcn-ui/components/ui/button";
-import { LogOut } from "lucide-react";
-import { useAuth } from "../../providers/auth";
+import { Greeting } from "./components/Greeting";
+import { StatsGrid } from "./components/StatsGrid";
+import { NextWorkoutCard } from "./components/NextWorkoutCard";
+import { WeeklyActivityCard } from "./components/WeeklyActivityCard";
+import { RecentWorkoutsCard } from "./components/RecentWorkoutsCard";
+import { MusclesTrainedCard } from "./components/MusclesTrainedCard";
+import {
+  musclesTrained,
+  nextWorkout,
+  recentWorkouts,
+  stats,
+  weekDays,
+} from "./mock";
 
 export const IndexRoute = () => {
-  const { logout } = useAuth();
-
   return (
-    <div className="flex flex-col">
-      <h1>Index Page</h1>
-      <Button
-        variant="ghost"
-        className="w-full justify-start"
-        onClick={() => logout()}
-      >
-        <LogOut /> Log out
-      </Button>
+    <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 p-4 pb-8 md:p-6">
+      <Greeting />
+      <StatsGrid stats={stats} />
+      <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
+        <NextWorkoutCard workout={nextWorkout} />
+        <WeeklyActivityCard days={weekDays} />
+      </div>
+      <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
+        <RecentWorkoutsCard workouts={recentWorkouts} />
+        <MusclesTrainedCard muscles={musclesTrained} />
+      </div>
     </div>
   );
 };
