@@ -2,8 +2,9 @@
 # Runs once at container start: nginx's /docker-entrypoint.sh executes every *.sh in /docker-entrypoint.d/.
 #
 # Vite inlines import.meta.env at build time, so Dockerfile.frontend builds the bundle with the literal
-# placeholder "MY_APP_API_BASE_URL" (ENV VITE_API_BASE_URL). This script replaces every MY_APP_*
-# placeholder in the built assets with the value of the container env var of the same name.
+# placeholders "MY_APP_API_BASE_URL" (ENV VITE_API_BASE_URL) and "MY_APP_MEDIA_BASE_URL"
+# (ENV VITE_MEDIA_BASE_URL). This script replaces every MY_APP_* placeholder in the built assets with
+# the value of the container env var of the same name.
 #
 # Notes:
 #   - The files are edited in place, so this only works on a freshly *created* container. After changing
@@ -15,7 +16,7 @@
 set -eu
 
 HTML_DIR=/usr/share/nginx/html
-REQUIRED_VARS="MY_APP_API_BASE_URL"
+REQUIRED_VARS="MY_APP_API_BASE_URL MY_APP_MEDIA_BASE_URL"
 
 # Fail fast: a missing value would leave the placeholder in the bundle and the app would throw
 # "There is an error with your environment variables." in the browser, with nothing in the container logs.

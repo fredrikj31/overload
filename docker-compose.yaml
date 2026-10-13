@@ -153,6 +153,7 @@ services:
       - prod
     environment:
       MY_APP_API_BASE_URL: ${MY_APP_API_BASE_URL}
+      MY_APP_MEDIA_BASE_URL: ${MY_APP_MEDIA_BASE_URL}
     networks:
       - cloudflared
     ports:
