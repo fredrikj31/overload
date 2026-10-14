@@ -8,6 +8,34 @@
     />
 
     <link rel="manifest" href="manifest.webmanifest" />
+
+    <!--
+      Resolve the theme before any CSS or JS loads so the first painted frame already has the
+      right background. Mirrors the logic in src/providers/theme.tsx (same storage key).
+    -->
+    <script>
+      (function () {
+        var theme = null;
+        try {
+          theme = localStorage.getItem("overload-theme");
+        } catch (_) {}
+        var dark =
+          theme === "dark" ||
+          (theme !== "light" &&
+            window.matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.classList.add(dark ? "dark" : "light");
+      })();
+    </script>
+    <style>
+      html {
+        background-color: #ffffff;
+        color-scheme: light;
+      }
+      html.dark {
+        background-color: #171717;
+        color-scheme: dark;
+      }
+    </style>
     <meta
       name="theme-color"
       content="#ffffff"
