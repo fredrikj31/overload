@@ -5,13 +5,23 @@ import { equipment } from "./schemas/equipment";
 import { exercise } from "./schemas/exercise";
 import { muscle } from "./schemas/muscle";
 import { muscleExercise } from "./schemas/muscle_exercise";
+import { routine } from "./schemas/routine";
 
 export const relations = defineRelations(
-  { ...authSchema, bodyPart, muscle, equipment, exercise, muscleExercise },
+  {
+    ...authSchema,
+    bodyPart,
+    muscle,
+    equipment,
+    exercise,
+    muscleExercise,
+    routine,
+  },
   (r) => ({
     user: {
       sessions: r.many.session(),
       accounts: r.many.account(),
+      routines: r.many.routine(),
     },
     session: {
       user: r.one.user({ from: r.session.userId, to: r.user.id }),
@@ -55,6 +65,13 @@ export const relations = defineRelations(
       muscle: r.one.muscle({
         from: r.muscleExercise.muscleId,
         to: r.muscle.id,
+        optional: false,
+      }),
+    },
+    routine: {
+      user: r.one.user({
+        from: r.routine.userId,
+        to: r.user.id,
         optional: false,
       }),
     },
