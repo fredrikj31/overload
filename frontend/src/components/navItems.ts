@@ -15,7 +15,7 @@ export type NavItem = {
 
 export const navItems: readonly NavItem[] = [
   { to: "/", label: "Home", icon: House, end: true },
-  { to: "/workouts", label: "Workouts", icon: Dumbbell },
+  { to: "/routines", label: "Routines", icon: Dumbbell },
   { to: "/exercises", label: "Exercises", icon: ListChecks },
   { to: "/profile", label: "Profile", icon: User },
 ];
