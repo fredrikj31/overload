@@ -7,6 +7,7 @@ import { Skeleton } from "@shadcn-ui/components/ui/skeleton";
 import { cn } from "@shadcn-ui/lib/utils";
 import { useRoutine } from "../../api/queries/routines/listRoutines/useListRoutines";
 import { QueryErrorState } from "../../components/QueryErrorState";
+import { DeleteRoutineDialog } from "./components/DeleteRoutineDialog";
 
 export const RoutineDetailRoute = () => {
   const { id } = useParams<{ id: string }>();
@@ -51,17 +52,20 @@ export const RoutineDetailRoute = () => {
           </Link>
         </div>
       ) : (
-        <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {routine.name}
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            {description ? (
-              description
-            ) : (
-              <span className="italic">No description</span>
-            )}
-          </p>
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex flex-col gap-2">
+            <h1 className="text-2xl font-semibold tracking-tight">
+              {routine.name}
+            </h1>
+            <p className="text-sm text-muted-foreground">
+              {description ? (
+                description
+              ) : (
+                <span className="italic">No description</span>
+              )}
+            </p>
+          </div>
+          <DeleteRoutineDialog routine={routine} />
         </div>
       )}
     </div>
