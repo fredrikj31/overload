@@ -21,3 +21,7 @@ export const CreateRoutineResponseSchema = z.object({
 export const ListRoutinesResponseSchema = z.object({
   data: z.array(RoutineSchema),
 });
+
+/** Path params for routes that address a single routine. */
+export const RoutineParamsSchema = z.object({ id: z.uuid() });
+export type RoutineParams = z.infer<typeof RoutineParamsSchema>;
