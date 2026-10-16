@@ -1,0 +1,1 @@
+CREATE INDEX "routine_user_id_idx" ON "routine" ("user_id");

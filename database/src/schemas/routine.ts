@@ -1,4 +1,11 @@
-import { pgTable, text, timestamp, uuid, varchar } from "drizzle-orm/pg-core";
+import {
+  index,
+  pgTable,
+  text,
+  timestamp,
+  uuid,
+  varchar,
+} from "drizzle-orm/pg-core";
 import {
   createInsertSchema,
   createSelectSchema,
@@ -10,20 +17,24 @@ import { user } from "./auth";
 /**
  * A routine which is a list of exercises that you do.
  */
-export const routine = pgTable("routine", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at")
-    .defaultNow()
-    .$onUpdate(() => /* @__PURE__ */ new Date())
-    .notNull(),
-  deletedAt: timestamp("deleted_at"),
-  userId: text("user_id")
-    .notNull()
-    .references(() => user.id),
-  name: varchar("name").notNull(),
-  description: varchar("description"),
-});
+export const routine = pgTable(
+  "routine",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at")
+      .defaultNow()
+      .$onUpdate(() => /* @__PURE__ */ new Date())
+      .notNull(),
+    deletedAt: timestamp("deleted_at"),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id),
+    name: varchar("name").notNull(),
+    description: varchar("description"),
+  },
+  (table) => [index("routine_user_id_idx").on(table.userId)],
+);
 
 // ---------------------------------------------------------------------------
 // Zod schemas (shared by backend & frontend)
