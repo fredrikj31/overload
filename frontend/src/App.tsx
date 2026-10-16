@@ -10,6 +10,7 @@ import { IndexRoute } from "./routes/_authenticated.index/route";
 import { ExercisesRoute } from "./routes/_authenticated.exercises/route";
 import { ExerciseDetailRoute } from "./routes/_authenticated.exercises.$id/route";
 import { RoutinesRoute } from "./routes/_authenticated.routines/route";
+import { RoutineDetailRoute } from "./routes/_authenticated.routines.$id/route";
 
 export const App = () => {
   const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ export const App = () => {
                 <Route path="exercises" element={<ExercisesRoute />} />
                 <Route path="exercises/:id" element={<ExerciseDetailRoute />} />
                 <Route path="routines" element={<RoutinesRoute />} />
+                <Route path="routines/:id" element={<RoutineDetailRoute />} />
               </Route>
             </Routes>
             <Toaster />

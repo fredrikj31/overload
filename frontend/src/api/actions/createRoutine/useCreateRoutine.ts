@@ -1,8 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { routinesQueryKey } from "../../queries/routines/listRoutines/useListRoutines";
 import { createRoutine } from "./createRoutine";
-
-/** Query key a future "list routines" query should use, so creates refresh it. */
-export const routinesQueryKey = ["routines"] as const;
 
 export const useCreateRoutine = () => {
   const queryClient = useQueryClient();
