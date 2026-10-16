@@ -17,3 +17,7 @@ export type Routine = z.infer<typeof RoutineSchema>;
 export const CreateRoutineResponseSchema = z.object({
   data: RoutineSchema,
 });
+
+export const ListRoutinesResponseSchema = z.object({
+  data: z.array(RoutineSchema),
+});
