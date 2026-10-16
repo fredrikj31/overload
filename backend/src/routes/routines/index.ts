@@ -1,13 +1,16 @@
 import { FastifyPluginAsync } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
+import { z } from "zod";
 import { validateSession } from "../../hooks/validateSession";
 import { ApiErrorSchema } from "../../types/error";
 import {
   CreateRoutineBodySchema,
   CreateRoutineResponseSchema,
   ListRoutinesResponseSchema,
+  RoutineParamsSchema,
 } from "../../types/routine";
 import { createRoutineHandler } from "./handlers/createRoutine";
+import { deleteRoutineHandler } from "./handlers/deleteRoutine";
 import { listRoutinesHandler } from "./handlers/listRoutines";
 
 export const routineRoutes: FastifyPluginAsync = async (instance) => {
@@ -72,6 +75,37 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
         body: req.body,
       });
       return res.status(201).send({ data: routine });
+    },
+  );
+
+  app.delete(
+    "/:id",
+    {
+      onRequest: validateSession(),
+      schema: {
+        summary: "Delete routine",
+        description:
+          "Deletes a routine owned by the signed-in user. Routines owned by other users are reported as not found.",
+        tags: ["routines"],
+        security: [{ session: [] }],
+        params: RoutineParamsSchema,
+        response: {
+          "204": z.undefined().describe("The routine was deleted."),
+          "400": ApiErrorSchema,
+          "401": ApiErrorSchema,
+          "404": ApiErrorSchema,
+          "500": ApiErrorSchema,
+        },
+      },
+    },
+    async (req, res) => {
+      const userId = req.userId;
+      await deleteRoutineHandler({
+        database,
+        userId,
+        params: req.params,
+      });
+      return res.status(204).send(undefined);
     },
   );
 };
