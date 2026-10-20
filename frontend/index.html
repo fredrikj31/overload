@@ -10,8 +10,26 @@
     <link rel="manifest" href="manifest.webmanifest" />
 
     <!--
+      Dark is the default. The manifest splash is a fixed #171717, so everything before React
+      mounts must be dark too or the launch flashes. The theme-color meta drives the Android
+      gesture bar and iOS status bar, so it is set from the resolved theme here rather than via
+      a prefers-color-scheme media attribute (that would follow the OS, not the in-app choice).
+    -->
+    <style>
+      html {
+        background-color: #171717;
+        color-scheme: dark;
+      }
+      html.light {
+        background-color: #ffffff;
+        color-scheme: light;
+      }
+    </style>
+    <meta name="theme-color" content="#171717" />
+    <!--
       Resolve the theme before any CSS or JS loads so the first painted frame already has the
-      right background. Mirrors the logic in src/providers/theme.tsx (same storage key).
+      right background. Mirrors applyTheme in src/providers/theme.tsx (same storage key and
+      colors).
     -->
     <script>
       (function () {
@@ -20,32 +38,16 @@
           theme = localStorage.getItem("overload-theme");
         } catch (_) {}
         var dark =
-          theme === "dark" ||
-          (theme !== "light" &&
-            window.matchMedia("(prefers-color-scheme: dark)").matches);
+          theme === "light"
+            ? false
+            : theme === "system"
+              ? window.matchMedia("(prefers-color-scheme: dark)").matches
+              : true;
         document.documentElement.classList.add(dark ? "dark" : "light");
+        var meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute("content", dark ? "#171717" : "#ffffff");
       })();
     </script>
-    <style>
-      html {
-        background-color: #ffffff;
-        color-scheme: light;
-      }
-      html.dark {
-        background-color: #171717;
-        color-scheme: dark;
-      }
-    </style>
-    <meta
-      name="theme-color"
-      content="#ffffff"
-      media="(prefers-color-scheme: light)"
-    />
-    <meta
-      name="theme-color"
-      content="#171717"
-      media="(prefers-color-scheme: dark)"
-    />
 
     <link rel="icon" href="/assets/images/favicon.ico" sizes="any" />
 

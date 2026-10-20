@@ -18,7 +18,7 @@ export const App = () => {
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider defaultTheme="system" storageKey="overload-theme">
+        <ThemeProvider defaultTheme="dark" storageKey="overload-theme">
           <AuthProvider>
             <Routes>
               <Route path="/signup" element={<SignupRoute />} />
