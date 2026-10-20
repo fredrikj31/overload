@@ -1,6 +1,39 @@
 import { createContext, useContext, useEffect, useState } from "react";
 
 type Theme = "dark" | "light" | "system";
+type ResolvedTheme = Exclude<Theme, "system">;
+
+const THEMES: readonly Theme[] = ["dark", "light", "system"];
+
+// Must match --background in src/index.css (oklch(1 0 0) / oklch(0.145 0 0)) and the inline
+// first-paint script in index.html. The theme-color meta drives the Android gesture bar and
+// the iOS status bar in standalone mode.
+const THEME_COLOR: Record<ResolvedTheme, string> = {
+  light: "#ffffff",
+  dark: "#171717",
+};
+
+const DARK_QUERY = "(prefers-color-scheme: dark)";
+
+const isTheme = (value: string | null): value is Theme =>
+  THEMES.includes(value as Theme);
+
+const resolveTheme = (theme: Theme): ResolvedTheme =>
+  theme === "system"
+    ? window.matchMedia(DARK_QUERY).matches
+      ? "dark"
+      : "light"
+    : theme;
+
+const applyTheme = (resolved: ResolvedTheme) => {
+  const root = window.document.documentElement;
+  root.classList.remove("light", "dark");
+  root.classList.add(resolved);
+
+  document
+    .querySelector('meta[name="theme-color"]')
+    ?.setAttribute("content", THEME_COLOR[resolved]);
+};
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -14,7 +47,7 @@ type ThemeProviderState = {
 };
 
 const initialState: ThemeProviderState = {
-  theme: "system",
+  theme: "dark",
   setTheme: () => null,
 };
 
@@ -26,26 +59,21 @@ export function ThemeProvider({
   storageKey,
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
-  );
+  const [theme, setTheme] = useState<Theme>(() => {
+    const stored = localStorage.getItem(storageKey);
+    return isTheme(stored) ? stored : defaultTheme;
+  });
 
   useEffect(() => {
-    const root = window.document.documentElement;
+    applyTheme(resolveTheme(theme));
 
-    root.classList.remove("light", "dark");
+    if (theme !== "system") return;
 
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
-        ? "dark"
-        : "light";
-
-      root.classList.add(systemTheme);
-      return;
-    }
-
-    root.classList.add(theme);
+    // Follow live OS theme changes while the user has picked "system"
+    const query = window.matchMedia(DARK_QUERY);
+    const onChange = () => applyTheme(resolveTheme(theme));
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
   }, [theme]);
 
   const value = {
