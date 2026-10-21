@@ -10,6 +10,7 @@ import { QueryErrorState } from "../../components/QueryErrorState";
 import { AddExerciseDialog } from "./components/AddExerciseDialog";
 import { DeleteRoutineDialog } from "./components/DeleteRoutineDialog";
 import { EditRoutineDialog } from "./components/EditRoutineDialog";
+import { RoutineExerciseList } from "./components/RoutineExerciseList";
 
 export const RoutineDetailRoute = () => {
   const { id } = useParams<{ id: string }>();
@@ -81,11 +82,7 @@ export const RoutineDetailRoute = () => {
               </h2>
               <AddExerciseDialog routine={routine} />
             </div>
-            {/* Placeholder until there is an endpoint to list a routine's
-                exercises. */}
-            <div className="flex flex-col items-center gap-1 rounded-xl border p-8 text-center text-sm text-muted-foreground">
-              <p>Exercises you add aren&apos;t listed here yet.</p>
-            </div>
+            <RoutineExerciseList routineId={routine.id} />
           </section>
         </>
       )}
