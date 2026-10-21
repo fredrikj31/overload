@@ -1,7 +1,7 @@
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { listRoutines } from "./listRoutines";
 
-/** Shared with `useCreateRoutine` and `useDeleteRoutine`, which update it after a mutation. */
+/** Shared with `useCreateRoutine`, `useUpdateRoutine` and `useDeleteRoutine`, which update it after a mutation. */
 export const routinesQueryKey = ["routines"] as const;
 
 export const listRoutinesQueryOptions = queryOptions({
