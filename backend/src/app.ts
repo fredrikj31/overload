@@ -16,7 +16,7 @@ const app: FastifyInstance = fastify({
 app
   .register(fastifyCors, {
     origin: config.website.baseUrl,
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     maxAge: 86400,
     credentials: true,
   })
