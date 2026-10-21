@@ -11,6 +11,11 @@ import {
   UpdateRoutineBodySchema,
   UpdateRoutineResponseSchema,
 } from "../../types/routine";
+import {
+  AddRoutineExerciseBodySchema,
+  AddRoutineExerciseResponseSchema,
+} from "../../types/routineExercise";
+import { addRoutineExerciseHandler } from "./handlers/addRoutineExercise";
 import { createRoutineHandler } from "./handlers/createRoutine";
 import { deleteRoutineHandler } from "./handlers/deleteRoutine";
 import { listRoutinesHandler } from "./handlers/listRoutines";
@@ -144,6 +149,41 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
         body: req.body,
       });
       return res.send({ data: routine });
+    },
+  );
+
+  app.post(
+    "/:id/exercises",
+    {
+      onRequest: validateSession(),
+      schema: {
+        summary: "Add exercise to routine",
+        description:
+          "Appends an exercise to the end of a routine owned by the signed-in user. The same exercise may be added more than once. Routines owned by other users are reported as not found.",
+        tags: ["routines"],
+        security: [{ session: [] }],
+        params: RoutineParamsSchema,
+        body: AddRoutineExerciseBodySchema,
+        response: {
+          "201": AddRoutineExerciseResponseSchema.describe(
+            "Returns the created routine exercise.",
+          ),
+          "400": ApiErrorSchema,
+          "401": ApiErrorSchema,
+          "404": ApiErrorSchema,
+          "500": ApiErrorSchema,
+        },
+      },
+    },
+    async (req, res) => {
+      const userId = req.userId;
+      const routineExercise = await addRoutineExerciseHandler({
+        database,
+        userId,
+        params: req.params,
+        body: req.body,
+      });
+      return res.status(201).send({ data: routineExercise });
     },
   );
 };
