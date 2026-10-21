@@ -7,6 +7,7 @@ import { Skeleton } from "@shadcn-ui/components/ui/skeleton";
 import { cn } from "@shadcn-ui/lib/utils";
 import { useRoutine } from "../../api/queries/routines/listRoutines/useListRoutines";
 import { QueryErrorState } from "../../components/QueryErrorState";
+import { AddExerciseDialog } from "./components/AddExerciseDialog";
 import { DeleteRoutineDialog } from "./components/DeleteRoutineDialog";
 import { EditRoutineDialog } from "./components/EditRoutineDialog";
 
@@ -53,24 +54,40 @@ export const RoutineDetailRoute = () => {
           </Link>
         </div>
       ) : (
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex min-w-0 flex-col gap-2">
-            <h1 className="text-2xl font-semibold tracking-tight wrap-break-word">
-              {routine.name}
-            </h1>
-            <p className="text-sm text-muted-foreground wrap-break-word">
-              {description ? (
-                description
-              ) : (
-                <span className="italic">No description</span>
-              )}
-            </p>
+        <>
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex min-w-0 flex-col gap-2">
+              <h1 className="text-2xl font-semibold tracking-tight wrap-break-word">
+                {routine.name}
+              </h1>
+              <p className="text-sm text-muted-foreground wrap-break-word">
+                {description ? (
+                  description
+                ) : (
+                  <span className="italic">No description</span>
+                )}
+              </p>
+            </div>
+            <div className="flex shrink-0 items-center gap-2">
+              <EditRoutineDialog routine={routine} />
+              <DeleteRoutineDialog routine={routine} />
+            </div>
           </div>
-          <div className="flex shrink-0 items-center gap-2">
-            <EditRoutineDialog routine={routine} />
-            <DeleteRoutineDialog routine={routine} />
-          </div>
-        </div>
+
+          <section className="flex flex-col gap-3">
+            <div className="flex items-center justify-between gap-4">
+              <h2 className="text-lg font-semibold tracking-tight">
+                Exercises
+              </h2>
+              <AddExerciseDialog routine={routine} />
+            </div>
+            {/* Placeholder until there is an endpoint to list a routine's
+                exercises. */}
+            <div className="flex flex-col items-center gap-1 rounded-xl border p-8 text-center text-sm text-muted-foreground">
+              <p>Exercises you add aren&apos;t listed here yet.</p>
+            </div>
+          </section>
+        </>
       )}
     </div>
   );
