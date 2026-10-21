@@ -9,9 +9,14 @@ import {
 type ExerciseSearchProps = {
   value: string;
   onChange: (value: string) => void;
+  autoFocus?: boolean;
 };
 
-export const ExerciseSearch = ({ value, onChange }: ExerciseSearchProps) => {
+export const ExerciseSearch = ({
+  value,
+  onChange,
+  autoFocus,
+}: ExerciseSearchProps) => {
   return (
     <InputGroup>
       <InputGroupAddon>
@@ -22,6 +27,7 @@ export const ExerciseSearch = ({ value, onChange }: ExerciseSearchProps) => {
         placeholder="Search exercises"
         aria-label="Search exercises"
         autoComplete="off"
+        autoFocus={autoFocus}
         value={value}
         onChange={(event) => onChange(event.target.value)}
       />
