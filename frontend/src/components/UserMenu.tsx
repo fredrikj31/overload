@@ -1,4 +1,5 @@
-import { LogOut } from "lucide-react";
+import { Info, LogOut } from "lucide-react";
+import { Link } from "react-router";
 import { Button } from "@shadcn-ui/components/ui/button";
 import {
   Avatar,
@@ -52,6 +53,10 @@ export const UserMenu = () => {
             </span>
           </DropdownMenuLabel>
         </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem render={<Link to="/about" />}>
+          <Info /> About
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" onClick={() => logout()}>
           <LogOut /> Log out

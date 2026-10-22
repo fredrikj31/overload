@@ -11,6 +11,9 @@ WORKDIR /usr/src/app
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --filter=frontend
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm deploy --filter=frontend /app
 WORKDIR /app
+# Set by the release workflow to the semantic-release version; shown on the About page
+ARG APP_VERSION=dev
+ENV VITE_APP_VERSION=$APP_VERSION
 RUN pnpm run build
 
 FROM nginx:1.31.6-alpine AS app
