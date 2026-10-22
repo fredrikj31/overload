@@ -94,6 +94,9 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          # Baked into the frontend bundle and shown on the About page
+          build-args: |
+            APP_VERSION=${{ needs.release.outputs.new-release-version }}
 
   push-backend-docker-image:
     needs: release
