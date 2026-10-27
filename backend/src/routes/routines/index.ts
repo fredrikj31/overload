@@ -20,6 +20,9 @@ import {
   AddRoutineExerciseSetBodySchema,
   AddRoutineExerciseSetResponseSchema,
   RoutineExerciseParamsSchema,
+  RoutineExerciseSetParamsSchema,
+  UpdateRoutineExerciseSetBodySchema,
+  UpdateRoutineExerciseSetResponseSchema,
 } from "../../types/routineExerciseSet";
 import { addRoutineExerciseHandler } from "./handlers/addRoutineExercise";
 import { addRoutineExerciseSetHandler } from "./handlers/addRoutineExerciseSet";
@@ -28,6 +31,7 @@ import { deleteRoutineHandler } from "./handlers/deleteRoutine";
 import { listRoutinesHandler } from "./handlers/listRoutines";
 import { listRoutineExercisesHandler } from "./handlers/listRoutineExercises";
 import { updateRoutineHandler } from "./handlers/updateRoutine";
+import { updateRoutineExerciseSetHandler } from "./handlers/updateRoutineExerciseSet";
 
 export const routineRoutes: FastifyPluginAsync = async (instance) => {
   const app = instance.withTypeProvider<ZodTypeProvider>();
@@ -260,6 +264,41 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
         body: req.body,
       });
       return res.status(201).send({ data: routineExerciseSet });
+    },
+  );
+
+  app.patch(
+    "/:id/exercises/:routineExerciseId/sets/:setId",
+    {
+      onRequest: validateSession(),
+      schema: {
+        summary: "Update routine exercise set",
+        description:
+          "Updates the type, reps, weight and/or weight unit of a planned set in a routine owned by the signed-in user. Routines owned by other users, and sets that are not part of the given exercise, are reported as not found.",
+        tags: ["routines"],
+        security: [{ session: [] }],
+        params: RoutineExerciseSetParamsSchema,
+        body: UpdateRoutineExerciseSetBodySchema,
+        response: {
+          "200": UpdateRoutineExerciseSetResponseSchema.describe(
+            "Returns the updated routine exercise set.",
+          ),
+          "400": ApiErrorSchema,
+          "401": ApiErrorSchema,
+          "404": ApiErrorSchema,
+          "500": ApiErrorSchema,
+        },
+      },
+    },
+    async (req, res) => {
+      const userId = req.userId;
+      const routineExerciseSet = await updateRoutineExerciseSetHandler({
+        database,
+        userId,
+        params: req.params,
+        body: req.body,
+      });
+      return res.send({ data: routineExerciseSet });
     },
   );
 };
