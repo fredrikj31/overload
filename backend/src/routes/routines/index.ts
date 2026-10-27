@@ -206,7 +206,7 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
       schema: {
         summary: "List routine exercises",
         description:
-          "Lists the exercises in a routine owned by the signed-in user, ordered by position, each with the exercise it points at. Routines owned by other users are reported as not found.",
+          "Lists the exercises in a routine owned by the signed-in user, ordered by position, each with the exercise it points at and its planned sets in order. Routines owned by other users are reported as not found.",
         tags: ["routines"],
         security: [{ session: [] }],
         params: RoutineParamsSchema,

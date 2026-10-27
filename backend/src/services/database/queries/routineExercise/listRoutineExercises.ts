@@ -5,7 +5,7 @@ import { RoutineExerciseListItem } from "../../../../types/routineExercise";
 
 /**
  * Lists a routine's non-deleted exercise slots in routine order, each with
- * the exercise it points at.
+ * the exercise it points at and its non-deleted planned sets in set order.
  *
  * A soft-deleted library exercise is still returned: it stays part of the
  * routine (the FK is `restrict`), and hiding it would silently shift the
@@ -33,6 +33,19 @@ export const listRoutineExercises = async (
             equipment: { columns: { id: true, name: true, slug: true } },
           },
         },
+        routineExerciseSets: {
+          columns: {
+            id: true,
+            routineExerciseId: true,
+            position: true,
+            type: true,
+            reps: true,
+            weightUnit: true,
+            weight: true,
+          },
+          where: { deletedAt: { isNull: true } },
+          orderBy: { position: "asc", createdAt: "asc" },
+        },
       },
     })
     .catch((error) => {
@@ -43,5 +56,9 @@ export const listRoutineExercises = async (
       });
     });
 
-  return rows;
+  // The relation is named after the table; the API exposes it as `sets`.
+  return rows.map(({ routineExerciseSets, ...rest }) => ({
+    ...rest,
+    sets: routineExerciseSets,
+  }));
 };
