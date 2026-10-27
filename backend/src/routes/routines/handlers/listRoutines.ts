@@ -1,4 +1,4 @@
-import { Database, routineSchema } from "@overload/database";
+import { Database, Routine } from "@overload/database";
 import { UnauthorizedError } from "../../../errors/client";
 import { listRoutines } from "../../../services/database/queries/routine/listRoutines";
 
@@ -10,7 +10,7 @@ export const listRoutinesHandler = async ({
   database,
   userId,
 }: ListRoutinesHandlerOptions): Promise<
-  Pick<routineSchema.Routine, "id" | "name" | "description">[]
+  Pick<Routine, "id" | "name" | "description">[]
 > => {
   if (!userId) {
     throw new UnauthorizedError({

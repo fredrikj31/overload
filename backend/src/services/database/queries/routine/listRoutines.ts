@@ -1,11 +1,11 @@
-import { Database, routineSchema } from "@overload/database";
+import { Database, Routine } from "@overload/database";
 import { logger } from "../../../../logger";
 import { InternalServerError } from "../../../../errors/server";
 
 export const listRoutines = async (
   database: Database,
   userId: string,
-): Promise<Pick<routineSchema.Routine, "id" | "name" | "description">[]> => {
+): Promise<Pick<Routine, "id" | "name" | "description">[]> => {
   const rows = await database.query.routine
     .findMany({
       columns: { id: true, name: true, description: true },

@@ -1,9 +1,7 @@
-import { Database, routineExerciseSchema } from "@overload/database";
+import { Database, routineExercise, RoutineExercise } from "@overload/database";
 import { sql } from "drizzle-orm";
 import { logger } from "../../../../logger";
 import { InternalServerError } from "../../../../errors/server";
-
-const { routineExercise } = routineExerciseSchema;
 
 interface CreateRoutineExerciseOptions {
   routineId: string;
@@ -26,10 +24,7 @@ export const createRoutineExercise = async (
   database: Database,
   { routineId, exerciseId }: CreateRoutineExerciseOptions,
 ): Promise<
-  Pick<
-    routineExerciseSchema.RoutineExercise,
-    "id" | "routineId" | "exerciseId" | "position"
-  >
+  Pick<RoutineExercise, "id" | "routineId" | "exerciseId" | "position">
 > => {
   const nextPosition = sql<number>`coalesce(
     (select max(${routineExercise.position}) + 1

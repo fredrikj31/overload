@@ -1,10 +1,10 @@
 import {
-  bodyPartSchema,
+  BodyPart,
   Database,
-  equipmentSchema,
-  exerciseSchema,
-  muscleExerciseSchema,
-  muscleSchema,
+  Equipment,
+  Exercise,
+  Muscle,
+  MuscleExercise,
 } from "@overload/database";
 import { logger } from "../../../../logger";
 import { InternalServerError } from "../../../../errors/server";
@@ -13,13 +13,13 @@ export const listExercises = async (
   database: Database,
 ): Promise<
   (Pick<
-    exerciseSchema.Exercise,
+    Exercise,
     "id" | "name" | "instructions" | "imagePath" | "gifPath" | "attribution"
   > & {
-    bodyPart: Pick<bodyPartSchema.BodyPart, "id" | "name" | "slug"> | null;
-    equipment: Pick<equipmentSchema.Equipment, "id" | "name" | "slug">;
-    muscles: (Pick<muscleSchema.Muscle, "id" | "name" | "slug"> &
-      Pick<muscleExerciseSchema.MuscleExercise, "role">)[];
+    bodyPart: Pick<BodyPart, "id" | "name" | "slug"> | null;
+    equipment: Pick<Equipment, "id" | "name" | "slug">;
+    muscles: (Pick<Muscle, "id" | "name" | "slug"> &
+      Pick<MuscleExercise, "role">)[];
   })[]
 > => {
   const rows = await database.query.exercise

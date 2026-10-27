@@ -1,4 +1,4 @@
-import { Database, routineExerciseSchema } from "@overload/database";
+import { Database, RoutineExercise } from "@overload/database";
 import { NotFoundError, UnauthorizedError } from "../../../errors/client";
 import { exerciseExists } from "../../../services/database/queries/exercise/exerciseExists";
 import { getRoutine } from "../../../services/database/queries/routine/getRoutine";
@@ -8,7 +8,7 @@ interface AddRoutineExerciseHandlerOptions {
   database: Database;
   userId: string | undefined;
   params: { id: string };
-  body: Pick<routineExerciseSchema.RoutineExercise, "exerciseId">;
+  body: Pick<RoutineExercise, "exerciseId">;
 }
 export const addRoutineExerciseHandler = async ({
   database,
@@ -16,10 +16,7 @@ export const addRoutineExerciseHandler = async ({
   params,
   body,
 }: AddRoutineExerciseHandlerOptions): Promise<
-  Pick<
-    routineExerciseSchema.RoutineExercise,
-    "id" | "routineId" | "exerciseId" | "position"
-  >
+  Pick<RoutineExercise, "id" | "routineId" | "exerciseId" | "position">
 > => {
   if (!userId) {
     throw new UnauthorizedError({

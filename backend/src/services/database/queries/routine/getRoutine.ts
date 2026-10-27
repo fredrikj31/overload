@@ -1,4 +1,4 @@
-import { Database, routineSchema } from "@overload/database";
+import { Database, Routine } from "@overload/database";
 import { logger } from "../../../../logger";
 import { InternalServerError } from "../../../../errors/server";
 
@@ -16,9 +16,7 @@ interface GetRoutineOptions {
 export const getRoutine = async (
   database: Database,
   { id, userId }: GetRoutineOptions,
-): Promise<
-  Pick<routineSchema.Routine, "id" | "name" | "description"> | undefined
-> => {
+): Promise<Pick<Routine, "id" | "name" | "description"> | undefined> => {
   const row = await database.query.routine
     .findFirst({
       columns: { id: true, name: true, description: true },

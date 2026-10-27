@@ -1,10 +1,10 @@
 import {
-  bodyPartSchema,
+  BodyPart,
   Database,
-  equipmentSchema,
-  exerciseSchema,
-  routineExerciseSchema,
-  routineExerciseSetSchema,
+  Equipment,
+  Exercise,
+  RoutineExercise,
+  RoutineExerciseSet,
 } from "@overload/database";
 import { NotFoundError, UnauthorizedError } from "../../../errors/client";
 import { getRoutine } from "../../../services/database/queries/routine/getRoutine";
@@ -20,16 +20,13 @@ export const listRoutineExercisesHandler = async ({
   userId,
   params,
 }: ListRoutineExercisesHandlerOptions): Promise<
-  (Pick<
-    routineExerciseSchema.RoutineExercise,
-    "id" | "routineId" | "exerciseId" | "position"
-  > & {
-    exercise: Pick<exerciseSchema.Exercise, "id" | "name" | "imagePath"> & {
-      bodyPart: Pick<bodyPartSchema.BodyPart, "id" | "name" | "slug"> | null;
-      equipment: Pick<equipmentSchema.Equipment, "id" | "name" | "slug">;
+  (Pick<RoutineExercise, "id" | "routineId" | "exerciseId" | "position"> & {
+    exercise: Pick<Exercise, "id" | "name" | "imagePath"> & {
+      bodyPart: Pick<BodyPart, "id" | "name" | "slug"> | null;
+      equipment: Pick<Equipment, "id" | "name" | "slug">;
     };
     sets: Pick<
-      routineExerciseSetSchema.RoutineExerciseSet,
+      RoutineExerciseSet,
       | "id"
       | "routineExerciseId"
       | "position"

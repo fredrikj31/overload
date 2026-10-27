@@ -1,15 +1,19 @@
-import { Database, routineExerciseSetSchema } from "@overload/database";
+import {
+  Database,
+  routineExerciseSet,
+  RoutineExerciseSet,
+  SetType,
+  WeightUnit,
+} from "@overload/database";
 import { sql } from "drizzle-orm";
 import { logger } from "../../../../logger";
 import { InternalServerError } from "../../../../errors/server";
 
-const { routineExerciseSet } = routineExerciseSetSchema;
-
 interface CreateRoutineExerciseSetOptions {
   routineExerciseId: string;
-  type?: routineExerciseSetSchema.SetType;
+  type?: SetType;
   reps: number;
-  weightUnit: routineExerciseSetSchema.WeightUnit;
+  weightUnit: WeightUnit;
   weight?: number | null;
 }
 
@@ -37,7 +41,7 @@ export const createRoutineExerciseSet = async (
   }: CreateRoutineExerciseSetOptions,
 ): Promise<
   Pick<
-    routineExerciseSetSchema.RoutineExerciseSet,
+    RoutineExerciseSet,
     | "id"
     | "routineExerciseId"
     | "position"

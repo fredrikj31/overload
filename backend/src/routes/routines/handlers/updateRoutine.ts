@@ -1,4 +1,4 @@
-import { Database, routineSchema } from "@overload/database";
+import { Database, Routine } from "@overload/database";
 import { NotFoundError, UnauthorizedError } from "../../../errors/client";
 import { updateRoutine } from "../../../services/database/queries/routine/updateRoutine";
 
@@ -6,7 +6,7 @@ interface UpdateRoutineHandlerOptions {
   database: Database;
   userId: string | undefined;
   params: { id: string };
-  body: Partial<Pick<routineSchema.Routine, "name" | "description">>;
+  body: Partial<Pick<Routine, "name" | "description">>;
 }
 export const updateRoutineHandler = async ({
   database,
@@ -14,7 +14,7 @@ export const updateRoutineHandler = async ({
   params,
   body,
 }: UpdateRoutineHandlerOptions): Promise<
-  Pick<routineSchema.Routine, "id" | "name" | "description">
+  Pick<Routine, "id" | "name" | "description">
 > => {
   if (!userId) {
     throw new UnauthorizedError({

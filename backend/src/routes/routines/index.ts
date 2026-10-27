@@ -1,10 +1,10 @@
 import {
-  bodyPartSchema,
-  equipmentSchema,
-  exerciseSchema,
-  routineExerciseSchema,
-  routineExerciseSetSchema,
-  routineSchema,
+  BodyPartSchema,
+  EquipmentSchema,
+  ExerciseSchema,
+  RoutineExerciseSchema,
+  RoutineExerciseSetSchema,
+  RoutineSchema,
 } from "@overload/database";
 import { FastifyPluginAsync } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
@@ -38,7 +38,7 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
           "200": z
             .object({
               data: z.array(
-                routineSchema.RoutineSchema.pick({
+                RoutineSchema.pick({
                   id: true,
                   name: true,
                   description: true,
@@ -72,14 +72,14 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
         tags: ["routines"],
         security: [{ session: [] }],
         // `userId` comes from the session; `description` may be left out.
-        body: routineSchema.RoutineSchema.pick({
+        body: RoutineSchema.pick({
           name: true,
           description: true,
         }).partial({ description: true }),
         response: {
           "201": z
             .object({
-              data: routineSchema.RoutineSchema.pick({
+              data: RoutineSchema.pick({
                 id: true,
                 name: true,
                 description: true,
@@ -146,7 +146,7 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
         security: [{ session: [] }],
         params: z.object({ id: z.uuid() }),
         // Every field is optional, but at least one must be provided.
-        body: routineSchema.RoutineSchema.pick({
+        body: RoutineSchema.pick({
           name: true,
           description: true,
         })
@@ -157,7 +157,7 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
         response: {
           "200": z
             .object({
-              data: routineSchema.RoutineSchema.pick({
+              data: RoutineSchema.pick({
                 id: true,
                 name: true,
                 description: true,
@@ -196,13 +196,13 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
         params: z.object({ id: z.uuid() }),
         // `routineId` comes from the path and `position` is assigned by the
         // server (appended at the end).
-        body: routineExerciseSchema.RoutineExerciseSchema.pick({
+        body: RoutineExerciseSchema.pick({
           exerciseId: true,
         }),
         response: {
           "201": z
             .object({
-              data: routineExerciseSchema.RoutineExerciseSchema.pick({
+              data: RoutineExerciseSchema.pick({
                 id: true,
                 routineId: true,
                 exerciseId: true,
@@ -244,7 +244,7 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
           "200": z
             .object({
               data: z.array(
-                routineExerciseSchema.RoutineExerciseSchema.pick({
+                RoutineExerciseSchema.pick({
                   id: true,
                   routineId: true,
                   exerciseId: true,
@@ -252,25 +252,25 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
                 }).extend({
                   // Lighter than the exercise list: no instructions, gif,
                   // attribution or muscles.
-                  exercise: exerciseSchema.ExerciseSchema.pick({
+                  exercise: ExerciseSchema.pick({
                     id: true,
                     name: true,
                     imagePath: true,
                   }).extend({
                     // Nullable: cardio exercises have no body region.
-                    bodyPart: bodyPartSchema.BodyPartSchema.pick({
+                    bodyPart: BodyPartSchema.pick({
                       id: true,
                       name: true,
                       slug: true,
                     }).nullable(),
-                    equipment: equipmentSchema.EquipmentSchema.pick({
+                    equipment: EquipmentSchema.pick({
                       id: true,
                       name: true,
                       slug: true,
                     }),
                   }),
                   sets: z.array(
-                    routineExerciseSetSchema.RoutineExerciseSetSchema.pick({
+                    RoutineExerciseSetSchema.pick({
                       id: true,
                       routineExerciseId: true,
                       position: true,
@@ -316,7 +316,7 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
         // `routineExerciseId` comes from the path, `position` is assigned by
         // the server (appended at the end) and `weightUnit` falls back to kg
         // when omitted.
-        body: routineExerciseSetSchema.RoutineExerciseSetSchema.pick({
+        body: RoutineExerciseSetSchema.pick({
           type: true,
           reps: true,
           weightUnit: true,
@@ -325,7 +325,7 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
         response: {
           "201": z
             .object({
-              data: routineExerciseSetSchema.RoutineExerciseSetSchema.pick({
+              data: RoutineExerciseSetSchema.pick({
                 id: true,
                 routineExerciseId: true,
                 position: true,
@@ -372,7 +372,7 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
         }),
         // Every field is optional, but at least one must be provided.
         // `routineExerciseId` and `position` are not editable here.
-        body: routineExerciseSetSchema.RoutineExerciseSetSchema.pick({
+        body: RoutineExerciseSetSchema.pick({
           type: true,
           reps: true,
           weightUnit: true,
@@ -385,7 +385,7 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
         response: {
           "200": z
             .object({
-              data: routineExerciseSetSchema.RoutineExerciseSetSchema.pick({
+              data: RoutineExerciseSetSchema.pick({
                 id: true,
                 routineExerciseId: true,
                 position: true,

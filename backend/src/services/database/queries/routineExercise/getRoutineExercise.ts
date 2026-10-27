@@ -1,4 +1,4 @@
-import { Database, routineExerciseSchema } from "@overload/database";
+import { Database, RoutineExercise } from "@overload/database";
 import { logger } from "../../../../logger";
 import { InternalServerError } from "../../../../errors/server";
 
@@ -19,10 +19,7 @@ export const getRoutineExercise = async (
   database: Database,
   { id, routineId }: GetRoutineExerciseOptions,
 ): Promise<
-  | Pick<
-      routineExerciseSchema.RoutineExercise,
-      "id" | "routineId" | "exerciseId" | "position"
-    >
+  | Pick<RoutineExercise, "id" | "routineId" | "exerciseId" | "position">
   | undefined
 > => {
   const row = await database.query.routineExercise

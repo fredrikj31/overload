@@ -1,10 +1,10 @@
 import {
-  bodyPartSchema,
+  bodyPart,
   createDatabaseClient,
-  equipmentSchema,
-  exerciseSchema,
-  muscleExerciseSchema,
-  muscleSchema,
+  equipment,
+  exercise,
+  muscle,
+  muscleExercise,
 } from "@overload/database";
 import { count, inArray, sql } from "drizzle-orm";
 import { existsSync } from "node:fs";
@@ -45,12 +45,6 @@ const EXTRACTED_PATHS = [
 const EXERCISES_DIR = "exercises";
 const REF_MARKER_FILE = ".dataset-ref";
 const UPSERT_CHUNK_SIZE = 200;
-
-const { bodyPart } = bodyPartSchema;
-const { equipment } = equipmentSchema;
-const { muscle } = muscleSchema;
-const { exercise } = exerciseSchema;
-const { muscleExercise } = muscleExerciseSchema;
 
 const database = createDatabaseClient({
   dbHost: config.database.host,

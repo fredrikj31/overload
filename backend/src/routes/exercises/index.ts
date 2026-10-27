@@ -1,9 +1,9 @@
 import {
-  bodyPartSchema,
-  equipmentSchema,
-  exerciseSchema,
-  muscleExerciseSchema,
-  muscleSchema,
+  BodyPartSchema,
+  EquipmentSchema,
+  ExerciseSchema,
+  MuscleExerciseSchema,
+  MuscleSchema,
 } from "@overload/database";
 import { FastifyPluginAsync } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
@@ -31,7 +31,7 @@ export const exerciseRoutes: FastifyPluginAsync = async (instance) => {
           "200": z
             .object({
               data: z.array(
-                exerciseSchema.ExerciseSchema.pick({
+                ExerciseSchema.pick({
                   id: true,
                   name: true,
                   instructions: true,
@@ -40,24 +40,23 @@ export const exerciseRoutes: FastifyPluginAsync = async (instance) => {
                   attribution: true,
                 }).extend({
                   // Nullable: cardio exercises have no body region.
-                  bodyPart: bodyPartSchema.BodyPartSchema.pick({
+                  bodyPart: BodyPartSchema.pick({
                     id: true,
                     name: true,
                     slug: true,
                   }).nullable(),
-                  equipment: equipmentSchema.EquipmentSchema.pick({
+                  equipment: EquipmentSchema.pick({
                     id: true,
                     name: true,
                     slug: true,
                   }),
                   muscles: z.array(
-                    muscleSchema.MuscleSchema.pick({
+                    MuscleSchema.pick({
                       id: true,
                       name: true,
                       slug: true,
                     }).extend({
-                      role: muscleExerciseSchema.MuscleExerciseSchema.shape
-                        .role,
+                      role: MuscleExerciseSchema.shape.role,
                     }),
                   ),
                 }),

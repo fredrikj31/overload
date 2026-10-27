@@ -1,10 +1,10 @@
 import {
-  bodyPartSchema,
+  BodyPart,
   Database,
-  equipmentSchema,
-  exerciseSchema,
-  muscleExerciseSchema,
-  muscleSchema,
+  Equipment,
+  Exercise,
+  Muscle,
+  MuscleExercise,
 } from "@overload/database";
 import { UnauthorizedError } from "../../../errors/client";
 import { listExercises } from "../../../services/database/queries/exercise/listExercises";
@@ -18,13 +18,13 @@ export const listExercisesHandler = async ({
   userId,
 }: ListExercisesHandlerOptions): Promise<
   (Pick<
-    exerciseSchema.Exercise,
+    Exercise,
     "id" | "name" | "instructions" | "imagePath" | "gifPath" | "attribution"
   > & {
-    bodyPart: Pick<bodyPartSchema.BodyPart, "id" | "name" | "slug"> | null;
-    equipment: Pick<equipmentSchema.Equipment, "id" | "name" | "slug">;
-    muscles: (Pick<muscleSchema.Muscle, "id" | "name" | "slug"> &
-      Pick<muscleExerciseSchema.MuscleExercise, "role">)[];
+    bodyPart: Pick<BodyPart, "id" | "name" | "slug"> | null;
+    equipment: Pick<Equipment, "id" | "name" | "slug">;
+    muscles: (Pick<Muscle, "id" | "name" | "slug"> &
+      Pick<MuscleExercise, "role">)[];
   })[]
 > => {
   if (!userId) {

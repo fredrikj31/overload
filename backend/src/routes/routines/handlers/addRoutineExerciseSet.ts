@@ -1,4 +1,4 @@
-import { Database, routineExerciseSetSchema } from "@overload/database";
+import { Database, RoutineExerciseSet } from "@overload/database";
 import { NotFoundError, UnauthorizedError } from "../../../errors/client";
 import { getRoutine } from "../../../services/database/queries/routine/getRoutine";
 import { getRoutineExercise } from "../../../services/database/queries/routineExercise/getRoutineExercise";
@@ -8,13 +8,8 @@ interface AddRoutineExerciseSetHandlerOptions {
   database: Database;
   userId: string | undefined;
   params: { id: string; routineExerciseId: string };
-  body: Pick<routineExerciseSetSchema.RoutineExerciseSet, "reps"> &
-    Partial<
-      Pick<
-        routineExerciseSetSchema.RoutineExerciseSet,
-        "type" | "weightUnit" | "weight"
-      >
-    >;
+  body: Pick<RoutineExerciseSet, "reps"> &
+    Partial<Pick<RoutineExerciseSet, "type" | "weightUnit" | "weight">>;
 }
 export const addRoutineExerciseSetHandler = async ({
   database,
@@ -23,7 +18,7 @@ export const addRoutineExerciseSetHandler = async ({
   body,
 }: AddRoutineExerciseSetHandlerOptions): Promise<
   Pick<
-    routineExerciseSetSchema.RoutineExerciseSet,
+    RoutineExerciseSet,
     | "id"
     | "routineExerciseId"
     | "position"
