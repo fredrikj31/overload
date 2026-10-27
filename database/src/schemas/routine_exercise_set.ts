@@ -11,6 +11,7 @@ import {
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { routineExercise } from "./routine_exercise";
+import { weightUnitEnum } from "./weight_unit";
 
 /**
  * How a planned set is meant to be performed.
@@ -24,16 +25,6 @@ export const SET_TYPES = ["normal", "warmup", "failure", "dropset"] as const;
 export type SetType = (typeof SET_TYPES)[number];
 
 export const setTypeEnum = pgEnum("set_type", SET_TYPES);
-
-/**
- * Unit a set's `weight` was entered in. Stored per set so the value is kept
- * exactly as the user typed it (no kg <-> lb rounding drift) and so a row is
- * self-describing without a join.
- */
-export const WEIGHT_UNITS = ["kg", "lb"] as const;
-export type WeightUnit = (typeof WEIGHT_UNITS)[number];
-
-export const weightUnitEnum = pgEnum("weight_unit", WEIGHT_UNITS);
 
 /**
  * A planned set belonging to an exercise slot in a routine.
@@ -62,6 +53,8 @@ export const routineExerciseSet = pgTable(
     type: setTypeEnum("type").notNull().default("normal"),
     // Target repetitions for the set.
     reps: integer("reps").notNull(),
+    // Stored per set so the value is kept exactly as the user typed it (no
+    // kg <-> lb rounding drift) and so a row is self-describing without a join.
     // Deliberately no database default: the API fills in the user's preferred
     // unit when a client omits it, so the row always states its own unit.
     weightUnit: weightUnitEnum("weight_unit").notNull(),

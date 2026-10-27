@@ -2,7 +2,7 @@ import { pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { user } from "./auth";
-import { weightUnitEnum } from "./routine_exercise_set";
+import { weightUnitEnum } from "./weight_unit";
 
 /**
  * Per-user settings. One row per user, keyed by the user id.
