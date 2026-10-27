@@ -9,3 +9,4 @@ export * from "./schemas/muscle_exercise";
 export * from "./schemas/routine";
 export * from "./schemas/routine_exercise";
 export * from "./schemas/routine_exercise_set";
+export * from "./schemas/user_preference";
