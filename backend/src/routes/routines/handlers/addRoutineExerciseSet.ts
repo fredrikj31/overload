@@ -1,26 +1,33 @@
-import { Database } from "@overload/database";
+import { Database, RoutineExerciseSet } from "@overload/database";
 import { NotFoundError, UnauthorizedError } from "../../../errors/client";
 import { getRoutine } from "../../../services/database/queries/routine/getRoutine";
 import { getRoutineExercise } from "../../../services/database/queries/routineExercise/getRoutineExercise";
 import { createRoutineExerciseSet } from "../../../services/database/queries/routineExerciseSet/createRoutineExerciseSet";
-import {
-  AddRoutineExerciseSetBody,
-  RoutineExerciseParams,
-  RoutineExerciseSet,
-} from "../../../types/routineExerciseSet";
 
 interface AddRoutineExerciseSetHandlerOptions {
   database: Database;
   userId: string | undefined;
-  params: RoutineExerciseParams;
-  body: AddRoutineExerciseSetBody;
+  params: { id: string; routineExerciseId: string };
+  body: Pick<RoutineExerciseSet, "reps"> &
+    Partial<Pick<RoutineExerciseSet, "type" | "weightUnit" | "weight">>;
 }
 export const addRoutineExerciseSetHandler = async ({
   database,
   userId,
   params,
   body,
-}: AddRoutineExerciseSetHandlerOptions): Promise<RoutineExerciseSet> => {
+}: AddRoutineExerciseSetHandlerOptions): Promise<
+  Pick<
+    RoutineExerciseSet,
+    | "id"
+    | "routineExerciseId"
+    | "position"
+    | "type"
+    | "reps"
+    | "weightUnit"
+    | "weight"
+  >
+> => {
   if (!userId) {
     throw new UnauthorizedError({
       code: "account-id-not-found-in-request",

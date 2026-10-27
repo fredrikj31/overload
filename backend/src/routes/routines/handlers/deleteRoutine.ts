@@ -1,12 +1,11 @@
 import { Database } from "@overload/database";
 import { NotFoundError, UnauthorizedError } from "../../../errors/client";
 import { deleteRoutine } from "../../../services/database/queries/routine/deleteRoutine";
-import { RoutineParams } from "../../../types/routine";
 
 interface DeleteRoutineHandlerOptions {
   database: Database;
   userId: string | undefined;
-  params: RoutineParams;
+  params: { id: string };
 }
 export const deleteRoutineHandler = async ({
   database,

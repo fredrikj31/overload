@@ -7,10 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@shadcn-ui/components/ui/card";
-import type { Routine } from "../../../api/queries/routines/types";
+import * as routineSchema from "../../../types/routine";
 
 type RoutineCardProps = {
-  routine: Routine;
+  routine: Pick<routineSchema.Routine, "id" | "name" | "description">;
 };
 
 export const RoutineCard = ({ routine }: RoutineCardProps) => {

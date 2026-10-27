@@ -1,9 +1,7 @@
-import { Database, routineSchema } from "@overload/database";
+import { Database, routine } from "@overload/database";
 import { and, eq, isNull } from "drizzle-orm";
 import { logger } from "../../../../logger";
 import { InternalServerError } from "../../../../errors/server";
-
-const { routine } = routineSchema;
 
 interface DeleteRoutineOptions {
   id: string;

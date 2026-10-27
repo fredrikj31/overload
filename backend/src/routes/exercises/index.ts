@@ -1,8 +1,15 @@
+import {
+  BodyPartSchema,
+  EquipmentSchema,
+  ExerciseSchema,
+  MuscleExerciseSchema,
+  MuscleSchema,
+} from "@overload/database";
 import { FastifyPluginAsync } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
+import { z } from "zod";
+import { ApiErrorSchema } from "../../errors";
 import { validateSession } from "../../hooks/validateSession";
-import { ApiErrorSchema } from "../../types/error";
-import { ListExercisesResponseSchema } from "../../types/exercise";
 import { listExercisesHandler } from "./handlers/listExercises";
 
 export const exerciseRoutes: FastifyPluginAsync = async (instance) => {
@@ -21,7 +28,41 @@ export const exerciseRoutes: FastifyPluginAsync = async (instance) => {
         tags: ["exercises"],
         security: [{ session: [] }],
         response: {
-          "200": ListExercisesResponseSchema.describe("Returns all exercises."),
+          "200": z
+            .object({
+              data: z.array(
+                ExerciseSchema.pick({
+                  id: true,
+                  name: true,
+                  instructions: true,
+                  imagePath: true,
+                  gifPath: true,
+                  attribution: true,
+                }).extend({
+                  // Nullable: cardio exercises have no body region.
+                  bodyPart: BodyPartSchema.pick({
+                    id: true,
+                    name: true,
+                    slug: true,
+                  }).nullable(),
+                  equipment: EquipmentSchema.pick({
+                    id: true,
+                    name: true,
+                    slug: true,
+                  }),
+                  muscles: z.array(
+                    MuscleSchema.pick({
+                      id: true,
+                      name: true,
+                      slug: true,
+                    }).extend({
+                      role: MuscleExerciseSchema.shape.role,
+                    }),
+                  ),
+                }),
+              ),
+            })
+            .describe("Returns all exercises."),
           "401": ApiErrorSchema,
           "500": ApiErrorSchema,
         },

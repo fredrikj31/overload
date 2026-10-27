@@ -1,8 +1,10 @@
 import { Badge } from "@shadcn-ui/components/ui/badge";
-import type { ExerciseMuscle } from "../../../api/queries/exercises/types";
+import * as muscleExerciseSchema from "../../../types/muscleExercise";
+import * as muscleSchema from "../../../types/muscle";
 
 type MuscleGroupsProps = {
-  muscles: ExerciseMuscle[];
+  muscles: (Pick<muscleSchema.Muscle, "id" | "name" | "slug"> &
+    Pick<muscleExerciseSchema.MuscleExercise, "role">)[];
 };
 
 export const MuscleGroups = ({ muscles }: MuscleGroupsProps) => {

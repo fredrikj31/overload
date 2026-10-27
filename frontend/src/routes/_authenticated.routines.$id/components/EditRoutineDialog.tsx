@@ -22,14 +22,10 @@ import {
 } from "@shadcn-ui/components/ui/field";
 import { Input } from "@shadcn-ui/components/ui/input";
 import { Textarea } from "@shadcn-ui/components/ui/textarea";
-import {
-  UpdateRoutineBody,
-  UpdateRoutineBodySchema,
-} from "../../../api/actions/updateRoutine/types";
 import { useUpdateRoutine } from "../../../api/actions/updateRoutine/useUpdateRoutine";
 import { ApiError } from "../../../api/errors";
 import { routinesQueryKey } from "../../../api/queries/routines/listRoutines/useListRoutines";
-import { Routine } from "../../../api/queries/routines/types";
+import * as routineSchema from "../../../types/routine";
 
 type FieldName = "name" | "description";
 type FieldErrors = Partial<Record<FieldName, string>>;
@@ -38,7 +34,7 @@ const isFieldName = (value: unknown): value is FieldName =>
   value === "name" || value === "description";
 
 interface EditRoutineDialogProps {
-  routine: Routine;
+  routine: Pick<routineSchema.Routine, "id" | "name" | "description">;
 }
 
 export const EditRoutineDialog = ({ routine }: EditRoutineDialogProps) => {
@@ -80,7 +76,8 @@ export const EditRoutineDialog = ({ routine }: EditRoutineDialogProps) => {
 
     // Only send the fields that changed. The backend rejects an empty body,
     // so a no-op submit just closes the dialog.
-    const body: UpdateRoutineBody = {};
+    const body: Partial<Pick<routineSchema.Routine, "name" | "description">> =
+      {};
     if (trimmedName !== routine.name) body.name = name;
     if (trimmedDescription !== currentDescription) {
       // Clear the description with null when the user empties the field.
@@ -92,7 +89,12 @@ export const EditRoutineDialog = ({ routine }: EditRoutineDialogProps) => {
       return;
     }
 
-    const parsed = UpdateRoutineBodySchema.safeParse(body);
+    const parsed = routineSchema.RoutineSchema.pick({
+      name: true,
+      description: true,
+    })
+      .partial()
+      .safeParse(body);
 
     if (!parsed.success) {
       const errors: FieldErrors = {};

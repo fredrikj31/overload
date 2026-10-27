@@ -1,8 +1,5 @@
-import type { muscleSchema, muscleExerciseSchema } from "@overload/database";
+import type { GraphSlug, MuscleRole } from "@overload/database";
 import type { DatasetExercise } from "./dataset";
-
-type GraphSlug = muscleSchema.GraphSlug;
-type MuscleRole = muscleExerciseSchema.MuscleRole;
 
 // ---------------------------------------------------------------------------
 // Slugs

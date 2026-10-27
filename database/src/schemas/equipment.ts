@@ -1,9 +1,5 @@
 import { pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
-import {
-  createInsertSchema,
-  createSelectSchema,
-  createUpdateSchema,
-} from "drizzle-zod";
+import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 
 /**
@@ -51,25 +47,3 @@ const refinements = {
 
 export const EquipmentSchema = createSelectSchema(equipment, refinements);
 export type Equipment = z.infer<typeof EquipmentSchema>;
-
-export const CreateEquipmentSchema = createInsertSchema(
-  equipment,
-  refinements,
-).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-  deletedAt: true,
-});
-export type CreateEquipment = z.infer<typeof CreateEquipmentSchema>;
-
-export const UpdateEquipmentSchema = createUpdateSchema(
-  equipment,
-  refinements,
-).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-  deletedAt: true,
-});
-export type UpdateEquipment = z.infer<typeof UpdateEquipmentSchema>;

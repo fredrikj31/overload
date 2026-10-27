@@ -13,11 +13,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@shadcn-ui/components/ui/dialog";
-import {
-  SET_TYPES,
-  type RoutineExerciseSet,
-  type SetType,
-} from "../../../api/actions/addRoutineExerciseSet/types";
+import * as routineExerciseSetSchema from "../../../types/routineExerciseSet";
 import { useUpdateRoutineExerciseSet } from "../../../api/actions/updateRoutineExerciseSet/useUpdateRoutineExerciseSet";
 import { ApiError } from "../../../api/errors";
 import { routineExercisesQueryKey } from "../../../api/queries/routines/listRoutineExercises/useListRoutineExercises";
@@ -32,7 +28,16 @@ import {
 type SetTypeDialogProps = {
   routineId: string;
   routineExerciseId: string;
-  set: RoutineExerciseSet;
+  set: Pick<
+    routineExerciseSetSchema.RoutineExerciseSet,
+    | "id"
+    | "routineExerciseId"
+    | "position"
+    | "type"
+    | "reps"
+    | "weightUnit"
+    | "weight"
+  >;
   /**
    * 1-based number among the normal (working) sets; warm-up, failure and
    * drop sets don't count. For a non-normal set it is the number the set
@@ -68,7 +73,7 @@ export const SetTypeDialog = ({
     setOpen(nextOpen);
   };
 
-  const handleSelect = (type: SetType) => {
+  const handleSelect = (type: routineExerciseSetSchema.SetType) => {
     if (type === set.type) {
       setOpen(false);
       return;
@@ -134,7 +139,7 @@ export const SetTypeDialog = ({
         </DialogHeader>
 
         <div className="flex flex-col gap-2 py-2" role="radiogroup">
-          {SET_TYPES.map((type) => {
+          {routineExerciseSetSchema.SET_TYPES.map((type) => {
             const selected = type === set.type;
             const typeMarker =
               type === "normal" ? null : SET_TYPE_MARKERS[type];

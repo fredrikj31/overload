@@ -1,9 +1,5 @@
 import { index, integer, pgTable, timestamp, uuid } from "drizzle-orm/pg-core";
-import {
-  createInsertSchema,
-  createSelectSchema,
-  createUpdateSchema,
-} from "drizzle-zod";
+import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { exercise } from "./exercise";
 import { routine } from "./routine";
@@ -48,8 +44,7 @@ export const routineExercise = pgTable(
 // Zod schemas (shared by backend & frontend)
 // ---------------------------------------------------------------------------
 
-// Callback form so drizzle-zod still wraps nullable / defaulted columns in
-// `.nullable()` / `.optional()` for the insert and update schemas.
+// Callback form so drizzle-zod still wraps nullable columns in `.nullable()`.
 const refinements = {
   // drizzle-zod maps uuid columns to plain strings; tighten them.
   id: () => z.uuid(),
@@ -65,25 +60,3 @@ export const RoutineExerciseSchema = createSelectSchema(
   refinements,
 );
 export type RoutineExercise = z.infer<typeof RoutineExerciseSchema>;
-
-export const CreateRoutineExerciseSchema = createInsertSchema(
-  routineExercise,
-  refinements,
-).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-  deletedAt: true,
-});
-export type CreateRoutineExercise = z.infer<typeof CreateRoutineExerciseSchema>;
-
-export const UpdateRoutineExerciseSchema = createUpdateSchema(
-  routineExercise,
-  refinements,
-).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-  deletedAt: true,
-});
-export type UpdateRoutineExercise = z.infer<typeof UpdateRoutineExerciseSchema>;

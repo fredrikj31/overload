@@ -1,11 +1,27 @@
-import { Database } from "@overload/database";
+import {
+  BodyPart,
+  Database,
+  Equipment,
+  Exercise,
+  Muscle,
+  MuscleExercise,
+} from "@overload/database";
 import { logger } from "../../../../logger";
 import { InternalServerError } from "../../../../errors/server";
-import { ExerciseListItem } from "../../../../types/exercise";
 
 export const listExercises = async (
   database: Database,
-): Promise<ExerciseListItem[]> => {
+): Promise<
+  (Pick<
+    Exercise,
+    "id" | "name" | "instructions" | "imagePath" | "gifPath" | "attribution"
+  > & {
+    bodyPart: Pick<BodyPart, "id" | "name" | "slug"> | null;
+    equipment: Pick<Equipment, "id" | "name" | "slug">;
+    muscles: (Pick<Muscle, "id" | "name" | "slug"> &
+      Pick<MuscleExercise, "role">)[];
+  })[]
+> => {
   const rows = await database.query.exercise
     .findMany({
       columns: {

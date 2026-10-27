@@ -1,9 +1,5 @@
 import { index, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
-import {
-  createInsertSchema,
-  createSelectSchema,
-  createUpdateSchema,
-} from "drizzle-zod";
+import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { bodyPart } from "./bodyPart";
 
@@ -97,19 +93,3 @@ const refinements = {
 
 export const MuscleSchema = createSelectSchema(muscle, refinements);
 export type Muscle = z.infer<typeof MuscleSchema>;
-
-export const CreateMuscleSchema = createInsertSchema(muscle, refinements).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-  deletedAt: true,
-});
-export type CreateMuscle = z.infer<typeof CreateMuscleSchema>;
-
-export const UpdateMuscleSchema = createUpdateSchema(muscle, refinements).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-  deletedAt: true,
-});
-export type UpdateMuscle = z.infer<typeof UpdateMuscleSchema>;

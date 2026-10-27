@@ -1,26 +1,23 @@
-import { Database } from "@overload/database";
+import { Database, RoutineExercise } from "@overload/database";
 import { NotFoundError, UnauthorizedError } from "../../../errors/client";
 import { exerciseExists } from "../../../services/database/queries/exercise/exerciseExists";
 import { getRoutine } from "../../../services/database/queries/routine/getRoutine";
 import { createRoutineExercise } from "../../../services/database/queries/routineExercise/createRoutineExercise";
-import { RoutineParams } from "../../../types/routine";
-import {
-  AddRoutineExerciseBody,
-  RoutineExercise,
-} from "../../../types/routineExercise";
 
 interface AddRoutineExerciseHandlerOptions {
   database: Database;
   userId: string | undefined;
-  params: RoutineParams;
-  body: AddRoutineExerciseBody;
+  params: { id: string };
+  body: Pick<RoutineExercise, "exerciseId">;
 }
 export const addRoutineExerciseHandler = async ({
   database,
   userId,
   params,
   body,
-}: AddRoutineExerciseHandlerOptions): Promise<RoutineExercise> => {
+}: AddRoutineExerciseHandlerOptions): Promise<
+  Pick<RoutineExercise, "id" | "routineId" | "exerciseId" | "position">
+> => {
   if (!userId) {
     throw new UnauthorizedError({
       code: "account-id-not-found-in-request",

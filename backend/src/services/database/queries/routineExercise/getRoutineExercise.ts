@@ -1,7 +1,6 @@
-import { Database } from "@overload/database";
+import { Database, RoutineExercise } from "@overload/database";
 import { logger } from "../../../../logger";
 import { InternalServerError } from "../../../../errors/server";
-import { RoutineExercise } from "../../../../types/routineExercise";
 
 interface GetRoutineExerciseOptions {
   id: string;
@@ -19,7 +18,10 @@ interface GetRoutineExerciseOptions {
 export const getRoutineExercise = async (
   database: Database,
   { id, routineId }: GetRoutineExerciseOptions,
-): Promise<RoutineExercise | undefined> => {
+): Promise<
+  | Pick<RoutineExercise, "id" | "routineId" | "exerciseId" | "position">
+  | undefined
+> => {
   const row = await database.query.routineExercise
     .findFirst({
       columns: { id: true, routineId: true, exerciseId: true, position: true },

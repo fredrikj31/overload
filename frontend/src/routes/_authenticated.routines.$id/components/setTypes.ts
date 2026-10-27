@@ -1,4 +1,4 @@
-import type { SetType } from "../../../api/actions/addRoutineExerciseSet/types";
+import type { SetType } from "../../../types/routineExerciseSet";
 
 /** Display copy for the set types, shared by the set row and the type dialog. */
 export const SET_TYPE_LABELS: Record<SetType, string> = {

@@ -6,11 +6,7 @@ import {
   uniqueIndex,
   uuid,
 } from "drizzle-orm/pg-core";
-import {
-  createInsertSchema,
-  createSelectSchema,
-  createUpdateSchema,
-} from "drizzle-zod";
+import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { exercise } from "./exercise";
 import { muscle } from "./muscle";
@@ -64,8 +60,7 @@ export const muscleExercise = pgTable(
 // Zod schemas (shared by backend & frontend)
 // ---------------------------------------------------------------------------
 
-// Callback form so drizzle-zod still wraps nullable / defaulted columns in
-// `.nullable()` / `.optional()` for the insert and update schemas.
+// Callback form so drizzle-zod still wraps nullable columns in `.nullable()`.
 // `role` needs no refinement: drizzle-zod maps the pgEnum to z.enum itself.
 const refinements = {
   // drizzle-zod maps uuid columns to plain strings; tighten them.
@@ -79,25 +74,3 @@ export const MuscleExerciseSchema = createSelectSchema(
   refinements,
 );
 export type MuscleExercise = z.infer<typeof MuscleExerciseSchema>;
-
-export const CreateMuscleExerciseSchema = createInsertSchema(
-  muscleExercise,
-  refinements,
-).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-  deletedAt: true,
-});
-export type CreateMuscleExercise = z.infer<typeof CreateMuscleExerciseSchema>;
-
-export const UpdateMuscleExerciseSchema = createUpdateSchema(
-  muscleExercise,
-  refinements,
-).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-  deletedAt: true,
-});
-export type UpdateMuscleExercise = z.infer<typeof UpdateMuscleExerciseSchema>;

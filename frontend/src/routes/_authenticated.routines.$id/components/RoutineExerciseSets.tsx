@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { Button } from "@shadcn-ui/components/ui/button";
-import type { RoutineExerciseSet } from "../../../api/actions/addRoutineExerciseSet/types";
+import * as routineExerciseSetSchema from "../../../types/routineExerciseSet";
 import { useAddRoutineExerciseSet } from "../../../api/actions/addRoutineExerciseSet/useAddRoutineExerciseSet";
 import { ApiError } from "../../../api/errors";
 import { routineExercisesQueryKey } from "../../../api/queries/routines/listRoutineExercises/useListRoutineExercises";
@@ -13,7 +13,16 @@ import { RoutineExerciseSetRow } from "./RoutineExerciseSetRow";
 type RoutineExerciseSetsProps = {
   routineId: string;
   routineExerciseId: string;
-  sets: RoutineExerciseSet[];
+  sets: Pick<
+    routineExerciseSetSchema.RoutineExerciseSet,
+    | "id"
+    | "routineExerciseId"
+    | "position"
+    | "type"
+    | "reps"
+    | "weightUnit"
+    | "weight"
+  >[];
 };
 
 /**

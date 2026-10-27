@@ -1,12 +1,11 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { routinesQueryKey } from "../../queries/routines/listRoutines/useListRoutines";
-import { Routine } from "../../queries/routines/types";
-import { UpdateRoutineBody } from "./types";
+import * as routineSchema from "../../../types/routine";
 import { updateRoutine } from "./updateRoutine";
 
 interface UpdateRoutineVariables {
   id: string;
-  body: UpdateRoutineBody;
+  body: Partial<Pick<routineSchema.Routine, "name" | "description">>;
 }
 
 export const useUpdateRoutine = () => {
@@ -20,7 +19,9 @@ export const useUpdateRoutine = () => {
       // Swap the routine in the cached list right away so the detail page
       // (which selects from this list) and the list page show the new values
       // without a round trip, then refetch to stay in sync with the server.
-      queryClient.setQueryData<Routine[]>(routinesQueryKey, (routines) =>
+      queryClient.setQueryData<
+        Pick<routineSchema.Routine, "id" | "name" | "description">[]
+      >(routinesQueryKey, (routines) =>
         routines?.map((routine) =>
           routine.id === updated.id ? updated : routine,
         ),

@@ -21,7 +21,7 @@ import {
 import { Input } from "@shadcn-ui/components/ui/input";
 import { Textarea } from "@shadcn-ui/components/ui/textarea";
 import { useCreateRoutine } from "../../../api/actions/createRoutine/useCreateRoutine";
-import { CreateRoutineBodySchema } from "../../../api/actions/createRoutine/types";
+import * as routineSchema from "../../../types/routine";
 import { ApiError } from "../../../api/errors";
 
 type FieldName = "name" | "description";
@@ -56,11 +56,16 @@ export const CreateRoutineDialog = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const parsed = CreateRoutineBodySchema.safeParse({
-      name,
-      // Send nothing for an empty description so the backend stores null.
-      description: description.trim() === "" ? undefined : description,
-    });
+    const parsed = routineSchema.RoutineSchema.pick({
+      name: true,
+      description: true,
+    })
+      .partial({ description: true })
+      .safeParse({
+        name,
+        // Send nothing for an empty description so the backend stores null.
+        description: description.trim() === "" ? undefined : description,
+      });
 
     if (!parsed.success) {
       const errors: FieldErrors = {};

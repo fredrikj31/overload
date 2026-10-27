@@ -1,12 +1,34 @@
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router";
 import { Badge } from "@shadcn-ui/components/ui/badge";
-import type { RoutineExerciseListItem } from "../../../api/queries/routines/types";
+import * as bodyPartSchema from "../../../types/bodyPart";
+import * as equipmentSchema from "../../../types/equipment";
+import * as exerciseSchema from "../../../types/exercise";
+import * as routineExerciseSchema from "../../../types/routineExercise";
+import * as routineExerciseSetSchema from "../../../types/routineExerciseSet";
 import { getMediaUrl } from "../../../utils/getMediaUrl";
 import { RoutineExerciseSets } from "./RoutineExerciseSets";
 
 type RoutineExerciseRowProps = {
-  routineExercise: RoutineExerciseListItem;
+  routineExercise: Pick<
+    routineExerciseSchema.RoutineExercise,
+    "id" | "routineId" | "exerciseId" | "position"
+  > & {
+    exercise: Pick<exerciseSchema.Exercise, "id" | "name" | "imagePath"> & {
+      bodyPart: Pick<bodyPartSchema.BodyPart, "id" | "name" | "slug"> | null;
+      equipment: Pick<equipmentSchema.Equipment, "id" | "name" | "slug">;
+    };
+    sets: Pick<
+      routineExerciseSetSchema.RoutineExerciseSet,
+      | "id"
+      | "routineExerciseId"
+      | "position"
+      | "type"
+      | "reps"
+      | "weightUnit"
+      | "weight"
+    >[];
+  };
   /** 1-based display number. Not `position`, which may have gaps. */
   number: number;
 };

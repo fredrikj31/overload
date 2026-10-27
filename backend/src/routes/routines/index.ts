@@ -1,29 +1,16 @@
+import {
+  BodyPartSchema,
+  EquipmentSchema,
+  ExerciseSchema,
+  RoutineExerciseSchema,
+  RoutineExerciseSetSchema,
+  RoutineSchema,
+} from "@overload/database";
 import { FastifyPluginAsync } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
+import { ApiErrorSchema } from "../../errors";
 import { validateSession } from "../../hooks/validateSession";
-import { ApiErrorSchema } from "../../types/error";
-import {
-  CreateRoutineBodySchema,
-  CreateRoutineResponseSchema,
-  ListRoutinesResponseSchema,
-  RoutineParamsSchema,
-  UpdateRoutineBodySchema,
-  UpdateRoutineResponseSchema,
-} from "../../types/routine";
-import {
-  AddRoutineExerciseBodySchema,
-  AddRoutineExerciseResponseSchema,
-  ListRoutineExercisesResponseSchema,
-} from "../../types/routineExercise";
-import {
-  AddRoutineExerciseSetBodySchema,
-  AddRoutineExerciseSetResponseSchema,
-  RoutineExerciseParamsSchema,
-  RoutineExerciseSetParamsSchema,
-  UpdateRoutineExerciseSetBodySchema,
-  UpdateRoutineExerciseSetResponseSchema,
-} from "../../types/routineExerciseSet";
 import { addRoutineExerciseHandler } from "./handlers/addRoutineExercise";
 import { addRoutineExerciseSetHandler } from "./handlers/addRoutineExerciseSet";
 import { createRoutineHandler } from "./handlers/createRoutine";
@@ -48,9 +35,17 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
         tags: ["routines"],
         security: [{ session: [] }],
         response: {
-          "200": ListRoutinesResponseSchema.describe(
-            "Returns the signed-in user's routines.",
-          ),
+          "200": z
+            .object({
+              data: z.array(
+                RoutineSchema.pick({
+                  id: true,
+                  name: true,
+                  description: true,
+                }),
+              ),
+            })
+            .describe("Returns the signed-in user's routines."),
           "401": ApiErrorSchema,
           "500": ApiErrorSchema,
         },
@@ -76,11 +71,21 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
         description: "Creates a new routine owned by the signed-in user.",
         tags: ["routines"],
         security: [{ session: [] }],
-        body: CreateRoutineBodySchema,
+        // `userId` comes from the session; `description` may be left out.
+        body: RoutineSchema.pick({
+          name: true,
+          description: true,
+        }).partial({ description: true }),
         response: {
-          "201": CreateRoutineResponseSchema.describe(
-            "Returns the created routine.",
-          ),
+          "201": z
+            .object({
+              data: RoutineSchema.pick({
+                id: true,
+                name: true,
+                description: true,
+              }),
+            })
+            .describe("Returns the created routine."),
           "400": ApiErrorSchema,
           "401": ApiErrorSchema,
           "500": ApiErrorSchema,
@@ -108,7 +113,7 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
           "Deletes a routine owned by the signed-in user. Routines owned by other users are reported as not found.",
         tags: ["routines"],
         security: [{ session: [] }],
-        params: RoutineParamsSchema,
+        params: z.object({ id: z.uuid() }),
         response: {
           "204": z.undefined().describe("The routine was deleted."),
           "400": ApiErrorSchema,
@@ -139,12 +144,26 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
           "Updates the name and/or description of a routine owned by the signed-in user. Routines owned by other users are reported as not found.",
         tags: ["routines"],
         security: [{ session: [] }],
-        params: RoutineParamsSchema,
-        body: UpdateRoutineBodySchema,
+        params: z.object({ id: z.uuid() }),
+        // Every field is optional, but at least one must be provided.
+        body: RoutineSchema.pick({
+          name: true,
+          description: true,
+        })
+          .partial()
+          .refine((body) => Object.keys(body).length > 0, {
+            message: "At least one field must be provided",
+          }),
         response: {
-          "200": UpdateRoutineResponseSchema.describe(
-            "Returns the updated routine.",
-          ),
+          "200": z
+            .object({
+              data: RoutineSchema.pick({
+                id: true,
+                name: true,
+                description: true,
+              }),
+            })
+            .describe("Returns the updated routine."),
           "400": ApiErrorSchema,
           "401": ApiErrorSchema,
           "404": ApiErrorSchema,
@@ -174,12 +193,23 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
           "Appends an exercise to the end of a routine owned by the signed-in user. The same exercise may be added more than once. Routines owned by other users are reported as not found.",
         tags: ["routines"],
         security: [{ session: [] }],
-        params: RoutineParamsSchema,
-        body: AddRoutineExerciseBodySchema,
+        params: z.object({ id: z.uuid() }),
+        // `routineId` comes from the path and `position` is assigned by the
+        // server (appended at the end).
+        body: RoutineExerciseSchema.pick({
+          exerciseId: true,
+        }),
         response: {
-          "201": AddRoutineExerciseResponseSchema.describe(
-            "Returns the created routine exercise.",
-          ),
+          "201": z
+            .object({
+              data: RoutineExerciseSchema.pick({
+                id: true,
+                routineId: true,
+                exerciseId: true,
+                position: true,
+              }),
+            })
+            .describe("Returns the created routine exercise."),
           "400": ApiErrorSchema,
           "401": ApiErrorSchema,
           "404": ApiErrorSchema,
@@ -209,11 +239,51 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
           "Lists the exercises in a routine owned by the signed-in user, ordered by position, each with the exercise it points at and its planned sets in order. Routines owned by other users are reported as not found.",
         tags: ["routines"],
         security: [{ session: [] }],
-        params: RoutineParamsSchema,
+        params: z.object({ id: z.uuid() }),
         response: {
-          "200": ListRoutineExercisesResponseSchema.describe(
-            "Returns the routine's exercises in order.",
-          ),
+          "200": z
+            .object({
+              data: z.array(
+                RoutineExerciseSchema.pick({
+                  id: true,
+                  routineId: true,
+                  exerciseId: true,
+                  position: true,
+                }).extend({
+                  // Lighter than the exercise list: no instructions, gif,
+                  // attribution or muscles.
+                  exercise: ExerciseSchema.pick({
+                    id: true,
+                    name: true,
+                    imagePath: true,
+                  }).extend({
+                    // Nullable: cardio exercises have no body region.
+                    bodyPart: BodyPartSchema.pick({
+                      id: true,
+                      name: true,
+                      slug: true,
+                    }).nullable(),
+                    equipment: EquipmentSchema.pick({
+                      id: true,
+                      name: true,
+                      slug: true,
+                    }),
+                  }),
+                  sets: z.array(
+                    RoutineExerciseSetSchema.pick({
+                      id: true,
+                      routineExerciseId: true,
+                      position: true,
+                      type: true,
+                      reps: true,
+                      weightUnit: true,
+                      weight: true,
+                    }),
+                  ),
+                }),
+              ),
+            })
+            .describe("Returns the routine's exercises in order."),
           "400": ApiErrorSchema,
           "401": ApiErrorSchema,
           "404": ApiErrorSchema,
@@ -242,12 +312,30 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
           "Appends a planned set to the end of an exercise in a routine owned by the signed-in user. `weightUnit` defaults to kg when omitted. Routines owned by other users, and exercises that are not part of the routine, are reported as not found.",
         tags: ["routines"],
         security: [{ session: [] }],
-        params: RoutineExerciseParamsSchema,
-        body: AddRoutineExerciseSetBodySchema,
+        params: z.object({ id: z.uuid(), routineExerciseId: z.uuid() }),
+        // `routineExerciseId` comes from the path, `position` is assigned by
+        // the server (appended at the end) and `weightUnit` falls back to kg
+        // when omitted.
+        body: RoutineExerciseSetSchema.pick({
+          type: true,
+          reps: true,
+          weightUnit: true,
+          weight: true,
+        }).partial({ type: true, weightUnit: true, weight: true }),
         response: {
-          "201": AddRoutineExerciseSetResponseSchema.describe(
-            "Returns the created routine exercise set.",
-          ),
+          "201": z
+            .object({
+              data: RoutineExerciseSetSchema.pick({
+                id: true,
+                routineExerciseId: true,
+                position: true,
+                type: true,
+                reps: true,
+                weightUnit: true,
+                weight: true,
+              }),
+            })
+            .describe("Returns the created routine exercise set."),
           "400": ApiErrorSchema,
           "401": ApiErrorSchema,
           "404": ApiErrorSchema,
@@ -277,12 +365,37 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
           "Updates the type, reps, weight and/or weight unit of a planned set in a routine owned by the signed-in user. Routines owned by other users, and sets that are not part of the given exercise, are reported as not found.",
         tags: ["routines"],
         security: [{ session: [] }],
-        params: RoutineExerciseSetParamsSchema,
-        body: UpdateRoutineExerciseSetBodySchema,
+        params: z.object({
+          id: z.uuid(),
+          routineExerciseId: z.uuid(),
+          setId: z.uuid(),
+        }),
+        // Every field is optional, but at least one must be provided.
+        // `routineExerciseId` and `position` are not editable here.
+        body: RoutineExerciseSetSchema.pick({
+          type: true,
+          reps: true,
+          weightUnit: true,
+          weight: true,
+        })
+          .partial()
+          .refine((body) => Object.keys(body).length > 0, {
+            message: "At least one field must be provided",
+          }),
         response: {
-          "200": UpdateRoutineExerciseSetResponseSchema.describe(
-            "Returns the updated routine exercise set.",
-          ),
+          "200": z
+            .object({
+              data: RoutineExerciseSetSchema.pick({
+                id: true,
+                routineExerciseId: true,
+                position: true,
+                type: true,
+                reps: true,
+                weightUnit: true,
+                weight: true,
+              }),
+            })
+            .describe("Returns the updated routine exercise set."),
           "400": ApiErrorSchema,
           "401": ApiErrorSchema,
           "404": ApiErrorSchema,

@@ -1,14 +1,12 @@
-import { Database, routineSchema } from "@overload/database";
+import { Database, Routine, routine } from "@overload/database";
 import { logger } from "../../../../logger";
 import { InternalServerError } from "../../../../errors/server";
-import { Routine } from "../../../../types/routine";
-
-const { routine } = routineSchema;
 
 export const createRoutine = async (
   database: Database,
-  values: routineSchema.CreateRoutine,
-): Promise<Routine> => {
+  values: Pick<Routine, "userId" | "name"> &
+    Partial<Pick<Routine, "description">>,
+): Promise<Pick<Routine, "id" | "name" | "description">> => {
   const [row] = await database
     .insert(routine)
     .values(values)

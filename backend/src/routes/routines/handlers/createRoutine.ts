@@ -1,18 +1,19 @@
-import { Database } from "@overload/database";
+import { Database, Routine } from "@overload/database";
 import { UnauthorizedError } from "../../../errors/client";
 import { createRoutine } from "../../../services/database/queries/routine/createRoutine";
-import { CreateRoutineBody, Routine } from "../../../types/routine";
 
 interface CreateRoutineHandlerOptions {
   database: Database;
   userId: string | undefined;
-  body: CreateRoutineBody;
+  body: Pick<Routine, "name"> & Partial<Pick<Routine, "description">>;
 }
 export const createRoutineHandler = async ({
   database,
   userId,
   body,
-}: CreateRoutineHandlerOptions): Promise<Routine> => {
+}: CreateRoutineHandlerOptions): Promise<
+  Pick<Routine, "id" | "name" | "description">
+> => {
   if (!userId) {
     throw new UnauthorizedError({
       code: "account-id-not-found-in-request",
