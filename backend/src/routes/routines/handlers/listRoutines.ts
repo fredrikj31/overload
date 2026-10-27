@@ -1,7 +1,6 @@
-import { Database } from "@overload/database";
+import { Database, routineSchema } from "@overload/database";
 import { UnauthorizedError } from "../../../errors/client";
 import { listRoutines } from "../../../services/database/queries/routine/listRoutines";
-import { Routine } from "../../../types/routine";
 
 interface ListRoutinesHandlerOptions {
   database: Database;
@@ -10,7 +9,9 @@ interface ListRoutinesHandlerOptions {
 export const listRoutinesHandler = async ({
   database,
   userId,
-}: ListRoutinesHandlerOptions): Promise<Routine[]> => {
+}: ListRoutinesHandlerOptions): Promise<
+  Pick<routineSchema.Routine, "id" | "name" | "description">[]
+> => {
   if (!userId) {
     throw new UnauthorizedError({
       code: "account-id-not-found-in-request",

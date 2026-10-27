@@ -1,14 +1,14 @@
 import { Database, routineSchema } from "@overload/database";
 import { logger } from "../../../../logger";
 import { InternalServerError } from "../../../../errors/server";
-import { Routine } from "../../../../types/routine";
 
 const { routine } = routineSchema;
 
 export const createRoutine = async (
   database: Database,
-  values: routineSchema.CreateRoutine,
-): Promise<Routine> => {
+  values: Pick<routineSchema.Routine, "userId" | "name"> &
+    Partial<Pick<routineSchema.Routine, "description">>,
+): Promise<Pick<routineSchema.Routine, "id" | "name" | "description">> => {
   const [row] = await database
     .insert(routine)
     .values(values)

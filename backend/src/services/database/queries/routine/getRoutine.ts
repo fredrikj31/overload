@@ -1,7 +1,6 @@
-import { Database } from "@overload/database";
+import { Database, routineSchema } from "@overload/database";
 import { logger } from "../../../../logger";
 import { InternalServerError } from "../../../../errors/server";
-import { Routine } from "../../../../types/routine";
 
 interface GetRoutineOptions {
   id: string;
@@ -17,7 +16,9 @@ interface GetRoutineOptions {
 export const getRoutine = async (
   database: Database,
   { id, userId }: GetRoutineOptions,
-): Promise<Routine | undefined> => {
+): Promise<
+  Pick<routineSchema.Routine, "id" | "name" | "description"> | undefined
+> => {
   const row = await database.query.routine
     .findFirst({
       columns: { id: true, name: true, description: true },

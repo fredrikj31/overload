@@ -17,13 +17,13 @@ import {
 import { useAddRoutineExercise } from "../../../api/actions/addRoutineExercise/useAddRoutineExercise";
 import { ApiError } from "../../../api/errors";
 import { exercisesQueryKey } from "../../../api/queries/exercises/listExercises/useListExercises";
-import type { ExerciseListItem } from "../../../api/queries/exercises/types";
+import * as exerciseSchema from "../../../types/exercise";
 import { routinesQueryKey } from "../../../api/queries/routines/listRoutines/useListRoutines";
-import { Routine } from "../../../api/queries/routines/types";
+import * as routineSchema from "../../../types/routine";
 import { ExercisePicker } from "./ExercisePicker";
 
 interface AddExerciseDialogProps {
-  routine: Routine;
+  routine: Pick<routineSchema.Routine, "id" | "name" | "description">;
 }
 
 export const AddExerciseDialog = ({ routine }: AddExerciseDialogProps) => {
@@ -41,7 +41,9 @@ export const AddExerciseDialog = ({ routine }: AddExerciseDialogProps) => {
     setOpen(nextOpen);
   };
 
-  const handleSelect = (exercise: ExerciseListItem) => {
+  const handleSelect = (
+    exercise: Pick<exerciseSchema.Exercise, "id" | "name">,
+  ) => {
     addRoutineExercise(
       { routineId: routine.id, exerciseId: exercise.id },
       {

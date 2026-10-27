@@ -1,24 +1,21 @@
-import { Database } from "@overload/database";
+import { Database, routineSchema } from "@overload/database";
 import { NotFoundError, UnauthorizedError } from "../../../errors/client";
 import { updateRoutine } from "../../../services/database/queries/routine/updateRoutine";
-import {
-  Routine,
-  RoutineParams,
-  UpdateRoutineBody,
-} from "../../../types/routine";
 
 interface UpdateRoutineHandlerOptions {
   database: Database;
   userId: string | undefined;
-  params: RoutineParams;
-  body: UpdateRoutineBody;
+  params: { id: string };
+  body: Partial<Pick<routineSchema.Routine, "name" | "description">>;
 }
 export const updateRoutineHandler = async ({
   database,
   userId,
   params,
   body,
-}: UpdateRoutineHandlerOptions): Promise<Routine> => {
+}: UpdateRoutineHandlerOptions): Promise<
+  Pick<routineSchema.Routine, "id" | "name" | "description">
+> => {
   if (!userId) {
     throw new UnauthorizedError({
       code: "account-id-not-found-in-request",

@@ -2,14 +2,13 @@ import { Database, routineSchema } from "@overload/database";
 import { and, eq, isNull } from "drizzle-orm";
 import { logger } from "../../../../logger";
 import { InternalServerError } from "../../../../errors/server";
-import { Routine, UpdateRoutineBody } from "../../../../types/routine";
 
 const { routine } = routineSchema;
 
 interface UpdateRoutineOptions {
   id: string;
   userId: string;
-  values: UpdateRoutineBody;
+  values: Partial<Pick<routineSchema.Routine, "name" | "description">>;
 }
 
 /**
@@ -22,7 +21,9 @@ interface UpdateRoutineOptions {
 export const updateRoutine = async (
   database: Database,
   { id, userId, values }: UpdateRoutineOptions,
-): Promise<Routine | undefined> => {
+): Promise<
+  Pick<routineSchema.Routine, "id" | "name" | "description"> | undefined
+> => {
   const [row] = await database
     .update(routine)
     .set(values)

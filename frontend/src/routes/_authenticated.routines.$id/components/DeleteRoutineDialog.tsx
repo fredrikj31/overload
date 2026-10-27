@@ -18,10 +18,10 @@ import { Button } from "@shadcn-ui/components/ui/button";
 import { useDeleteRoutine } from "../../../api/actions/deleteRoutine/useDeleteRoutine";
 import { ApiError } from "../../../api/errors";
 import { routinesQueryKey } from "../../../api/queries/routines/listRoutines/useListRoutines";
-import { Routine } from "../../../api/queries/routines/types";
+import * as routineSchema from "../../../types/routine";
 
 interface DeleteRoutineDialogProps {
-  routine: Routine;
+  routine: Pick<routineSchema.Routine, "id" | "name" | "description">;
 }
 
 export const DeleteRoutineDialog = ({ routine }: DeleteRoutineDialogProps) => {

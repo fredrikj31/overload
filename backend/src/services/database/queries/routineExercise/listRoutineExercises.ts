@@ -1,7 +1,13 @@
-import { Database } from "@overload/database";
+import {
+  bodyPartSchema,
+  Database,
+  equipmentSchema,
+  exerciseSchema,
+  routineExerciseSchema,
+  routineExerciseSetSchema,
+} from "@overload/database";
 import { logger } from "../../../../logger";
 import { InternalServerError } from "../../../../errors/server";
-import { RoutineExerciseListItem } from "../../../../types/routineExercise";
 
 /**
  * Lists a routine's non-deleted exercise slots in routine order, each with
@@ -17,7 +23,27 @@ import { RoutineExerciseListItem } from "../../../../types/routineExercise";
 export const listRoutineExercises = async (
   database: Database,
   routineId: string,
-): Promise<RoutineExerciseListItem[]> => {
+): Promise<
+  (Pick<
+    routineExerciseSchema.RoutineExercise,
+    "id" | "routineId" | "exerciseId" | "position"
+  > & {
+    exercise: Pick<exerciseSchema.Exercise, "id" | "name" | "imagePath"> & {
+      bodyPart: Pick<bodyPartSchema.BodyPart, "id" | "name" | "slug"> | null;
+      equipment: Pick<equipmentSchema.Equipment, "id" | "name" | "slug">;
+    };
+    sets: Pick<
+      routineExerciseSetSchema.RoutineExerciseSet,
+      | "id"
+      | "routineExerciseId"
+      | "position"
+      | "type"
+      | "reps"
+      | "weightUnit"
+      | "weight"
+    >[];
+  })[]
+> => {
   const rows = await database.query.routineExercise
     .findMany({
       columns: { id: true, routineId: true, exerciseId: true, position: true },

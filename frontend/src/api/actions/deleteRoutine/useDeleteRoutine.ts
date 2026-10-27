@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { routinesQueryKey } from "../../queries/routines/listRoutines/useListRoutines";
-import { Routine } from "../../queries/routines/types";
+import * as routineSchema from "../../../types/routine";
 import { deleteRoutine } from "./deleteRoutine";
 
 export const useDeleteRoutine = () => {
@@ -13,7 +13,9 @@ export const useDeleteRoutine = () => {
     onSuccess: (_, id) => {
       // Drop the routine from the cached list right away so the list page is
       // correct on arrival, then refetch to stay in sync with the server.
-      queryClient.setQueryData<Routine[]>(routinesQueryKey, (routines) =>
+      queryClient.setQueryData<
+        Pick<routineSchema.Routine, "id" | "name" | "description">[]
+      >(routinesQueryKey, (routines) =>
         routines?.filter((routine) => routine.id !== id),
       );
       void queryClient.invalidateQueries({ queryKey: routinesQueryKey });

@@ -1,11 +1,23 @@
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router";
 import { Badge } from "@shadcn-ui/components/ui/badge";
-import type { ExerciseListItem } from "../../../api/queries/exercises/types";
+import * as bodyPartSchema from "../../../types/bodyPart";
+import * as equipmentSchema from "../../../types/equipment";
+import * as exerciseSchema from "../../../types/exercise";
+import * as muscleExerciseSchema from "../../../types/muscleExercise";
+import * as muscleSchema from "../../../types/muscle";
 import { getMediaUrl } from "../../../utils/getMediaUrl";
 
 type ExerciseRowProps = {
-  exercise: ExerciseListItem;
+  exercise: Pick<
+    exerciseSchema.Exercise,
+    "id" | "name" | "instructions" | "imagePath" | "gifPath" | "attribution"
+  > & {
+    bodyPart: Pick<bodyPartSchema.BodyPart, "id" | "name" | "slug"> | null;
+    equipment: Pick<equipmentSchema.Equipment, "id" | "name" | "slug">;
+    muscles: (Pick<muscleSchema.Muscle, "id" | "name" | "slug"> &
+      Pick<muscleExerciseSchema.MuscleExercise, "role">)[];
+  };
 };
 
 export const ExerciseRow = ({ exercise }: ExerciseRowProps) => {

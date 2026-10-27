@@ -2,17 +2,18 @@ import { Database, routineExerciseSetSchema } from "@overload/database";
 import { and, eq, isNull } from "drizzle-orm";
 import { logger } from "../../../../logger";
 import { InternalServerError } from "../../../../errors/server";
-import {
-  RoutineExerciseSet,
-  UpdateRoutineExerciseSetBody,
-} from "../../../../types/routineExerciseSet";
 
 const { routineExerciseSet } = routineExerciseSetSchema;
 
 interface UpdateRoutineExerciseSetOptions {
   id: string;
   routineExerciseId: string;
-  values: UpdateRoutineExerciseSetBody;
+  values: Partial<
+    Pick<
+      routineExerciseSetSchema.RoutineExerciseSet,
+      "type" | "reps" | "weightUnit" | "weight"
+    >
+  >;
 }
 
 /**
@@ -26,7 +27,19 @@ interface UpdateRoutineExerciseSetOptions {
 export const updateRoutineExerciseSet = async (
   database: Database,
   { id, routineExerciseId, values }: UpdateRoutineExerciseSetOptions,
-): Promise<RoutineExerciseSet | undefined> => {
+): Promise<
+  | Pick<
+      routineExerciseSetSchema.RoutineExerciseSet,
+      | "id"
+      | "routineExerciseId"
+      | "position"
+      | "type"
+      | "reps"
+      | "weightUnit"
+      | "weight"
+    >
+  | undefined
+> => {
   const [row] = await database
     .update(routineExerciseSet)
     .set(values)

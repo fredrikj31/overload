@@ -15,15 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@shadcn-ui/components/ui/select";
-import {
-  WEIGHT_UNITS,
-  type RoutineExerciseSet,
-  type WeightUnit,
-} from "../../../api/actions/addRoutineExerciseSet/types";
-import {
-  UpdateRoutineExerciseSetBodySchema,
-  type UpdateRoutineExerciseSetBody,
-} from "../../../api/actions/updateRoutineExerciseSet/types";
+import * as routineExerciseSetSchema from "../../../types/routineExerciseSet";
 import { useUpdateRoutineExerciseSet } from "../../../api/actions/updateRoutineExerciseSet/useUpdateRoutineExerciseSet";
 import { ApiError } from "../../../api/errors";
 import { routineExercisesQueryKey } from "../../../api/queries/routines/listRoutineExercises/useListRoutineExercises";
@@ -33,7 +25,16 @@ import { SetTypeDialog } from "./SetTypeDialog";
 type RoutineExerciseSetRowProps = {
   routineId: string;
   routineExerciseId: string;
-  set: RoutineExerciseSet;
+  set: Pick<
+    routineExerciseSetSchema.RoutineExerciseSet,
+    | "id"
+    | "routineExerciseId"
+    | "position"
+    | "type"
+    | "reps"
+    | "weightUnit"
+    | "weight"
+  >;
   /**
    * 1-based number among the normal (working) sets; warm-up, failure and
    * drop sets don't count. For a non-normal set it is the number the set
@@ -42,10 +43,11 @@ type RoutineExerciseSetRowProps = {
   number: number;
 };
 
-const WEIGHT_UNIT_LABELS: Record<WeightUnit, string> = {
-  kg: "kg",
-  lb: "lb",
-};
+const WEIGHT_UNIT_LABELS: Record<routineExerciseSetSchema.WeightUnit, string> =
+  {
+    kg: "kg",
+    lb: "lb",
+  };
 
 /** Blur on Enter so the field's onBlur handler saves the value. */
 const blurOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -73,7 +75,14 @@ export const RoutineExerciseSetRow = ({
 
   const inputId = `set-${set.id}`;
 
-  const save = (body: UpdateRoutineExerciseSetBody) => {
+  const save = (
+    body: Partial<
+      Pick<
+        routineExerciseSetSchema.RoutineExerciseSet,
+        "type" | "reps" | "weightUnit" | "weight"
+      >
+    >,
+  ) => {
     updateRoutineExerciseSet(
       { routineId, routineExerciseId, setId: set.id, body },
       {
@@ -112,7 +121,9 @@ export const RoutineExerciseSetRow = ({
 
     if (weight === set.weight) return;
 
-    const parsed = UpdateRoutineExerciseSetBodySchema.safeParse({ weight });
+    const parsed = routineExerciseSetSchema.RoutineExerciseSetSchema.pick({
+      weight: true,
+    }).safeParse({ weight });
     if (!parsed.success) {
       toast.error(parsed.error.issues[0]?.message ?? "Invalid weight", {
         position: "bottom-right",
@@ -130,7 +141,7 @@ export const RoutineExerciseSetRow = ({
 
     if (reps === set.reps) return;
 
-    const parsed = UpdateRoutineExerciseSetBodySchema.required({
+    const parsed = routineExerciseSetSchema.RoutineExerciseSetSchema.pick({
       reps: true,
     }).safeParse({ reps });
     if (!parsed.success) {
@@ -144,7 +155,9 @@ export const RoutineExerciseSetRow = ({
     save(parsed.data);
   };
 
-  const handleUnitChange = (weightUnit: WeightUnit | null) => {
+  const handleUnitChange = (
+    weightUnit: routineExerciseSetSchema.WeightUnit | null,
+  ) => {
     if (!weightUnit || weightUnit === set.weightUnit) return;
 
     save({ weightUnit });
@@ -191,7 +204,7 @@ export const RoutineExerciseSetRow = ({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {WEIGHT_UNITS.map((unit) => (
+              {routineExerciseSetSchema.WEIGHT_UNITS.map((unit) => (
                 <SelectItem key={unit} value={unit}>
                   {WEIGHT_UNIT_LABELS[unit]}
                 </SelectItem>

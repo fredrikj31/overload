@@ -8,11 +8,7 @@ import {
   timestamp,
   uuid,
 } from "drizzle-orm/pg-core";
-import {
-  createInsertSchema,
-  createSelectSchema,
-  createUpdateSchema,
-} from "drizzle-zod";
+import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { routineExercise } from "./routine_exercise";
 
@@ -89,12 +85,10 @@ export const routineExerciseSet = pgTable(
 // Zod schemas (shared by backend & frontend)
 // ---------------------------------------------------------------------------
 
-// Callback form so drizzle-zod still wraps nullable / defaulted columns in
-// `.nullable()` / `.optional()` for the insert and update schemas.
+// Callback form so drizzle-zod still wraps nullable columns in `.nullable()`.
 // `type` and `weightUnit` need no refinement: drizzle-zod maps pgEnums to
-// z.enum itself. `weightUnit` has no column default, so it is required in the
-// insert schema; the backend request schema defaults it from the user's
-// preference before insert.
+// z.enum itself. `weightUnit` has no column default; the backend request
+// schema defaults it from the user's preference before insert.
 const refinements = {
   // drizzle-zod maps uuid columns to plain strings; tighten them.
   id: () => z.uuid(),
@@ -102,9 +96,18 @@ const refinements = {
   // drizzle-orm 1.0 reports integer columns as dataType "number int32", which
   // drizzle-zod 0.8 does not recognise, so it hands us z.any(). Build our own.
   position: () => z.int().min(0),
-  reps: () => z.int().min(0),
+  // The messages are user-facing: the frontend mirrors them in its forms.
+  reps: () =>
+    z
+      .number({ error: "Reps is required" })
+      .int("Reps must be a whole number")
+      .min(0, "Reps can't be negative"),
   // numeric(6,2): at most four digits before the decimal point.
-  weight: () => z.number().min(0).max(9999.99),
+  weight: () =>
+    z
+      .number({ error: "Weight must be a number" })
+      .min(0, "Weight can't be negative")
+      .max(9999.99, "Weight must be 9999.99 or less"),
 };
 
 export const RoutineExerciseSetSchema = createSelectSchema(
@@ -112,29 +115,3 @@ export const RoutineExerciseSetSchema = createSelectSchema(
   refinements,
 );
 export type RoutineExerciseSet = z.infer<typeof RoutineExerciseSetSchema>;
-
-export const CreateRoutineExerciseSetSchema = createInsertSchema(
-  routineExerciseSet,
-  refinements,
-).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-  deletedAt: true,
-});
-export type CreateRoutineExerciseSet = z.infer<
-  typeof CreateRoutineExerciseSetSchema
->;
-
-export const UpdateRoutineExerciseSetSchema = createUpdateSchema(
-  routineExerciseSet,
-  refinements,
-).omit({
-  id: true,
-  createdAt: true,
-  updatedAt: true,
-  deletedAt: true,
-});
-export type UpdateRoutineExerciseSet = z.infer<
-  typeof UpdateRoutineExerciseSetSchema
->;

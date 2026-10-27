@@ -1,20 +1,45 @@
-import { Database } from "@overload/database";
+import {
+  bodyPartSchema,
+  Database,
+  equipmentSchema,
+  exerciseSchema,
+  routineExerciseSchema,
+  routineExerciseSetSchema,
+} from "@overload/database";
 import { NotFoundError, UnauthorizedError } from "../../../errors/client";
 import { getRoutine } from "../../../services/database/queries/routine/getRoutine";
 import { listRoutineExercises } from "../../../services/database/queries/routineExercise/listRoutineExercises";
-import { RoutineParams } from "../../../types/routine";
-import { RoutineExerciseListItem } from "../../../types/routineExercise";
 
 interface ListRoutineExercisesHandlerOptions {
   database: Database;
   userId: string | undefined;
-  params: RoutineParams;
+  params: { id: string };
 }
 export const listRoutineExercisesHandler = async ({
   database,
   userId,
   params,
-}: ListRoutineExercisesHandlerOptions): Promise<RoutineExerciseListItem[]> => {
+}: ListRoutineExercisesHandlerOptions): Promise<
+  (Pick<
+    routineExerciseSchema.RoutineExercise,
+    "id" | "routineId" | "exerciseId" | "position"
+  > & {
+    exercise: Pick<exerciseSchema.Exercise, "id" | "name" | "imagePath"> & {
+      bodyPart: Pick<bodyPartSchema.BodyPart, "id" | "name" | "slug"> | null;
+      equipment: Pick<equipmentSchema.Equipment, "id" | "name" | "slug">;
+    };
+    sets: Pick<
+      routineExerciseSetSchema.RoutineExerciseSet,
+      | "id"
+      | "routineExerciseId"
+      | "position"
+      | "type"
+      | "reps"
+      | "weightUnit"
+      | "weight"
+    >[];
+  })[]
+> => {
   if (!userId) {
     throw new UnauthorizedError({
       code: "account-id-not-found-in-request",

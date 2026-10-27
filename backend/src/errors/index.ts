@@ -1,3 +1,11 @@
+import { z } from "zod";
+
+/** JSON body of every error response, i.e. what `BaseError.toJSON()` returns. */
+export const ApiErrorSchema = z.object({
+  code: z.string(),
+  message: z.string(),
+});
+
 export interface BaseErrorOptions {
   statusCode: number;
   code: string;

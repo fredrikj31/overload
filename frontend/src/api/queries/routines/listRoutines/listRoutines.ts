@@ -1,7 +1,20 @@
+import { z } from "zod";
 import { apiClient } from "../../../client";
-import { ListRoutinesResponseSchema, type Routine } from "../types";
+import * as routineSchema from "../../../../types/routine";
 
-export const listRoutines = async (): Promise<Routine[]> => {
+export const listRoutines = async (): Promise<
+  Pick<routineSchema.Routine, "id" | "name" | "description">[]
+> => {
   const response = await apiClient.get<unknown>("/routines");
-  return ListRoutinesResponseSchema.parse(response.data).data;
+  return z
+    .object({
+      data: z.array(
+        routineSchema.RoutineSchema.pick({
+          id: true,
+          name: true,
+          description: true,
+        }),
+      ),
+    })
+    .parse(response.data).data;
 };

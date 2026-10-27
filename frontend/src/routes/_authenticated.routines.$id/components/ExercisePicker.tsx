@@ -4,13 +4,29 @@ import { toast } from "sonner";
 import { Badge } from "@shadcn-ui/components/ui/badge";
 import { Button } from "@shadcn-ui/components/ui/button";
 import { useListExercises } from "../../../api/queries/exercises/listExercises/useListExercises";
-import type { ExerciseListItem } from "../../../api/queries/exercises/types";
+import * as bodyPartSchema from "../../../types/bodyPart";
+import * as equipmentSchema from "../../../types/equipment";
+import * as exerciseSchema from "../../../types/exercise";
+import * as muscleExerciseSchema from "../../../types/muscleExercise";
+import * as muscleSchema from "../../../types/muscle";
 import { QueryErrorState } from "../../../components/QueryErrorState";
 import { ExerciseListSkeleton } from "../../_authenticated.exercises/components/ExerciseListSkeleton";
 import { ExerciseSearch } from "../../_authenticated.exercises/components/ExerciseSearch";
 import { getMediaUrl } from "../../../utils/getMediaUrl";
 
 const PAGE_SIZE = 50;
+
+// The picker lists the same shape as the exercises page, so the row, its
+// `onSelect` and the picker's own `onSelect` share it here.
+type ExerciseListItem = Pick<
+  exerciseSchema.Exercise,
+  "id" | "name" | "instructions" | "imagePath" | "gifPath" | "attribution"
+> & {
+  bodyPart: Pick<bodyPartSchema.BodyPart, "id" | "name" | "slug"> | null;
+  equipment: Pick<equipmentSchema.Equipment, "id" | "name" | "slug">;
+  muscles: (Pick<muscleSchema.Muscle, "id" | "name" | "slug"> &
+    Pick<muscleExerciseSchema.MuscleExercise, "role">)[];
+};
 
 type ExercisePickerRowProps = {
   exercise: ExerciseListItem;
