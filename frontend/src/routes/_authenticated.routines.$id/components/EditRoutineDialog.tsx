@@ -24,7 +24,7 @@ import { Input } from "@shadcn-ui/components/ui/input";
 import { Textarea } from "@shadcn-ui/components/ui/textarea";
 import { useUpdateRoutine } from "../../../api/actions/updateRoutine/useUpdateRoutine";
 import { ApiError } from "../../../api/errors";
-import { routinesQueryKey } from "../../../api/queries/routines/listRoutines/useListRoutines";
+import { queryKeys } from "../../../api/queryKeys";
 import * as routineSchema from "../../../types/routine";
 
 type FieldName = "name" | "description";
@@ -134,7 +134,9 @@ export const EditRoutineDialog = ({ routine }: EditRoutineDialogProps) => {
           // A 404 means the routine is gone (deleted elsewhere), so the cached
           // list is stale and there is nothing left to edit here.
           if (error instanceof ApiError && error.status === 404) {
-            void queryClient.invalidateQueries({ queryKey: routinesQueryKey });
+            void queryClient.invalidateQueries({
+              queryKey: queryKeys.routines.list,
+            });
             setOpen(false);
             void navigate("/routines");
           }

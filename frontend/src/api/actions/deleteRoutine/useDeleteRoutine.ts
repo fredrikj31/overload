@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { routinesQueryKey } from "../../queries/routines/listRoutines/useListRoutines";
+import { queryKeys } from "../../queryKeys";
 import * as routineSchema from "../../../types/routine";
 import { deleteRoutine } from "./deleteRoutine";
 
@@ -15,10 +15,10 @@ export const useDeleteRoutine = () => {
       // correct on arrival, then refetch to stay in sync with the server.
       queryClient.setQueryData<
         Pick<routineSchema.Routine, "id" | "name" | "description">[]
-      >(routinesQueryKey, (routines) =>
+      >(queryKeys.routines.list, (routines) =>
         routines?.filter((routine) => routine.id !== id),
       );
-      void queryClient.invalidateQueries({ queryKey: routinesQueryKey });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.routines.list });
     },
   });
 };

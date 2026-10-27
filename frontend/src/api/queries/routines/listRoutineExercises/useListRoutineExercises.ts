@@ -1,13 +1,6 @@
 import { queryOptions, skipToken, useQuery } from "@tanstack/react-query";
 import { listRoutineExercises } from "./listRoutineExercises";
-
-/**
- * Nested under `routinesQueryKey` so invalidating the routines prefix (e.g.
- * after deleting a routine) also drops its exercises. `useAddRoutineExercise`
- * and `useAddRoutineExerciseSet` invalidate this key after a mutation.
- */
-export const routineExercisesQueryKey = (routineId: string) =>
-  ["routines", routineId, "exercises"] as const;
+import { queryKeys } from "../../../queryKeys";
 
 export const listRoutineExercisesQueryOptions = (
   routineId: string | undefined,
@@ -15,7 +8,7 @@ export const listRoutineExercisesQueryOptions = (
   queryOptions({
     // The route param is typed as possibly undefined; skip the request until
     // it is known rather than hitting /routines/undefined/exercises.
-    queryKey: routineExercisesQueryKey(routineId ?? ""),
+    queryKey: queryKeys.routines.exercises(routineId ?? ""),
     queryFn:
       routineId === undefined
         ? skipToken

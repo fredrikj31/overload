@@ -16,8 +16,7 @@ import {
 import * as routineExerciseSetSchema from "../../../types/routineExerciseSet";
 import { useUpdateRoutineExerciseSet } from "../../../api/actions/updateRoutineExerciseSet/useUpdateRoutineExerciseSet";
 import { ApiError } from "../../../api/errors";
-import { routineExercisesQueryKey } from "../../../api/queries/routines/listRoutineExercises/useListRoutineExercises";
-import { routinesQueryKey } from "../../../api/queries/routines/listRoutines/useListRoutines";
+import { queryKeys } from "../../../api/queryKeys";
 import { cn } from "@shadcn-ui/lib/utils";
 import {
   SET_TYPE_DESCRIPTIONS,
@@ -101,13 +100,13 @@ export const SetTypeDialog = ({
               // The routine is gone (deleted elsewhere), so the cached list
               // is stale and there is nothing left to edit here.
               void queryClient.invalidateQueries({
-                queryKey: routinesQueryKey,
+                queryKey: queryKeys.routines.list,
               });
               void navigate("/routines");
             } else {
               // The slot or set is gone; refresh the list so it drops out.
               void queryClient.invalidateQueries({
-                queryKey: routineExercisesQueryKey(routineId),
+                queryKey: queryKeys.routines.exercises(routineId),
               });
             }
           }

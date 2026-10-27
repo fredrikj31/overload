@@ -17,7 +17,7 @@ import {
 import { Button } from "@shadcn-ui/components/ui/button";
 import { useDeleteRoutine } from "../../../api/actions/deleteRoutine/useDeleteRoutine";
 import { ApiError } from "../../../api/errors";
-import { routinesQueryKey } from "../../../api/queries/routines/listRoutines/useListRoutines";
+import { queryKeys } from "../../../api/queryKeys";
 import * as routineSchema from "../../../types/routine";
 
 interface DeleteRoutineDialogProps {
@@ -58,7 +58,9 @@ export const DeleteRoutineDialog = ({ routine }: DeleteRoutineDialogProps) => {
         // A 404 means the routine is already gone (deleted elsewhere), so the
         // cached list is stale and there is nothing left to show here.
         if (error instanceof ApiError && error.status === 404) {
-          void queryClient.invalidateQueries({ queryKey: routinesQueryKey });
+          void queryClient.invalidateQueries({
+            queryKey: queryKeys.routines.list,
+          });
           setOpen(false);
           void navigate("/routines");
         }

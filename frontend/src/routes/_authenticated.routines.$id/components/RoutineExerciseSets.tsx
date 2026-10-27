@@ -6,8 +6,7 @@ import { Button } from "@shadcn-ui/components/ui/button";
 import * as routineExerciseSetSchema from "../../../types/routineExerciseSet";
 import { useAddRoutineExerciseSet } from "../../../api/actions/addRoutineExerciseSet/useAddRoutineExerciseSet";
 import { ApiError } from "../../../api/errors";
-import { routineExercisesQueryKey } from "../../../api/queries/routines/listRoutineExercises/useListRoutineExercises";
-import { routinesQueryKey } from "../../../api/queries/routines/listRoutines/useListRoutines";
+import { queryKeys } from "../../../api/queryKeys";
 import { RoutineExerciseSetRow } from "./RoutineExerciseSetRow";
 
 type RoutineExerciseSetsProps = {
@@ -68,13 +67,13 @@ export const RoutineExerciseSets = ({
               // The routine is gone (deleted elsewhere), so the cached list
               // is stale and there is nothing left to add to here.
               void queryClient.invalidateQueries({
-                queryKey: routinesQueryKey,
+                queryKey: queryKeys.routines.list,
               });
               void navigate("/routines");
             } else {
               // The exercise slot is gone; refresh the list so it drops out.
               void queryClient.invalidateQueries({
-                queryKey: routineExercisesQueryKey(routineId),
+                queryKey: queryKeys.routines.exercises(routineId),
               });
             }
           }

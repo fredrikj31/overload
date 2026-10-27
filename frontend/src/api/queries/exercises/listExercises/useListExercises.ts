@@ -1,10 +1,9 @@
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { listExercises } from "./listExercises";
-
-export const exercisesQueryKey = ["exercises"] as const;
+import { queryKeys } from "../../../queryKeys";
 
 export const listExercisesQueryOptions = queryOptions({
-  queryKey: exercisesQueryKey,
+  queryKey: queryKeys.exercises.list,
   queryFn: listExercises,
   staleTime: 5 * 60 * 1000,
 });
