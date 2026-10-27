@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { apiClient } from "../../client";
-import * as routineSchema from "../../../types/routine";
+import { Routine, RoutineSchema } from "../../../types/routine";
 
 /**
  * Every field is optional so callers can send only what changed. A `null`
@@ -9,15 +9,15 @@ import * as routineSchema from "../../../types/routine";
  */
 export const updateRoutine = async (
   id: string,
-  body: Partial<Pick<routineSchema.Routine, "name" | "description">>,
-): Promise<Pick<routineSchema.Routine, "id" | "name" | "description">> => {
+  body: Partial<Pick<Routine, "name" | "description">>,
+): Promise<Pick<Routine, "id" | "name" | "description">> => {
   const response = await apiClient.patch<unknown>(
     `/routines/${encodeURIComponent(id)}`,
     body,
   );
   return z
     .object({
-      data: routineSchema.RoutineSchema.pick({
+      data: RoutineSchema.pick({
         id: true,
         name: true,
         description: true,

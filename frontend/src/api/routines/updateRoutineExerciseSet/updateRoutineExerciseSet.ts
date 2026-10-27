@@ -1,6 +1,9 @@
 import { z } from "zod";
 import { apiClient } from "../../client";
-import * as routineExerciseSetSchema from "../../../types/routineExerciseSet";
+import {
+  RoutineExerciseSet,
+  RoutineExerciseSetSchema,
+} from "../../../types/routineExerciseSet";
 
 /**
  * Every field is optional so callers can send only what changed. A `null`
@@ -12,14 +15,11 @@ export const updateRoutineExerciseSet = async (
   routineExerciseId: string,
   setId: string,
   body: Partial<
-    Pick<
-      routineExerciseSetSchema.RoutineExerciseSet,
-      "type" | "reps" | "weightUnit" | "weight"
-    >
+    Pick<RoutineExerciseSet, "type" | "reps" | "weightUnit" | "weight">
   >,
 ): Promise<
   Pick<
-    routineExerciseSetSchema.RoutineExerciseSet,
+    RoutineExerciseSet,
     | "id"
     | "routineExerciseId"
     | "position"
@@ -36,7 +36,7 @@ export const updateRoutineExerciseSet = async (
 
   return z
     .object({
-      data: routineExerciseSetSchema.RoutineExerciseSetSchema.pick({
+      data: RoutineExerciseSetSchema.pick({
         id: true,
         routineExerciseId: true,
         position: true,

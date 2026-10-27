@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ApiError } from "../../../api/errors";
-import { useListRoutineExercises } from "../../../api/queries/routines/listRoutineExercises/useListRoutineExercises";
+import { useListRoutineExercises } from "../../../api/routines/listRoutineExercises/useListRoutineExercises";
 import { queryKeys } from "../../../api/queryKeys";
 import { QueryErrorState } from "../../../components/QueryErrorState";
 import { ExerciseListSkeleton } from "../../_authenticated.exercises/components/ExerciseListSkeleton";

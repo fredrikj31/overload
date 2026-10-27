@@ -6,7 +6,7 @@ import { Badge } from "@shadcn-ui/components/ui/badge";
 import { buttonVariants } from "@shadcn-ui/components/ui/button";
 import { Skeleton } from "@shadcn-ui/components/ui/skeleton";
 import { cn } from "@shadcn-ui/lib/utils";
-import { useExercise } from "../../api/queries/exercises/listExercises/useListExercises";
+import { useExercise } from "../../api/exercises/listExercises/useListExercises";
 import { QueryErrorState } from "../../components/QueryErrorState";
 import { ExerciseGif } from "./components/ExerciseGif";
 import { InstructionsList } from "./components/InstructionsList";

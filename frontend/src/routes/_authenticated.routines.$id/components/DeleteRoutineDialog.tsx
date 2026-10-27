@@ -15,7 +15,7 @@ import {
   AlertDialogTrigger,
 } from "@shadcn-ui/components/ui/alert-dialog";
 import { Button } from "@shadcn-ui/components/ui/button";
-import { useDeleteRoutine } from "../../../api/actions/deleteRoutine/useDeleteRoutine";
+import { useDeleteRoutine } from "../../../api/routines/deleteRoutine/useDeleteRoutine";
 import { ApiError } from "../../../api/errors";
 import { queryKeys } from "../../../api/queryKeys";
 import * as routineSchema from "../../../types/routine";

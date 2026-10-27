@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { Button } from "@shadcn-ui/components/ui/button";
 import * as routineExerciseSetSchema from "../../../types/routineExerciseSet";
-import { useAddRoutineExerciseSet } from "../../../api/actions/addRoutineExerciseSet/useAddRoutineExerciseSet";
+import { useAddRoutineExerciseSet } from "../../../api/routines/addRoutineExerciseSet/useAddRoutineExerciseSet";
 import { ApiError } from "../../../api/errors";
 import { queryKeys } from "../../../api/queryKeys";
 import { RoutineExerciseSetRow } from "./RoutineExerciseSetRow";

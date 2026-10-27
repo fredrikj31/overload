@@ -3,7 +3,7 @@ import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@shadcn-ui/components/ui/badge";
 import { Button } from "@shadcn-ui/components/ui/button";
-import { useListExercises } from "../../../api/queries/exercises/listExercises/useListExercises";
+import { useListExercises } from "../../../api/exercises/listExercises/useListExercises";
 import * as bodyPartSchema from "../../../types/bodyPart";
 import * as equipmentSchema from "../../../types/equipment";
 import * as exerciseSchema from "../../../types/exercise";

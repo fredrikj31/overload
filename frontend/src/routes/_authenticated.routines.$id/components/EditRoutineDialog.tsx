@@ -22,7 +22,7 @@ import {
 } from "@shadcn-ui/components/ui/field";
 import { Input } from "@shadcn-ui/components/ui/input";
 import { Textarea } from "@shadcn-ui/components/ui/textarea";
-import { useUpdateRoutine } from "../../../api/actions/updateRoutine/useUpdateRoutine";
+import { useUpdateRoutine } from "../../../api/routines/updateRoutine/useUpdateRoutine";
 import { ApiError } from "../../../api/errors";
 import { queryKeys } from "../../../api/queryKeys";
 import * as routineSchema from "../../../types/routine";

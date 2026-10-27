@@ -1,21 +1,18 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { queryKeys } from "../../queryKeys";
-import * as bodyPartSchema from "../../../types/bodyPart";
-import * as equipmentSchema from "../../../types/equipment";
-import * as exerciseSchema from "../../../types/exercise";
-import * as routineExerciseSchema from "../../../types/routineExercise";
-import * as routineExerciseSetSchema from "../../../types/routineExerciseSet";
 import { updateRoutineExerciseSet } from "./updateRoutineExerciseSet";
+import { BodyPart } from "../../../types/bodyPart";
+import { Equipment } from "../../../types/equipment";
+import { Exercise } from "../../../types/exercise";
+import { RoutineExercise } from "../../../types/routineExercise";
+import { RoutineExerciseSet } from "../../../types/routineExerciseSet";
 
 interface UpdateRoutineExerciseSetVariables {
   routineId: string;
   routineExerciseId: string;
   setId: string;
   body: Partial<
-    Pick<
-      routineExerciseSetSchema.RoutineExerciseSet,
-      "type" | "reps" | "weightUnit" | "weight"
-    >
+    Pick<RoutineExerciseSet, "type" | "reps" | "weightUnit" | "weight">
   >;
 }
 
@@ -41,21 +38,15 @@ export const useUpdateRoutineExerciseSet = () => {
       // values without a round trip, then refetch to stay in sync.
       queryClient.setQueryData<
         (Pick<
-          routineExerciseSchema.RoutineExercise,
+          RoutineExercise,
           "id" | "routineId" | "exerciseId" | "position"
         > & {
-          exercise: Pick<
-            exerciseSchema.Exercise,
-            "id" | "name" | "imagePath"
-          > & {
-            bodyPart: Pick<
-              bodyPartSchema.BodyPart,
-              "id" | "name" | "slug"
-            > | null;
-            equipment: Pick<equipmentSchema.Equipment, "id" | "name" | "slug">;
+          exercise: Pick<Exercise, "id" | "name" | "imagePath"> & {
+            bodyPart: Pick<BodyPart, "id" | "name" | "slug"> | null;
+            equipment: Pick<Equipment, "id" | "name" | "slug">;
           };
           sets: Pick<
-            routineExerciseSetSchema.RoutineExerciseSet,
+            RoutineExerciseSet,
             | "id"
             | "routineExerciseId"
             | "position"
