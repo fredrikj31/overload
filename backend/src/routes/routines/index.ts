@@ -16,7 +16,13 @@ import {
   AddRoutineExerciseResponseSchema,
   ListRoutineExercisesResponseSchema,
 } from "../../types/routineExercise";
+import {
+  AddRoutineExerciseSetBodySchema,
+  AddRoutineExerciseSetResponseSchema,
+  RoutineExerciseParamsSchema,
+} from "../../types/routineExerciseSet";
 import { addRoutineExerciseHandler } from "./handlers/addRoutineExercise";
+import { addRoutineExerciseSetHandler } from "./handlers/addRoutineExerciseSet";
 import { createRoutineHandler } from "./handlers/createRoutine";
 import { deleteRoutineHandler } from "./handlers/deleteRoutine";
 import { listRoutinesHandler } from "./handlers/listRoutines";
@@ -219,6 +225,41 @@ export const routineRoutes: FastifyPluginAsync = async (instance) => {
         params: req.params,
       });
       return res.send({ data: routineExercises });
+    },
+  );
+
+  app.post(
+    "/:id/exercises/:routineExerciseId/sets",
+    {
+      onRequest: validateSession(),
+      schema: {
+        summary: "Add set to routine exercise",
+        description:
+          "Appends a planned set to the end of an exercise in a routine owned by the signed-in user. `weightUnit` defaults to kg when omitted. Routines owned by other users, and exercises that are not part of the routine, are reported as not found.",
+        tags: ["routines"],
+        security: [{ session: [] }],
+        params: RoutineExerciseParamsSchema,
+        body: AddRoutineExerciseSetBodySchema,
+        response: {
+          "201": AddRoutineExerciseSetResponseSchema.describe(
+            "Returns the created routine exercise set.",
+          ),
+          "400": ApiErrorSchema,
+          "401": ApiErrorSchema,
+          "404": ApiErrorSchema,
+          "500": ApiErrorSchema,
+        },
+      },
+    },
+    async (req, res) => {
+      const userId = req.userId;
+      const routineExerciseSet = await addRoutineExerciseSetHandler({
+        database,
+        userId,
+        params: req.params,
+        body: req.body,
+      });
+      return res.status(201).send({ data: routineExerciseSet });
     },
   );
 };
