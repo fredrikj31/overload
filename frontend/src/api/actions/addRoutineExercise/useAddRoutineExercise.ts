@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { routineExercisesQueryKey } from "../../queries/routines/listRoutineExercises/useListRoutineExercises";
+import { queryKeys } from "../../queryKeys";
 import { addRoutineExercise } from "./addRoutineExercise";
 
 interface AddRoutineExerciseVariables {
@@ -18,7 +18,7 @@ export const useAddRoutineExercise = () => {
       // The response carries no nested exercise, so refetch the list rather
       // than appending to the cache by hand.
       void queryClient.invalidateQueries({
-        queryKey: routineExercisesQueryKey(routineId),
+        queryKey: queryKeys.routines.exercises(routineId),
       });
     },
   });

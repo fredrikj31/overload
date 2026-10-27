@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ApiError } from "../../../api/errors";
 import { useListRoutineExercises } from "../../../api/queries/routines/listRoutineExercises/useListRoutineExercises";
-import { routinesQueryKey } from "../../../api/queries/routines/listRoutines/useListRoutines";
+import { queryKeys } from "../../../api/queryKeys";
 import { QueryErrorState } from "../../../components/QueryErrorState";
 import { ExerciseListSkeleton } from "../../_authenticated.exercises/components/ExerciseListSkeleton";
 import { RoutineExerciseRow } from "./RoutineExerciseRow";
@@ -32,7 +32,7 @@ export const RoutineExerciseList = ({
     ) {
       // The routine is gone (deleted elsewhere). Refresh the cached list so
       // the page falls through to its "Routine not found" state.
-      void queryClient.invalidateQueries({ queryKey: routinesQueryKey });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.routines.list });
     }
   }, [isError, error, queryClient]);
 

@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { routinesQueryKey } from "../../queries/routines/listRoutines/useListRoutines";
+import { queryKeys } from "../../queryKeys";
 import { createRoutine } from "./createRoutine";
 
 export const useCreateRoutine = () => {
@@ -10,7 +10,7 @@ export const useCreateRoutine = () => {
       return createRoutine(body);
     },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: routinesQueryKey });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.routines.list });
     },
   });
 };

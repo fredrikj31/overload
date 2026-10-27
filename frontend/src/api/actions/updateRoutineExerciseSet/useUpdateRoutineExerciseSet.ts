@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { routineExercisesQueryKey } from "../../queries/routines/listRoutineExercises/useListRoutineExercises";
+import { queryKeys } from "../../queryKeys";
 import * as bodyPartSchema from "../../../types/bodyPart";
 import * as equipmentSchema from "../../../types/equipment";
 import * as exerciseSchema from "../../../types/exercise";
@@ -65,7 +65,7 @@ export const useUpdateRoutineExerciseSet = () => {
             | "weight"
           >[];
         })[]
-      >(routineExercisesQueryKey(routineId), (items) =>
+      >(queryKeys.routines.exercises(routineId), (items) =>
         items?.map((item) =>
           item.id === routineExerciseId
             ? {
@@ -78,7 +78,7 @@ export const useUpdateRoutineExerciseSet = () => {
         ),
       );
       void queryClient.invalidateQueries({
-        queryKey: routineExercisesQueryKey(routineId),
+        queryKey: queryKeys.routines.exercises(routineId),
       });
     },
   });

@@ -16,9 +16,8 @@ import {
 } from "@shadcn-ui/components/ui/dialog";
 import { useAddRoutineExercise } from "../../../api/actions/addRoutineExercise/useAddRoutineExercise";
 import { ApiError } from "../../../api/errors";
-import { exercisesQueryKey } from "../../../api/queries/exercises/listExercises/useListExercises";
+import { queryKeys } from "../../../api/queryKeys";
 import * as exerciseSchema from "../../../types/exercise";
-import { routinesQueryKey } from "../../../api/queries/routines/listRoutines/useListRoutines";
 import * as routineSchema from "../../../types/routine";
 import { ExercisePicker } from "./ExercisePicker";
 
@@ -66,7 +65,7 @@ export const AddExerciseDialog = ({ routine }: AddExerciseDialogProps) => {
               // The routine is gone (deleted elsewhere), so the cached list
               // is stale and there is nothing left to add to here.
               void queryClient.invalidateQueries({
-                queryKey: routinesQueryKey,
+                queryKey: queryKeys.routines.list,
               });
               setOpen(false);
               void navigate("/routines");
@@ -74,7 +73,7 @@ export const AddExerciseDialog = ({ routine }: AddExerciseDialogProps) => {
               // The exercise is gone from the library; refresh the list and
               // let the user pick another one.
               void queryClient.invalidateQueries({
-                queryKey: exercisesQueryKey,
+                queryKey: queryKeys.exercises.list,
               });
             }
           }
