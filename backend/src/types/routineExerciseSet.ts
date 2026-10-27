@@ -42,3 +42,29 @@ export type RoutineExerciseSet = z.infer<typeof RoutineExerciseSetSchema>;
 export const AddRoutineExerciseSetResponseSchema = z.object({
   data: RoutineExerciseSetSchema,
 });
+
+/** Path params for routes that address a single set in an exercise slot. */
+export const RoutineExerciseSetParamsSchema =
+  RoutineExerciseParamsSchema.extend({ setId: z.uuid() });
+export type RoutineExerciseSetParams = z.infer<
+  typeof RoutineExerciseSetParamsSchema
+>;
+
+/**
+ * Request body for updating a set. Every field is optional, but at least one
+ * must be provided. `routineExerciseId` and `position` are not editable here.
+ */
+export const UpdateRoutineExerciseSetBodySchema =
+  routineExerciseSetSchema.UpdateRoutineExerciseSetSchema.omit({
+    routineExerciseId: true,
+    position: true,
+  }).refine((body) => Object.keys(body).length > 0, {
+    message: "At least one field must be provided",
+  });
+export type UpdateRoutineExerciseSetBody = z.infer<
+  typeof UpdateRoutineExerciseSetBodySchema
+>;
+
+export const UpdateRoutineExerciseSetResponseSchema = z.object({
+  data: RoutineExerciseSetSchema,
+});
