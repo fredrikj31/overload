@@ -7,6 +7,7 @@ import { muscle } from "./schemas/muscle";
 import { muscleExercise } from "./schemas/muscle_exercise";
 import { routine } from "./schemas/routine";
 import { routineExercise } from "./schemas/routine_exercise";
+import { routineExerciseSet } from "./schemas/routine_exercise_set";
 
 export const relations = defineRelations(
   {
@@ -18,6 +19,7 @@ export const relations = defineRelations(
     muscleExercise,
     routine,
     routineExercise,
+    routineExerciseSet,
   },
   (r) => ({
     user: {
@@ -88,6 +90,14 @@ export const relations = defineRelations(
       exercise: r.one.exercise({
         from: r.routineExercise.exerciseId,
         to: r.exercise.id,
+        optional: false,
+      }),
+      routineExerciseSets: r.many.routineExerciseSet(),
+    },
+    routineExerciseSet: {
+      routineExercise: r.one.routineExercise({
+        from: r.routineExerciseSet.routineExerciseId,
+        to: r.routineExercise.id,
         optional: false,
       }),
     },

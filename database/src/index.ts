@@ -8,3 +8,4 @@ export * as exerciseSchema from "./schemas/exercise";
 export * as muscleExerciseSchema from "./schemas/muscle_exercise";
 export * as routineSchema from "./schemas/routine";
 export * as routineExerciseSchema from "./schemas/routine_exercise";
+export * as routineExerciseSetSchema from "./schemas/routine_exercise_set";
