@@ -1,6 +1,6 @@
 import { queryOptions, skipToken, useQuery } from "@tanstack/react-query";
 import { listRoutineExercises } from "./listRoutineExercises";
-import { queryKeys } from "../../../queryKeys";
+import { queryKeys } from "../../queryKeys";
 
 export const listRoutineExercisesQueryOptions = (
   routineId: string | undefined,

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@shadcn-ui/components/ui/button";
-import { useListExercises } from "../../api/queries/exercises/listExercises/useListExercises";
+import { useListExercises } from "../../api/exercises/listExercises/useListExercises";
 import { QueryErrorState } from "../../components/QueryErrorState";
 import { ExerciseListSkeleton } from "./components/ExerciseListSkeleton";
 import { ExerciseRow } from "./components/ExerciseRow";

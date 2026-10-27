@@ -1,6 +1,6 @@
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { listExercises } from "./listExercises";
-import { queryKeys } from "../../../queryKeys";
+import { queryKeys } from "../../queryKeys";
 
 export const listExercisesQueryOptions = queryOptions({
   queryKey: queryKeys.exercises.list,

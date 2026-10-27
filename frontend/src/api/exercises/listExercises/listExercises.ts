@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { apiClient } from "../../../client";
-import * as bodyPartSchema from "../../../../types/bodyPart";
-import * as equipmentSchema from "../../../../types/equipment";
-import * as exerciseSchema from "../../../../types/exercise";
-import * as muscleExerciseSchema from "../../../../types/muscleExercise";
-import * as muscleSchema from "../../../../types/muscle";
+import { apiClient } from "../../client";
+import * as bodyPartSchema from "../../../types/bodyPart";
+import * as equipmentSchema from "../../../types/equipment";
+import * as exerciseSchema from "../../../types/exercise";
+import * as muscleExerciseSchema from "../../../types/muscleExercise";
+import * as muscleSchema from "../../../types/muscle";
 
 export const listExercises = async (): Promise<
   (Pick<

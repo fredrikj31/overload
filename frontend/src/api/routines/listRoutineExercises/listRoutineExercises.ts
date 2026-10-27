@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { apiClient } from "../../../client";
-import * as bodyPartSchema from "../../../../types/bodyPart";
-import * as equipmentSchema from "../../../../types/equipment";
-import * as exerciseSchema from "../../../../types/exercise";
-import * as routineExerciseSchema from "../../../../types/routineExercise";
-import * as routineExerciseSetSchema from "../../../../types/routineExerciseSet";
+import { apiClient } from "../../client";
+import * as bodyPartSchema from "../../../types/bodyPart";
+import * as equipmentSchema from "../../../types/equipment";
+import * as exerciseSchema from "../../../types/exercise";
+import * as routineExerciseSchema from "../../../types/routineExercise";
+import * as routineExerciseSetSchema from "../../../types/routineExerciseSet";
 
 /**
  * A routine's exercises in order, each with the exercise it points at and its

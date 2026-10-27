@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { buttonVariants } from "@shadcn-ui/components/ui/button";
 import { Skeleton } from "@shadcn-ui/components/ui/skeleton";
 import { cn } from "@shadcn-ui/lib/utils";
-import { useRoutine } from "../../api/queries/routines/listRoutines/useListRoutines";
+import { useRoutine } from "../../api/routines/listRoutines/useListRoutines";
 import { QueryErrorState } from "../../components/QueryErrorState";
 import { AddExerciseDialog } from "./components/AddExerciseDialog";
 import { DeleteRoutineDialog } from "./components/DeleteRoutineDialog";

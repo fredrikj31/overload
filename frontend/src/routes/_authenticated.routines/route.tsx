@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { toast } from "sonner";
-import { useListRoutines } from "../../api/queries/routines/listRoutines/useListRoutines";
+import { useListRoutines } from "../../api/routines/listRoutines/useListRoutines";
 import { QueryErrorState } from "../../components/QueryErrorState";
 import { CreateRoutineDialog } from "./components/CreateRoutineDialog";
 import { RoutineCard } from "./components/RoutineCard";

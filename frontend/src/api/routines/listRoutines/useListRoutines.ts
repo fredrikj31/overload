@@ -1,6 +1,6 @@
 import { queryOptions, useQuery } from "@tanstack/react-query";
 import { listRoutines } from "./listRoutines";
-import { queryKeys } from "../../../queryKeys";
+import { queryKeys } from "../../queryKeys";
 
 export const listRoutinesQueryOptions = queryOptions({
   queryKey: queryKeys.routines.list,

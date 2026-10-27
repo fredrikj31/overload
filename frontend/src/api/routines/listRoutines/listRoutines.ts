@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { apiClient } from "../../../client";
-import * as routineSchema from "../../../../types/routine";
+import { apiClient } from "../../client";
+import * as routineSchema from "../../../types/routine";
 
 export const listRoutines = async (): Promise<
   Pick<routineSchema.Routine, "id" | "name" | "description">[]

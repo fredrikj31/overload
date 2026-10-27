@@ -14,7 +14,7 @@ import {
   DialogTrigger,
 } from "@shadcn-ui/components/ui/dialog";
 import * as routineExerciseSetSchema from "../../../types/routineExerciseSet";
-import { useUpdateRoutineExerciseSet } from "../../../api/actions/updateRoutineExerciseSet/useUpdateRoutineExerciseSet";
+import { useUpdateRoutineExerciseSet } from "../../../api/routines/updateRoutineExerciseSet/useUpdateRoutineExerciseSet";
 import { ApiError } from "../../../api/errors";
 import { queryKeys } from "../../../api/queryKeys";
 import { cn } from "@shadcn-ui/lib/utils";

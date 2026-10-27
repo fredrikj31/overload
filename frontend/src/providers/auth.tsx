@@ -8,12 +8,12 @@ import {
 import { useNavigate } from "react-router";
 import { toast } from "sonner";
 import { User } from "better-auth";
-import { signup } from "../api/actions/signup/signup";
+import { signup } from "../api/auth/signup/signup";
 import { authClient } from "../auth/client";
-import { useSignup } from "../api/actions/signup/useSignup";
-import { login } from "../api/actions/login/login";
-import { useLogin } from "../api/actions/login/useLogin";
-import { useLogout } from "../api/actions/logout/useLogout";
+import { useSignup } from "../api/auth/signup/useSignup";
+import { login } from "../api/auth/login/login";
+import { useLogin } from "../api/auth/login/useLogin";
+import { useLogout } from "../api/auth/logout/useLogout";
 import { useQueryClient } from "@tanstack/react-query";
 
 type AuthProviderProps = {
