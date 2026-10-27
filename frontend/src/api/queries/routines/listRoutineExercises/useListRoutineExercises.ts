@@ -4,7 +4,7 @@ import { listRoutineExercises } from "./listRoutineExercises";
 /**
  * Nested under `routinesQueryKey` so invalidating the routines prefix (e.g.
  * after deleting a routine) also drops its exercises. `useAddRoutineExercise`
- * invalidates this key after a mutation.
+ * and `useAddRoutineExerciseSet` invalidate this key after a mutation.
  */
 export const routineExercisesQueryKey = (routineId: string) =>
   ["routines", routineId, "exercises"] as const;
