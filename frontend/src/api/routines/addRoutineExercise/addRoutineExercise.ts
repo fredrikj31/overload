@@ -1,16 +1,16 @@
 import { z } from "zod";
 import { apiClient } from "../../client";
-import * as routineExerciseSchema from "../../../types/routineExercise";
+import {
+  RoutineExercise,
+  RoutineExerciseSchema,
+} from "../../../types/routineExercise";
 
 /** `position` is assigned by the server (appended at the end). */
 export const addRoutineExercise = async (
   routineId: string,
-  body: Pick<routineExerciseSchema.RoutineExercise, "exerciseId">,
+  body: Pick<RoutineExercise, "exerciseId">,
 ): Promise<
-  Pick<
-    routineExerciseSchema.RoutineExercise,
-    "id" | "routineId" | "exerciseId" | "position"
-  >
+  Pick<RoutineExercise, "id" | "routineId" | "exerciseId" | "position">
 > => {
   const response = await apiClient.post<unknown>(
     `/routines/${encodeURIComponent(routineId)}/exercises`,
@@ -18,7 +18,7 @@ export const addRoutineExercise = async (
   );
   return z
     .object({
-      data: routineExerciseSchema.RoutineExerciseSchema.pick({
+      data: RoutineExerciseSchema.pick({
         id: true,
         routineId: true,
         exerciseId: true,

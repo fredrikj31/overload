@@ -1,6 +1,9 @@
 import { z } from "zod";
 import { apiClient } from "../../client";
-import * as routineExerciseSetSchema from "../../../types/routineExerciseSet";
+import {
+  RoutineExerciseSet,
+  RoutineExerciseSetSchema,
+} from "../../../types/routineExerciseSet";
 
 /**
  * `position` is assigned by the server (appended at the end). `type` defaults
@@ -10,16 +13,11 @@ import * as routineExerciseSetSchema from "../../../types/routineExerciseSet";
 export const addRoutineExerciseSet = async (
   routineId: string,
   routineExerciseId: string,
-  body: Pick<routineExerciseSetSchema.RoutineExerciseSet, "reps"> &
-    Partial<
-      Pick<
-        routineExerciseSetSchema.RoutineExerciseSet,
-        "type" | "weightUnit" | "weight"
-      >
-    >,
+  body: Pick<RoutineExerciseSet, "reps"> &
+    Partial<Pick<RoutineExerciseSet, "type" | "weightUnit" | "weight">>,
 ): Promise<
   Pick<
-    routineExerciseSetSchema.RoutineExerciseSet,
+    RoutineExerciseSet,
     | "id"
     | "routineExerciseId"
     | "position"
@@ -36,7 +34,7 @@ export const addRoutineExerciseSet = async (
 
   return z
     .object({
-      data: routineExerciseSetSchema.RoutineExerciseSetSchema.pick({
+      data: RoutineExerciseSetSchema.pick({
         id: true,
         routineExerciseId: true,
         position: true,

@@ -1,10 +1,16 @@
 import { z } from "zod";
 import { apiClient } from "../../client";
-import * as bodyPartSchema from "../../../types/bodyPart";
-import * as equipmentSchema from "../../../types/equipment";
-import * as exerciseSchema from "../../../types/exercise";
-import * as routineExerciseSchema from "../../../types/routineExercise";
-import * as routineExerciseSetSchema from "../../../types/routineExerciseSet";
+import { BodyPart, BodyPartSchema } from "../../../types/bodyPart";
+import { Equipment, EquipmentSchema } from "../../../types/equipment";
+import { Exercise, ExerciseSchema } from "../../../types/exercise";
+import {
+  RoutineExercise,
+  RoutineExerciseSchema,
+} from "../../../types/routineExercise";
+import {
+  RoutineExerciseSet,
+  RoutineExerciseSetSchema,
+} from "../../../types/routineExerciseSet";
 
 /**
  * A routine's exercises in order, each with the exercise it points at and its
@@ -13,16 +19,13 @@ import * as routineExerciseSetSchema from "../../../types/routineExerciseSet";
 export const listRoutineExercises = async (
   routineId: string,
 ): Promise<
-  (Pick<
-    routineExerciseSchema.RoutineExercise,
-    "id" | "routineId" | "exerciseId" | "position"
-  > & {
-    exercise: Pick<exerciseSchema.Exercise, "id" | "name" | "imagePath"> & {
-      bodyPart: Pick<bodyPartSchema.BodyPart, "id" | "name" | "slug"> | null;
-      equipment: Pick<equipmentSchema.Equipment, "id" | "name" | "slug">;
+  (Pick<RoutineExercise, "id" | "routineId" | "exerciseId" | "position"> & {
+    exercise: Pick<Exercise, "id" | "name" | "imagePath"> & {
+      bodyPart: Pick<BodyPart, "id" | "name" | "slug"> | null;
+      equipment: Pick<Equipment, "id" | "name" | "slug">;
     };
     sets: Pick<
-      routineExerciseSetSchema.RoutineExerciseSet,
+      RoutineExerciseSet,
       | "id"
       | "routineExerciseId"
       | "position"
@@ -40,32 +43,32 @@ export const listRoutineExercises = async (
   return z
     .object({
       data: z.array(
-        routineExerciseSchema.RoutineExerciseSchema.pick({
+        RoutineExerciseSchema.pick({
           id: true,
           routineId: true,
           exerciseId: true,
           position: true,
         }).extend({
           // Lighter than the exercise list: just what a row needs.
-          exercise: exerciseSchema.ExerciseSchema.pick({
+          exercise: ExerciseSchema.pick({
             id: true,
             name: true,
             imagePath: true,
           }).extend({
             // Cardio exercises have no body region.
-            bodyPart: bodyPartSchema.BodyPartSchema.pick({
+            bodyPart: BodyPartSchema.pick({
               id: true,
               name: true,
               slug: true,
             }).nullable(),
-            equipment: equipmentSchema.EquipmentSchema.pick({
+            equipment: EquipmentSchema.pick({
               id: true,
               name: true,
               slug: true,
             }),
           }),
           sets: z.array(
-            routineExerciseSetSchema.RoutineExerciseSetSchema.pick({
+            RoutineExerciseSetSchema.pick({
               id: true,
               routineExerciseId: true,
               position: true,
