@@ -15,7 +15,7 @@ import { routine } from "./routine";
  * than once (e.g. supersets), so there is deliberately no unique index on the
  * (routine, exercise) pair. `position` is a 0-based sort key within the
  * routine; gaps are allowed and clients order by it. Sets / reps are not
- * stored here; they will live in a later table that references this one.
+ * stored here; they live in `routine_exercise_set`, which references this one.
  */
 export const routineExercise = pgTable(
   "routine_exercise",
