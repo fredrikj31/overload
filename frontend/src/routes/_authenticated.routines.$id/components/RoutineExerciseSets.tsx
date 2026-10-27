@@ -74,6 +74,26 @@ export const RoutineExerciseSets = ({
     );
   };
 
+  // Only normal (working) sets count toward the displayed set number, so a
+  // warm-up followed by a working set shows "W" then "1". A non-normal set
+  // gets the number it would take if switched to normal, which the type
+  // dialog uses for its "Normal" preview.
+  const rows = sets.map((set, index) => {
+    const normalSetsBefore = sets
+      .slice(0, index)
+      .filter((previous) => previous.type === "normal").length;
+
+    return (
+      <RoutineExerciseSetRow
+        key={set.id}
+        routineId={routineId}
+        routineExerciseId={routineExerciseId}
+        set={set}
+        number={normalSetsBefore + 1}
+      />
+    );
+  });
+
   return (
     <div className="flex flex-col gap-1.5">
       <div className="grid grid-cols-[2.5rem_1fr_1fr] gap-2 px-1.5 text-xs font-medium tracking-wider text-muted-foreground uppercase">
@@ -83,17 +103,7 @@ export const RoutineExerciseSets = ({
       </div>
 
       {sets.length > 0 ? (
-        <ol className="flex flex-col gap-1.5">
-          {sets.map((set, index) => (
-            <RoutineExerciseSetRow
-              key={set.id}
-              routineId={routineId}
-              routineExerciseId={routineExerciseId}
-              set={set}
-              number={index + 1}
-            />
-          ))}
-        </ol>
+        <ol className="flex flex-col gap-1.5">{rows}</ol>
       ) : (
         <p className="py-1 text-center text-sm text-muted-foreground">
           No sets yet.

@@ -34,7 +34,11 @@ type RoutineExerciseSetRowProps = {
   routineId: string;
   routineExerciseId: string;
   set: RoutineExerciseSet;
-  /** 1-based display number. Not `position`, which may have gaps. */
+  /**
+   * 1-based number among the normal (working) sets; warm-up, failure and
+   * drop sets don't count. For a non-normal set it is the number the set
+   * would take if switched to normal. Not `position`, which may have gaps.
+   */
   number: number;
 };
 
