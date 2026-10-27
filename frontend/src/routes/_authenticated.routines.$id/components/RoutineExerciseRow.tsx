@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { Badge } from "@shadcn-ui/components/ui/badge";
 import type { RoutineExerciseListItem } from "../../../api/queries/routines/types";
 import { getMediaUrl } from "../../../utils/getMediaUrl";
+import { RoutineExerciseSets } from "./RoutineExerciseSets";
 
 type RoutineExerciseRowProps = {
   routineExercise: RoutineExerciseListItem;
@@ -10,7 +11,8 @@ type RoutineExerciseRowProps = {
   number: number;
 };
 
-// Adapted from the exercises page's ExerciseRow, with a leading slot number.
+// Adapted from the exercises page's ExerciseRow, with a leading slot number
+// and the slot's planned sets underneath.
 export const RoutineExerciseRow = ({
   routineExercise,
   number,
@@ -48,6 +50,16 @@ export const RoutineExerciseRow = ({
         </div>
         <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
       </Link>
+      {/* Outside the link, since interactive content is not allowed inside
+          an <a>. On wider screens it is indented past the number, image and
+          gaps to line up with the exercise name; phones use the full width. */}
+      <div className="px-3 pb-2.5 sm:pl-27">
+        <RoutineExerciseSets
+          routineId={routineExercise.routineId}
+          routineExerciseId={routineExercise.id}
+          sets={routineExercise.sets}
+        />
+      </div>
     </li>
   );
 };
