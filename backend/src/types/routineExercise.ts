@@ -1,6 +1,7 @@
 import { routineExerciseSchema } from "@overload/database";
 import { z } from "zod";
 import { ExerciseSummarySchema } from "./exercise";
+import { RoutineExerciseSetSchema } from "./routineExerciseSet";
 
 /**
  * Request body for adding an exercise to a routine. `routineId` comes from
@@ -26,11 +27,12 @@ export const AddRoutineExerciseResponseSchema = z.object({
 });
 
 /**
- * A routine exercise together with the exercise it points at. Sets will be
- * nested here as a `sets` array once they are stored.
+ * A routine exercise together with the exercise it points at and its planned
+ * sets, ordered by position.
  */
 export const RoutineExerciseListItemSchema = RoutineExerciseSchema.extend({
   exercise: ExerciseSummarySchema,
+  sets: z.array(RoutineExerciseSetSchema),
 });
 export type RoutineExerciseListItem = z.infer<
   typeof RoutineExerciseListItemSchema
