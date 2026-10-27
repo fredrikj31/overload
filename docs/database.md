@@ -139,9 +139,17 @@ erDiagram
         timestamp deleted_at
     }
 
+    user_preference {
+        text user_id PK, FK
+        weight_unit weight_unit "kg | lb, default kg"
+        timestamp created_at
+        timestamp updated_at
+    }
+
     user ||--o{ session : "has (cascade delete)"
     user ||--o{ account : "has (cascade delete)"
     user ||--o{ routine : "owns"
+    user ||--o| user_preference : "has (cascade delete)"
     body_part ||--o{ muscle : "contains (restrict delete)"
     body_part |o--o{ exercise : "groups (restrict delete)"
     equipment ||--o{ exercise : "used by (restrict delete)"
@@ -163,4 +171,5 @@ erDiagram
 - `routine` belongs to a `user`. Ownership is checked in the queries (`user_id` + `deleted_at IS NULL`); deletes are soft.
 - `routine_exercise` links a routine to its exercises. One row per exercise slot, ordered by `position` within the routine. The same exercise may appear more than once (e.g. supersets), so there is no unique index on `(routine_id, exercise_id)`, and `position` is not unique either so reorders don't trip a constraint. Sets/reps live in `routine_exercise_set`.
 - `routine_exercise_set` holds the planned sets of an exercise slot, one row per set, ordered by `position` within the slot (same non-unique, gaps-allowed semantics as `routine_exercise.position`). `reps` is the target rep count; `weight` is `numeric(6,2)` stored as entered and nullable for bodyweight sets; `weight_unit` is the `weight_unit` enum (`kg` or `lb`), required with no database default so each row states its own unit (the API fills it from the user's preference when a client omits it, and statistics convert at query time); `type` is the `set_type` enum (`normal`, `warmup`, `failure`, `dropset`, default `normal`). These are the sets a routine prescribes, not logged workout sets. Deleting a `routine_exercise` cascades to its sets. The FK is explicitly named `routine_exercise_set_routine_exercise_id_fkey` because the default name exceeds Postgres' 63-character identifier limit.
+- `user_preference` holds per-user settings, one row per user keyed by `user_id` (the primary key doubles as the one-row-per-user constraint). The row is created lazily the first time the user saves a setting, so a missing row means "all defaults" and every preference column has a database default. `weight_unit` (`kg` or `lb`, default `kg`) is the unit the user prefers to enter and see weights in; the API uses it to fill `routine_exercise_set.weight_unit` when a client omits it. Not soft-deleted: deleting the user cascades to the row.
 - Indexes: `session.user_id`, `account.user_id`, `verification.identifier`, `muscle.body_part_id`, `exercise.body_part_id`, `exercise.equipment_id`, `muscle_exercise.(exercise_id, muscle_id)` (unique), `muscle_exercise.muscle_id`, `routine.user_id`, `routine_exercise.routine_id`, `routine_exercise.exercise_id`, `routine_exercise_set.routine_exercise_id`.
