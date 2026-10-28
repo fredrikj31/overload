@@ -5,11 +5,42 @@ import { z } from "zod";
 import { ApiErrorSchema } from "../../errors";
 import { validateSession } from "../../hooks/validateSession";
 import { createPreferenceHandler } from "./handlers/createPreference";
+import { getPreferenceHandler } from "./handlers/getPreference";
 import { updatePreferenceHandler } from "./handlers/updatePreference";
 
 export const preferenceRoutes: FastifyPluginAsync = async (instance) => {
   const app = instance.withTypeProvider<ZodTypeProvider>();
   const database = instance.database;
+
+  app.get(
+    "/",
+    {
+      prefixTrailingSlash: "no-slash", // Register as "/preferences", not "/preferences/"
+      onRequest: validateSession(),
+      schema: {
+        summary: "Get preferences",
+        description:
+          "Returns the signed-in user's preferences. Fails with 404 if the user has no preferences yet.",
+        tags: ["preferences"],
+        security: [{ session: [] }],
+        response: {
+          "200": z
+            .object({
+              data: UserPreferenceSchema.pick({ weightUnit: true }),
+            })
+            .describe("Returns the signed-in user's preferences."),
+          "401": ApiErrorSchema,
+          "404": ApiErrorSchema,
+          "500": ApiErrorSchema,
+        },
+      },
+    },
+    async (req, res) => {
+      const userId = req.userId;
+      const preference = await getPreferenceHandler({ database, userId });
+      return res.send({ data: preference });
+    },
+  );
 
   app.post(
     "/",
