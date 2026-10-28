@@ -13,4 +13,12 @@ export const queryKeys = {
     exercises: (routineId: string) =>
       ["routines", routineId, "exercises"] as const,
   },
+  preferences: {
+    /**
+     * The signed-in user's preferences. `AuthenticatedRouteLayout` reads it as
+     * the onboarding gate (404 means "not onboarded yet") and
+     * `useCreatePreferences` seeds it after a successful POST.
+     */
+    detail: ["preferences"] as const,
+  },
 };
