@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { WEIGHT_UNITS } from "./weightUnit";
 
 // Mirrors database/src/schemas/routine_exercise_set.ts. The frontend doesn't
 // depend on the database package, so the entity is declared here; keep it in
@@ -16,10 +17,6 @@ import { z } from "zod";
 export const SET_TYPES = ["normal", "warmup", "failure", "dropset"] as const;
 export type SetType = (typeof SET_TYPES)[number];
 
-/** Unit a set's `weight` was entered in. */
-export const WEIGHT_UNITS = ["kg", "lb"] as const;
-export type WeightUnit = (typeof WEIGHT_UNITS)[number];
-
 export const RoutineExerciseSetSchema = z.object({
   id: z.uuid(),
   createdAt: z.iso.datetime(),
@@ -33,6 +30,7 @@ export const RoutineExerciseSetSchema = z.object({
     .number({ error: "Reps is required" })
     .int("Reps must be a whole number")
     .min(0, "Reps can't be negative"),
+  // Stored per set, in the unit the set was entered in.
   weightUnit: z.enum(WEIGHT_UNITS),
   // numeric(6,2), stored as entered in `weightUnit`; null means bodyweight.
   weight: z
