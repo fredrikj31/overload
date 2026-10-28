@@ -4,6 +4,7 @@ import { Toaster } from "@shadcn-ui/components/ui/sonner";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { AuthProvider } from "./providers/auth";
 import { LoginRoute } from "./routes/login/route";
+import { OnboardingRoute } from "./routes/onboarding/route";
 import { ThemeProvider } from "./providers/theme";
 import { AuthenticatedRouteLayout } from "./routes/_authenticated/route";
 import { IndexRoute } from "./routes/_authenticated.index/route";
@@ -24,6 +25,7 @@ export const App = () => {
             <Routes>
               <Route path="/signup" element={<SignupRoute />} />
               <Route path="/login" element={<LoginRoute />} />
+              <Route path="/onboarding" element={<OnboardingRoute />} />
               <Route path="/" element={<AuthenticatedRouteLayout />}>
                 <Route index element={<IndexRoute />} />
                 <Route path="exercises" element={<ExercisesRoute />} />
