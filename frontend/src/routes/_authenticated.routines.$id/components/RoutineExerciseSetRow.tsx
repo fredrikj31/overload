@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@shadcn-ui/components/ui/select";
 import * as routineExerciseSetSchema from "../../../types/routineExerciseSet";
+import { WeightUnit, WEIGHT_UNITS } from "../../../types/weightUnit";
 import { useUpdateRoutineExerciseSet } from "../../../api/routines/updateRoutineExerciseSet/useUpdateRoutineExerciseSet";
 import { ApiError } from "../../../api/errors";
 import { queryKeys } from "../../../api/queryKeys";
@@ -42,11 +43,10 @@ type RoutineExerciseSetRowProps = {
   number: number;
 };
 
-const WEIGHT_UNIT_LABELS: Record<routineExerciseSetSchema.WeightUnit, string> =
-  {
-    kg: "kg",
-    lb: "lb",
-  };
+const WEIGHT_UNIT_LABELS: Record<WeightUnit, string> = {
+  kg: "kg",
+  lb: "lb",
+};
 
 /** Blur on Enter so the field's onBlur handler saves the value. */
 const blurOnEnter = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -154,9 +154,7 @@ export const RoutineExerciseSetRow = ({
     save(parsed.data);
   };
 
-  const handleUnitChange = (
-    weightUnit: routineExerciseSetSchema.WeightUnit | null,
-  ) => {
+  const handleUnitChange = (weightUnit: WeightUnit | null) => {
     if (!weightUnit || weightUnit === set.weightUnit) return;
 
     save({ weightUnit });
@@ -203,7 +201,7 @@ export const RoutineExerciseSetRow = ({
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {routineExerciseSetSchema.WEIGHT_UNITS.map((unit) => (
+              {WEIGHT_UNITS.map((unit) => (
                 <SelectItem key={unit} value={unit}>
                   {WEIGHT_UNIT_LABELS[unit]}
                 </SelectItem>
