@@ -7,6 +7,7 @@ import {
 import { z } from "zod";
 import { authRoutes } from "./auth";
 import { exerciseRoutes } from "./exercises";
+import { preferenceRoutes } from "./preferences";
 import { routineRoutes } from "./routines";
 
 export const routes: FastifyPluginAsync = async (instance) => {
@@ -16,6 +17,7 @@ export const routes: FastifyPluginAsync = async (instance) => {
   instance.register(authRoutes, { prefix: "/" });
   instance.register(exerciseRoutes, { prefix: "/exercises" });
   instance.register(routineRoutes, { prefix: "/routines" });
+  instance.register(preferenceRoutes, { prefix: "/preferences" });
 
   const app = instance.withTypeProvider<ZodTypeProvider>();
 
