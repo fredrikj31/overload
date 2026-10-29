@@ -1,21 +1,11 @@
 import { z } from "zod";
+import { SET_TYPES } from "./setType";
 import { WEIGHT_UNITS } from "./weightUnit";
 
 // Mirrors database/src/schemas/routine_exercise_set.ts. The frontend doesn't
 // depend on the database package, so the entity is declared here; keep it in
 // sync, including the user-facing messages, which the forms show as-is.
 // Request and response shapes are derived from it with pick / omit.
-
-/**
- * How a planned set is meant to be performed.
- *
- * - normal:  a regular working set
- * - warmup:  a lighter preparatory set
- * - failure: taken to muscular failure / as many reps as possible
- * - dropset: weight reduced immediately after the previous set
- */
-export const SET_TYPES = ["normal", "warmup", "failure", "dropset"] as const;
-export type SetType = (typeof SET_TYPES)[number];
 
 export const RoutineExerciseSetSchema = z.object({
   id: z.uuid(),

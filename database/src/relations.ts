@@ -9,6 +9,9 @@ import { routine } from "./schemas/routine";
 import { routineExercise } from "./schemas/routine_exercise";
 import { routineExerciseSet } from "./schemas/routine_exercise_set";
 import { userPreference } from "./schemas/user_preference";
+import { workout } from "./schemas/workout";
+import { workoutExercise } from "./schemas/workout_exercise";
+import { workoutExerciseSet } from "./schemas/workout_exercise_set";
 
 export const relations = defineRelations(
   {
@@ -22,6 +25,9 @@ export const relations = defineRelations(
     routineExercise,
     routineExerciseSet,
     userPreference,
+    workout,
+    workoutExercise,
+    workoutExerciseSet,
   },
   (r) => ({
     user: {
@@ -29,6 +35,7 @@ export const relations = defineRelations(
       accounts: r.many.account(),
       routines: r.many.routine(),
       preference: r.one.userPreference(),
+      workouts: r.many.workout(),
     },
     session: {
       user: r.one.user({ from: r.session.userId, to: r.user.id }),
@@ -63,6 +70,7 @@ export const relations = defineRelations(
       }),
       muscleExercises: r.many.muscleExercise(),
       routineExercises: r.many.routineExercise(),
+      workoutExercises: r.many.workoutExercise(),
     },
     muscleExercise: {
       exercise: r.one.exercise({
@@ -83,6 +91,7 @@ export const relations = defineRelations(
         optional: false,
       }),
       routineExercises: r.many.routineExercise(),
+      workouts: r.many.workout(),
     },
     routineExercise: {
       routine: r.one.routine({
@@ -96,6 +105,7 @@ export const relations = defineRelations(
         optional: false,
       }),
       routineExerciseSets: r.many.routineExerciseSet(),
+      workoutExercises: r.many.workoutExercise(),
     },
     routineExerciseSet: {
       routineExercise: r.one.routineExercise({
@@ -108,6 +118,44 @@ export const relations = defineRelations(
       user: r.one.user({
         from: r.userPreference.userId,
         to: r.user.id,
+        optional: false,
+      }),
+    },
+    workout: {
+      user: r.one.user({
+        from: r.workout.userId,
+        to: r.user.id,
+        optional: false,
+      }),
+      // Null for workouts started without a routine.
+      routine: r.one.routine({
+        from: r.workout.routineId,
+        to: r.routine.id,
+      }),
+      workoutExercises: r.many.workoutExercise(),
+    },
+    workoutExercise: {
+      workout: r.one.workout({
+        from: r.workoutExercise.workoutId,
+        to: r.workout.id,
+        optional: false,
+      }),
+      exercise: r.one.exercise({
+        from: r.workoutExercise.exerciseId,
+        to: r.exercise.id,
+        optional: false,
+      }),
+      // Null for exercises added ad hoc during the workout.
+      routineExercise: r.one.routineExercise({
+        from: r.workoutExercise.routineExerciseId,
+        to: r.routineExercise.id,
+      }),
+      workoutExerciseSets: r.many.workoutExerciseSet(),
+    },
+    workoutExerciseSet: {
+      workoutExercise: r.one.workoutExercise({
+        from: r.workoutExerciseSet.workoutExerciseId,
+        to: r.workoutExercise.id,
         optional: false,
       }),
     },

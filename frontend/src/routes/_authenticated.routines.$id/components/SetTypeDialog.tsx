@@ -14,6 +14,7 @@ import {
   DialogTrigger,
 } from "@shadcn-ui/components/ui/dialog";
 import * as routineExerciseSetSchema from "../../../types/routineExerciseSet";
+import * as setTypeSchema from "../../../types/setType";
 import { useUpdateRoutineExerciseSet } from "../../../api/routines/updateRoutineExerciseSet/useUpdateRoutineExerciseSet";
 import { ApiError } from "../../../api/errors";
 import { queryKeys } from "../../../api/queryKeys";
@@ -72,7 +73,7 @@ export const SetTypeDialog = ({
     setOpen(nextOpen);
   };
 
-  const handleSelect = (type: routineExerciseSetSchema.SetType) => {
+  const handleSelect = (type: setTypeSchema.SetType) => {
     if (type === set.type) {
       setOpen(false);
       return;
@@ -138,7 +139,7 @@ export const SetTypeDialog = ({
         </DialogHeader>
 
         <div className="flex flex-col gap-2 py-2" role="radiogroup">
-          {routineExerciseSetSchema.SET_TYPES.map((type) => {
+          {setTypeSchema.SET_TYPES.map((type) => {
             const selected = type === set.type;
             const typeMarker =
               type === "normal" ? null : SET_TYPE_MARKERS[type];

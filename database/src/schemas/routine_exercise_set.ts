@@ -3,7 +3,6 @@ import {
   index,
   integer,
   numeric,
-  pgEnum,
   pgTable,
   timestamp,
   uuid,
@@ -11,20 +10,8 @@ import {
 import { createSelectSchema } from "drizzle-zod";
 import { z } from "zod";
 import { routineExercise } from "./routine_exercise";
+import { setTypeEnum } from "./set_type";
 import { weightUnitEnum } from "./weight_unit";
-
-/**
- * How a planned set is meant to be performed.
- *
- * - normal:  a regular working set
- * - warmup:  a lighter preparatory set
- * - failure: taken to muscular failure / as many reps as possible
- * - dropset: weight reduced immediately after the previous set
- */
-export const SET_TYPES = ["normal", "warmup", "failure", "dropset"] as const;
-export type SetType = (typeof SET_TYPES)[number];
-
-export const setTypeEnum = pgEnum("set_type", SET_TYPES);
 
 /**
  * A planned set belonging to an exercise slot in a routine.

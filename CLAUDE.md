@@ -11,9 +11,14 @@ target. Desktop is secondary but every screen must still work there.
 
 Domain today: exercises (seeded from a public dataset), muscles / body parts /
 equipment, user-owned **routines** (templates) with ordered exercises and
-planned sets, and user preferences (`weight_unit`: `kg` | `lb`). There is **no
-logged-workout entity yet**; routine sets are prescriptions, not logs.
-`docs/database.md` holds the ERD and schema notes.
+planned sets, user preferences (`weight_unit`: `kg` | `lb`), and **workouts**
+(`workout` -> `workout_exercise` -> `workout_exercise_set`), which log a
+session either started from a routine (`routine_id` set, sets pre-filled from
+the routine) or started empty. Routine sets are prescriptions; workout sets
+are logs (`completed_at` null until performed, `ended_at` null while the
+workout is in progress). The workout tables exist in the schema only: there
+are no workout API routes or UI yet. `docs/database.md` holds the ERD and
+schema notes.
 
 ## Repo layout and commands
 
