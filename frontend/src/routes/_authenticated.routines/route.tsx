@@ -5,6 +5,7 @@ import { QueryErrorState } from "../../components/QueryErrorState";
 import { CreateRoutineDialog } from "./components/CreateRoutineDialog";
 import { RoutineCard } from "./components/RoutineCard";
 import { RoutineListSkeleton } from "./components/RoutineListSkeleton";
+import { StartEmptyWorkoutButton } from "./components/StartEmptyWorkoutButton";
 
 export const RoutinesRoute = () => {
   const { data, isPending, isError, error, refetch } = useListRoutines();
@@ -27,6 +28,8 @@ export const RoutinesRoute = () => {
         </div>
         <CreateRoutineDialog />
       </div>
+
+      <StartEmptyWorkoutButton />
 
       {isPending ? (
         <RoutineListSkeleton />
