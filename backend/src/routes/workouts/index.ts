@@ -4,6 +4,7 @@ import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { ApiErrorSchema } from "../../errors";
 import { validateSession } from "../../hooks/validateSession";
+import { getWorkoutHandler } from "./handlers/getWorkout";
 import { startWorkoutHandler } from "./handlers/startWorkout";
 
 export const workoutRoutes: FastifyPluginAsync = async (instance) => {
@@ -45,6 +46,47 @@ export const workoutRoutes: FastifyPluginAsync = async (instance) => {
       const userId = req.userId;
       const workout = await startWorkoutHandler({ database, userId });
       return res.status(201).send({ data: workout });
+    },
+  );
+
+  app.get(
+    "/:id",
+    {
+      onRequest: validateSession(),
+      schema: {
+        summary: "Get workout",
+        description:
+          "Returns a workout owned by the signed-in user. Workouts owned by other users are reported as not found.",
+        tags: ["workouts"],
+        security: [{ session: [] }],
+        params: z.object({ id: z.uuid() }),
+        response: {
+          "200": z
+            .object({
+              data: WorkoutSchema.pick({
+                id: true,
+                routineId: true,
+                name: true,
+                startedAt: true,
+                endedAt: true,
+              }),
+            })
+            .describe("Returns the workout."),
+          "400": ApiErrorSchema,
+          "401": ApiErrorSchema,
+          "404": ApiErrorSchema,
+          "500": ApiErrorSchema,
+        },
+      },
+    },
+    async (req, res) => {
+      const userId = req.userId;
+      const workout = await getWorkoutHandler({
+        database,
+        userId,
+        params: req.params,
+      });
+      return res.send({ data: workout });
     },
   );
 };
