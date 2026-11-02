@@ -21,4 +21,16 @@ export const queryKeys = {
      */
     detail: ["preferences"] as const,
   },
+  workouts: {
+    /**
+     * Prefix for every workout query. There is no list endpoint yet;
+     * `useStartWorkout` invalidates it so a future list picks up new workouts.
+     */
+    list: ["workouts"] as const,
+    /**
+     * One workout, nested under `workouts.list`. `useStartWorkout` seeds it
+     * from the POST response so the workout screen renders without a fetch.
+     */
+    detail: (workoutId: string) => ["workouts", workoutId] as const,
+  },
 };
