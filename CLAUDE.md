@@ -16,9 +16,11 @@ planned sets, user preferences (`weight_unit`: `kg` | `lb`), and **workouts**
 session either started from a routine (`routine_id` set, sets pre-filled from
 the routine) or started empty. Routine sets are prescriptions; workout sets
 are logs (`completed_at` null until performed, `ended_at` null while the
-workout is in progress). The only workout route today is `POST /workouts`
-(start an empty workout; 409 while one is in progress); there is no workout
-UI yet. `docs/database.md` holds the ERD and schema notes.
+workout is in progress). Workout routes today: `POST /workouts` (start an
+empty workout; 409 while one is in progress) and `GET /workouts/:id`. UI: a
+"Start empty workout" button on the Routines page and a read-only
+`/workouts/:id` screen (name, status, elapsed time; no exercises yet).
+`docs/database.md` holds the ERD and schema notes.
 
 ## Repo layout and commands
 
