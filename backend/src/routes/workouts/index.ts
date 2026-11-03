@@ -1,9 +1,10 @@
-import { WorkoutSchema } from "@overload/database";
+import { WorkoutExerciseSchema, WorkoutSchema } from "@overload/database";
 import { FastifyPluginAsync } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { ApiErrorSchema } from "../../errors";
 import { validateSession } from "../../hooks/validateSession";
+import { addWorkoutExerciseHandler } from "./handlers/addWorkoutExercise";
 import { finishWorkoutHandler } from "./handlers/finishWorkout";
 import { getWorkoutHandler } from "./handlers/getWorkout";
 import { startWorkoutHandler } from "./handlers/startWorkout";
@@ -131,6 +132,55 @@ export const workoutRoutes: FastifyPluginAsync = async (instance) => {
         params: req.params,
       });
       return res.send({ data: workout });
+    },
+  );
+
+  app.post(
+    "/:id/exercises",
+    {
+      onRequest: validateSession(),
+      schema: {
+        summary: "Add exercise to workout",
+        description:
+          "Appends an exercise to the end of an in-progress workout owned by the signed-in user. The same exercise may be added more than once. Workouts owned by other users are reported as not found. Fails with 409 if the workout has already ended.",
+        tags: ["workouts"],
+        security: [{ session: [] }],
+        params: z.object({ id: z.uuid() }),
+        // `workoutId` comes from the path, `position` is assigned by the
+        // server (appended at the end) and `routineExerciseId` stays null for
+        // exercises added ad hoc.
+        body: WorkoutExerciseSchema.pick({
+          exerciseId: true,
+        }),
+        response: {
+          "201": z
+            .object({
+              data: WorkoutExerciseSchema.pick({
+                id: true,
+                workoutId: true,
+                exerciseId: true,
+                routineExerciseId: true,
+                position: true,
+              }),
+            })
+            .describe("Returns the created workout exercise."),
+          "400": ApiErrorSchema,
+          "401": ApiErrorSchema,
+          "404": ApiErrorSchema,
+          "409": ApiErrorSchema,
+          "500": ApiErrorSchema,
+        },
+      },
+    },
+    async (req, res) => {
+      const userId = req.userId;
+      const workoutExercise = await addWorkoutExerciseHandler({
+        database,
+        userId,
+        params: req.params,
+        body: req.body,
+      });
+      return res.status(201).send({ data: workoutExercise });
     },
   );
 };

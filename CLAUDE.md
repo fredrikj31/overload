@@ -18,7 +18,9 @@ the routine) or started empty. Routine sets are prescriptions; workout sets
 are logs (`completed_at` null until performed, `ended_at` null while the
 workout is in progress). Workout routes today: `POST /workouts` (start an
 empty workout; 409 while one is in progress), `GET /workouts/:id` and
-`POST /workouts/:id/finish` (sets `ended_at` to now; 409 if already ended). UI: a
+`POST /workouts/:id/finish` (sets `ended_at` to now; 409 if already ended) and
+`POST /workouts/:id/exercises` (body `{ exerciseId }`; appends a
+`workout_exercise` at `max(position) + 1`; 409 if the workout has ended). UI: a
 "Start empty workout" button on the Routines page and a `/workouts/:id`
 screen (name, status, elapsed time; no exercises yet) with a "Finish" button
 that confirms in a dialog and then returns to the Routines page.
