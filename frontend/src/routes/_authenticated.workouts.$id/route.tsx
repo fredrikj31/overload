@@ -10,6 +10,7 @@ import { ApiError } from "../../api/errors";
 import { useGetWorkout } from "../../api/workouts/getWorkout/useGetWorkout";
 import { QueryErrorState } from "../../components/QueryErrorState";
 import { ElapsedTime } from "./components/ElapsedTime";
+import { FinishWorkoutDialog } from "./components/FinishWorkoutDialog";
 
 const formatStartedAt = (startedAt: string): string =>
   new Date(startedAt).toLocaleTimeString(undefined, {
@@ -83,9 +84,12 @@ export const WorkoutDetailRoute = () => {
                 />
               </p>
             </div>
-            <Badge variant="secondary" className="shrink-0">
-              {workout.endedAt ? "Finished" : "In progress"}
-            </Badge>
+            <div className="flex shrink-0 items-center gap-2">
+              <Badge variant="secondary">
+                {workout.endedAt ? "Finished" : "In progress"}
+              </Badge>
+              {!workout.endedAt && <FinishWorkoutDialog workout={workout} />}
+            </div>
           </div>
 
           <section className="flex flex-col gap-3">
