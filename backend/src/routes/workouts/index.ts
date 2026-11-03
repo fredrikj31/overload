@@ -4,6 +4,7 @@ import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
 import { ApiErrorSchema } from "../../errors";
 import { validateSession } from "../../hooks/validateSession";
+import { finishWorkoutHandler } from "./handlers/finishWorkout";
 import { getWorkoutHandler } from "./handlers/getWorkout";
 import { startWorkoutHandler } from "./handlers/startWorkout";
 
@@ -82,6 +83,49 @@ export const workoutRoutes: FastifyPluginAsync = async (instance) => {
     async (req, res) => {
       const userId = req.userId;
       const workout = await getWorkoutHandler({
+        database,
+        userId,
+        params: req.params,
+      });
+      return res.send({ data: workout });
+    },
+  );
+
+  app.post(
+    "/:id/finish",
+    {
+      onRequest: validateSession(),
+      schema: {
+        summary: "Finish workout",
+        description:
+          "Finishes an in-progress workout owned by the signed-in user by setting its end time to now. Workouts owned by other users are reported as not found. Fails with 409 if the workout has already ended.",
+        tags: ["workouts"],
+        security: [{ session: [] }],
+        params: z.object({ id: z.uuid() }),
+        // No body: `endedAt` is set by the server.
+        response: {
+          "200": z
+            .object({
+              data: WorkoutSchema.pick({
+                id: true,
+                routineId: true,
+                name: true,
+                startedAt: true,
+                endedAt: true,
+              }),
+            })
+            .describe("Returns the finished workout."),
+          "400": ApiErrorSchema,
+          "401": ApiErrorSchema,
+          "404": ApiErrorSchema,
+          "409": ApiErrorSchema,
+          "500": ApiErrorSchema,
+        },
+      },
+    },
+    async (req, res) => {
+      const userId = req.userId;
+      const workout = await finishWorkoutHandler({
         database,
         userId,
         params: req.params,
