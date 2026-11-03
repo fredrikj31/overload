@@ -17,7 +17,8 @@ session either started from a routine (`routine_id` set, sets pre-filled from
 the routine) or started empty. Routine sets are prescriptions; workout sets
 are logs (`completed_at` null until performed, `ended_at` null while the
 workout is in progress). Workout routes today: `POST /workouts` (start an
-empty workout; 409 while one is in progress) and `GET /workouts/:id`. UI: a
+empty workout; 409 while one is in progress), `GET /workouts/:id` and
+`POST /workouts/:id/finish` (sets `ended_at` to now; 409 if already ended). UI: a
 "Start empty workout" button on the Routines page and a read-only
 `/workouts/:id` screen (name, status, elapsed time; no exercises yet).
 `docs/database.md` holds the ERD and schema notes.
