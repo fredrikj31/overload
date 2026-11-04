@@ -3,16 +3,16 @@ import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@shadcn-ui/components/ui/badge";
 import { Button } from "@shadcn-ui/components/ui/button";
-import { useListExercises } from "../../../api/exercises/listExercises/useListExercises";
-import * as bodyPartSchema from "../../../types/bodyPart";
-import * as equipmentSchema from "../../../types/equipment";
-import * as exerciseSchema from "../../../types/exercise";
-import * as muscleExerciseSchema from "../../../types/muscleExercise";
-import * as muscleSchema from "../../../types/muscle";
-import { QueryErrorState } from "../../../components/QueryErrorState";
-import { ExerciseListSkeleton } from "../../_authenticated.exercises/components/ExerciseListSkeleton";
-import { ExerciseSearch } from "../../_authenticated.exercises/components/ExerciseSearch";
-import { getMediaUrl } from "../../../utils/getMediaUrl";
+import { useListExercises } from "../api/exercises/listExercises/useListExercises";
+import * as bodyPartSchema from "../types/bodyPart";
+import * as equipmentSchema from "../types/equipment";
+import * as exerciseSchema from "../types/exercise";
+import * as muscleExerciseSchema from "../types/muscleExercise";
+import * as muscleSchema from "../types/muscle";
+import { QueryErrorState } from "./QueryErrorState";
+import { ExerciseListSkeleton } from "../routes/_authenticated.exercises/components/ExerciseListSkeleton";
+import { ExerciseSearch } from "../routes/_authenticated.exercises/components/ExerciseSearch";
+import { getMediaUrl } from "../utils/getMediaUrl";
 
 const PAGE_SIZE = 50;
 
