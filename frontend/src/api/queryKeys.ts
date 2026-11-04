@@ -34,5 +34,12 @@ export const queryKeys = {
      * renders without a fetch.
      */
     detail: (workoutId: string) => ["workouts", workoutId] as const,
+    /**
+     * A workout's exercise slots, nested under `workouts.detail` so
+     * invalidating the workout prefix also drops them. `useAddWorkoutExercise`
+     * invalidates this key after a mutation.
+     */
+    exercises: (workoutId: string) =>
+      ["workouts", workoutId, "exercises"] as const,
   },
 };
