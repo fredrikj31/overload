@@ -9,8 +9,10 @@ import { cn } from "@shadcn-ui/lib/utils";
 import { ApiError } from "../../api/errors";
 import { useGetWorkout } from "../../api/workouts/getWorkout/useGetWorkout";
 import { QueryErrorState } from "../../components/QueryErrorState";
+import { AddWorkoutExerciseDialog } from "./components/AddWorkoutExerciseDialog";
 import { ElapsedTime } from "./components/ElapsedTime";
 import { FinishWorkoutDialog } from "./components/FinishWorkoutDialog";
+import { WorkoutExerciseList } from "./components/WorkoutExerciseList";
 
 const formatStartedAt = (startedAt: string): string =>
   new Date(startedAt).toLocaleTimeString(undefined, {
@@ -93,11 +95,18 @@ export const WorkoutDetailRoute = () => {
           </div>
 
           <section className="flex flex-col gap-3">
-            <h2 className="text-lg font-semibold tracking-tight">Exercises</h2>
-            <div className="flex flex-col items-center gap-1 rounded-xl border p-8 text-center text-sm text-muted-foreground">
-              <p>No exercises yet.</p>
-              <p>Adding exercises to a workout is coming soon.</p>
+            <div className="flex items-center justify-between gap-4">
+              <h2 className="text-lg font-semibold tracking-tight">
+                Exercises
+              </h2>
+              {!workout.endedAt && (
+                <AddWorkoutExerciseDialog workout={workout} />
+              )}
             </div>
+            <WorkoutExerciseList
+              workoutId={workout.id}
+              ended={workout.endedAt !== null}
+            />
           </section>
         </>
       )}

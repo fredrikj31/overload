@@ -19,7 +19,7 @@ import { ApiError } from "../../../api/errors";
 import { queryKeys } from "../../../api/queryKeys";
 import * as exerciseSchema from "../../../types/exercise";
 import * as routineSchema from "../../../types/routine";
-import { ExercisePicker } from "./ExercisePicker";
+import { ExercisePicker } from "../../../components/ExercisePicker";
 
 interface AddExerciseDialogProps {
   routine: Pick<routineSchema.Routine, "id" | "name" | "description">;
