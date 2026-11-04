@@ -1,4 +1,11 @@
-import { WorkoutExerciseSchema, WorkoutSchema } from "@overload/database";
+import {
+  BodyPartSchema,
+  EquipmentSchema,
+  ExerciseSchema,
+  WorkoutExerciseSchema,
+  WorkoutExerciseSetSchema,
+  WorkoutSchema,
+} from "@overload/database";
 import { FastifyPluginAsync } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { z } from "zod";
@@ -7,6 +14,7 @@ import { validateSession } from "../../hooks/validateSession";
 import { addWorkoutExerciseHandler } from "./handlers/addWorkoutExercise";
 import { finishWorkoutHandler } from "./handlers/finishWorkout";
 import { getWorkoutHandler } from "./handlers/getWorkout";
+import { listWorkoutExercisesHandler } from "./handlers/listWorkoutExercises";
 import { startWorkoutHandler } from "./handlers/startWorkout";
 
 export const workoutRoutes: FastifyPluginAsync = async (instance) => {
@@ -132,6 +140,81 @@ export const workoutRoutes: FastifyPluginAsync = async (instance) => {
         params: req.params,
       });
       return res.send({ data: workout });
+    },
+  );
+
+  app.get(
+    "/:id/exercises",
+    {
+      onRequest: validateSession(),
+      schema: {
+        summary: "List workout exercises",
+        description:
+          "Lists the exercises in a workout owned by the signed-in user, ordered by position, each with the exercise it points at and its logged sets in order. Finished workouts are listable too. Workouts owned by other users are reported as not found.",
+        tags: ["workouts"],
+        security: [{ session: [] }],
+        params: z.object({ id: z.uuid() }),
+        response: {
+          "200": z
+            .object({
+              data: z.array(
+                WorkoutExerciseSchema.pick({
+                  id: true,
+                  workoutId: true,
+                  exerciseId: true,
+                  routineExerciseId: true,
+                  position: true,
+                }).extend({
+                  // Lighter than the exercise list: no instructions, gif,
+                  // attribution or muscles.
+                  exercise: ExerciseSchema.pick({
+                    id: true,
+                    name: true,
+                    imagePath: true,
+                  }).extend({
+                    // Nullable: cardio exercises have no body region.
+                    bodyPart: BodyPartSchema.pick({
+                      id: true,
+                      name: true,
+                      slug: true,
+                    }).nullable(),
+                    equipment: EquipmentSchema.pick({
+                      id: true,
+                      name: true,
+                      slug: true,
+                    }),
+                  }),
+                  sets: z.array(
+                    WorkoutExerciseSetSchema.pick({
+                      id: true,
+                      workoutExerciseId: true,
+                      position: true,
+                      type: true,
+                      completedAt: true,
+                      reps: true,
+                      weightUnit: true,
+                      weight: true,
+                    }),
+                  ),
+                }),
+              ),
+            })
+            .describe("Returns the workout's exercises in order."),
+          "400": ApiErrorSchema,
+          "401": ApiErrorSchema,
+          "404": ApiErrorSchema,
+          "500": ApiErrorSchema,
+        },
+      },
+    },
+    async (req, res) => {
+      const userId = req.userId;
+      const workoutExercises = await listWorkoutExercisesHandler({
+        database,
+        userId,
+        params: req.params,
+      });
+      return res.send({ data: workoutExercises });
     },
   );
 
